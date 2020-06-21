@@ -35,7 +35,7 @@ def apply_block(block, commit=False):
         atomic.revert()
         return False, errors
     
-    for memeID, meme in enumerate(memes_upvoted):
+    for memeID, meme in memes_upvoted.items():
         meme.reward_upvoters(block_ID) # Reward Upvoters that upvoted
                                        # the meme before block
                                        # `block_ID`
