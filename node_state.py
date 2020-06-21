@@ -48,7 +48,7 @@ class Node(Atomic):
         self.memes = {}
         self.upvotes = {}
         
-        super.__init__()
+        super().__init__()
 
     def __repr__(self):
         return "ID=`{}`, Wallet={}".format(self.ID, str(self.wallet))
@@ -78,7 +78,7 @@ class MemeFormat(Atomic):
     Class that handles all functions pertaining to maintaining state
     of a MemeFormat.
     """
-    def __init__(self, ID, name, description, binary, owner):
+    def __init__(self, ID, name, description, binary, owner, miner):
         """
         ID : Uniquely Identifiable ID for the MemeFormat
         name : Any Display Name for the MemeFormat
@@ -97,7 +97,7 @@ class MemeFormat(Atomic):
         #TODO : Throw Exception
         
         self.memes = {}
-        super.__init__()
+        super().__init__()
 
         Nodes[self.owner].add_meme_format(self.ID)
 
@@ -136,7 +136,7 @@ class Meme(Atomic):
         self.upvote_credits = defaultdict(lambda:0)
 
 
-        super.__init__()
+        super().__init__()
         
         MemeFormats[meme_format].add_meme(self.ID)
         Nodes[poster_ID].add_meme(self.ID)
@@ -189,7 +189,7 @@ class Upvote(Atomic):
         Nodes[self.upvoter_ID].add_upvote(self.ID)
         Memes[self.meme_ID].add_upvote(self.ID)
 
-        super.__init__()
+        super().__init__()
 
         meme_poster_id = Memes[self.meme_ID].poster_ID
         meme_miner_id = Memes[self.meme_ID].miner_ID

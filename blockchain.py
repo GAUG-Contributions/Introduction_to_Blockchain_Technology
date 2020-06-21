@@ -142,10 +142,10 @@ class Blockchain:
         return -1
 
     # mine_block encapsulation -> to be used in app_mine_block() function
-    def mine_block(self):
+    def mine_block(self, _minerID):
         previous_block = self.previous_block()
         new_block = Block(index=previous_block.index + 1,
-                          minerID=app_port,
+                          minerID=_minerID,
                           transactions=self.transactions_to_be_confirmed,
                           transaction_counter = len(self.transactions_to_be_confirmed),
                           timestamp=str(datetime.datetime.now()),

@@ -15,6 +15,10 @@ def apply_block(block, commit=False):
     errors = []
     
     for trindex, transaction in enumerate(block.transactions):
+        # Skip if it is a pseudo transaction (no type field)
+        if not(transaction.get("type")):
+            continue
+
         try:
             ret = apply_transaction(transaction, block_ID, miner_ID)
         except TransactionException as Exp:
@@ -45,6 +49,7 @@ def apply_transaction(transaction_data, block_ID, miner_ID):
     """
     Update node_state based on transaction_data
     """
+
     if transaction_data["type"] == "Upvote":
         return apply_upvote_transaction(transaction_data, block_ID, miner_ID)
     elif transaction_data["type"] == "Meme":
@@ -87,7 +92,7 @@ def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID):
     if node_id not in node_state.Nodes: #Means the node is new. Start
                                         #tracking the state of this
                                         #node
-        node = node_state.Node(node_id)
+        node = node_state.Node(node_id, 0)
     else:
         node = node_state.nodes[node_id]
 
@@ -107,7 +112,7 @@ def apply_meme_transaction(transaction_data, block_ID, miner_ID):
     if node_id not in node_state.Nodes: # Means the node is new. Start
                                         # tracking the state of this
                                         # node
-        node = node_state.Node(node_id)
+        node = node_state.Node(node_id, 0)
     else:
         node = node_state.Nodes[node_id]
 
@@ -124,22 +129,22 @@ def apply_meme_transaction(transaction_data, block_ID, miner_ID):
 class TransactionException(Exception):
     def __init__(self, transactionID, message):
         self.transactionID = transactionID
-        super.__init__("Error in transaction `{}`. {}".format(self.transactionID, message))
+        super().__init__("Error in transaction `{}`. {}".format(self.transactionID, message))
 
 class MemeFormatNotFoundException(TransactionException):
     def __init__(self, memeFormatID, transactionID):
-        super.__init__(transactionID, "MemeFormat `{}` not found".format(memeFormatID))
+        super().__init__(transactionID, "MemeFormat `{}` not found".format(memeFormatID))
 
 class MemeNotFoundException(TransactionException):
     def __init__(self, memeID, transactionID):
-        super.__init__(transactionID, "Meme `{}` not found".format(memeID))
+        super().__init__(transactionID, "Meme `{}` not found".format(memeID))
 
 class NodeNotFoundForUpvoteException(TransactionException):
     def __init__(self, nodeID, transactionID):
-        super.__init__(transactionID, "Node `{}` not found".format(memeFormatID))
+        super().__init__(transactionID, "Node `{}` not found".format(memeFormatID))
 
 class UpvoteFailedNoCreditsException(TransactionException):
     def __init__(self, nodeID, transactionID, message):
-        super.__init__(transactionID,
+        super().__init__(transactionID,
                        "{}. Node `{}` does not have enough credits for Upvote".format(message,
                                                                                       nodeID))

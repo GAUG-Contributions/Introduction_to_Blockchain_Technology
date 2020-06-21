@@ -7,6 +7,7 @@ import hashlib
 import json
 import datetime
 import sys
+import base64
 
 from flask import Flask, jsonify, request
 import requests
@@ -252,7 +253,7 @@ def app_mine_block():
     if not blockchain.pending_transactions():
         return jsonify({"Warning": "No pending transactions available!"}), 405
 
-    blockchain.mine_block()
+    blockchain.mine_block(app_port) # app_port is minerID
     mined_block = blockchain.previous_block()
 
     # Store the local lenght of the current node
