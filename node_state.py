@@ -143,7 +143,7 @@ class Meme(Atomic):
 
     def add_upvote(self, upvote_ID):
         upvote = Upvotes[upvote_ID]
-        block_ID = upvote[block_ID]
+        block_ID = upvote.block_ID
 
         if block_ID not in self.blocklist:
             self.blocklist.append(block_ID) # Add block_ID to
