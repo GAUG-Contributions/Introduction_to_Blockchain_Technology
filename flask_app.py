@@ -167,6 +167,82 @@ def app_add_transaction():
     response = {"Notification": "The transaction was received."}
     return jsonify(response), 201
 
+def image_base64encoding(imagePath):
+    with open(imagePath, "rb") as media_file:
+        encoded_image = base64.b64encode(media_file.read())
+
+    return encoded_image
+
+# NOTE: The image id's are currently not unique and collisions are possible
+# POST method for pushing a new transaction to the local mempool
+@app.route('/add_transaction2', methods=['POST'])      
+def app_add_transaction2():
+    # Expected JSON data formats
+    # {"type":"Upvote","imageVoteId":"imageIdValue"}
+    # {"type":"MemeFormat","imagePath":"block.jpg", "name": "nameValue"}
+    # {"type":"Meme","imagePath":"block.jpg", "name": "nameValue"}
+    transaction_data = request.get_json()
+
+    if not transaction_data.get("type"):
+        return jsonify({"Error": "Missing type element!"}), 400
+
+    # Check whether the received data format is valid
+    transactionType = transaction_data["type"]
+    if(transactionType == "Upvote"):
+        if not transaction_data.get("imageVoteId"):
+            return jsonify({"Error": "Missing imageId element!"}), 400
+    elif(transactionType == "Meme" or transactionType == "MemeFormat"):
+        if not transaction_data.get("imagePath"):
+            return jsonify({"Error": "Missing imagePath element!"}), 400
+        if not transaction_data.get("name"):
+            return jsonify({"Error": "Missing name element!"}), 400
+
+        encodedImage = image_base64encoding(transaction_data["imagePath"])
+
+        # Append the base64 encoding of the Meme or MemeFormat
+        transaction_data["zEncoding64_val"] = encodedImage.decode('ascii')
+        # Append the base64 encoding length
+        transaction_data["zEncoding64_len"] = len(encodedImage)
+
+        host_port = request.host.split(":")[1]
+        # Append image ID -> Format: HostPort_MemeName
+        transaction_data["imageId"] = "{}_{}".format(host_port, transaction_data["name"])
+    else:
+        return jsonify({"Error": "Wrong type format!"}), 400
+
+    # Get IP and Port of the Node calling this method
+    transaction_data["senderHost"] = request.host
+
+    # Produce an index and a timestamp for the transaction
+    transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
+    transaction_data["timestamp"] = str(datetime.datetime.now())
+
+    # Notify all nodes in the network for this new transaction 
+    # so they can add it to their local mempool
+    notify_all_nodes_new_transaction(transaction_data)
+
+    response = {"Notification": "The transaction was received."}
+    return jsonify(response), 201
+
+# GET method for visualizing image by it's name
+@app.route('/get_meme', methods=['GET'])
+def app_get_meme():
+    # Expected JSON data format
+    # {"imageId":"idValue"}
+    image_data = request.get_json()
+
+    if not image_data.get("imageId"):
+        return jsonify({"Error": "Missing imageName element!"}), 400
+
+    image_ascii = blockchain.find_image(image_data["imageId"])
+
+    if(image_ascii == -1):
+        return jsonify({"Error": "Image was not found!"}), 400
+
+    html_image = "<html><img src='data:image/jpg; base64, " + image_ascii + "'></html>"
+
+    return html_image, 201
+
 # GET request for mining a block
 @app.route('/mine_block', methods=['GET'])
 def app_mine_block():

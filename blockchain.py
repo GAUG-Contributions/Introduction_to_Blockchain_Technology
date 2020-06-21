@@ -120,6 +120,18 @@ class Blockchain:
         # 0 = False
         return len(self.transactions_to_be_confirmed)
 
+    # Checks whether the blockchain contains image with imageId
+    # if exists, returns image's decoded ascii value, otherwise -1
+    def find_image(self, imageId):
+        for Block in self.chain:
+            current_block_transactions = Block.get_transactions()
+            for Transaction in current_block_transactions:
+                # If the transaction has imageId field and that field matches with the parameter imageId
+                if (Transaction.get("imageId") and Transaction["imageId"] == imageId):
+                    return Transaction["zEncoding64_val"]
+
+        return -1
+
     # mine_block encapsulation -> to be used in app_mine_block() function
     def mine_block(self):
         previous_block = self.previous_block()
