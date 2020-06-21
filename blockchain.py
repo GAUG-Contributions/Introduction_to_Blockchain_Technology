@@ -6,6 +6,7 @@ import sys
 import requests
 
 from block import Block
+import validation
 
 class Blockchain:
     # difficulty level of the Proof of Work
