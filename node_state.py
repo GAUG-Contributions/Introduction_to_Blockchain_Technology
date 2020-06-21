@@ -39,7 +39,7 @@ class Node(Atomic):
         self.ID = ID
         self.wallet = Wallet(ID, credits=credits)
         if self.ID not in Nodes:
-            Nodes[ID] = ID
+            Nodes[ID] = self
         else:
             pass
         #TODO: Throw an exception
