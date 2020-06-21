@@ -52,6 +52,7 @@ def notify_all_nodes_new_block(block):
 def app_append_block():
     block_data = request.get_json()
     block = Block(block_data["index"],
+                  block_data["minerID"],
                   block_data["transactions"],
                   block_data["transaction_counter"],
                   block_data["timestamp"],
@@ -178,9 +179,9 @@ def image_base64encoding(imagePath):
 @app.route('/add_transaction2', methods=['POST'])      
 def app_add_transaction2():
     # Expected JSON data formats
-    # {"type":"Upvote","imageVoteId":"imageIdValue"}
+    # {"type":"Upvote","imageVoteId":"imageIdValue", "upvoteID":"..."}
     # {"type":"MemeFormat","imagePath":"block.jpg", "name": "nameValue"}
-    # {"type":"Meme","imagePath":"block.jpg", "name": "nameValue"}
+    # {"type":"Meme","imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
     transaction_data = request.get_json()
 
     if not transaction_data.get("type"):
@@ -212,7 +213,7 @@ def app_add_transaction2():
 
     # Get IP and Port of the Node calling this method
     transaction_data["senderHost"] = request.host
-
+    transaction_data["nodeID"] = app_port # Temporary NodeID for V3
     # Produce an index and a timestamp for the transaction
     transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
     transaction_data["timestamp"] = str(datetime.datetime.now())

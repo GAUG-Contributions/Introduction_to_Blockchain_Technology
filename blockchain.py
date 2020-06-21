@@ -19,11 +19,11 @@ class Blockchain:
         # temporaly stores all transactions which are currently not within a block
         self.transactions_to_be_confirmed = [] 
 
-    # Creationg of the Origin/First block in the chain
+    # Creating of the Origin/First block in the chain
     def create_origin_block(self):
         # The block has empty list of transactions
         # The block has 0 as a value for index, previous_hash, proof_of_work
-        origin_block = Block(0, [], 0, "0", 0)
+        origin_block = Block(0, None, [], 0, "0", 0)
         origin_block.hash = origin_block.compute_hash()
         self.chain.append(origin_block)
 
@@ -104,10 +104,19 @@ class Blockchain:
         if (self.previous_block().hash != block.previous_hash):
             return False
 
+        
+        
         block.hash = proof
+
+        success, errors = validation.apply_block(block, commit=True)
+        if not success:
+            return False
+        
         self.chain.append(block)
         # reset the list since the transactions are confirmed now
-        self.transactions_to_be_confirmed = []
+        self.transactions_to_be_confirmed = [] #TODO Only remove
+                                               #transactions that were
+                                               #added to the new block
 
         return True
 
@@ -126,8 +135,7 @@ class Blockchain:
         for Block in self.chain:
             current_block_transactions = Block.get_transactions()
             for Transaction in current_block_transactions:
-                # If the transaction has imageId field and that field matches with the parameter imageId
-                if (Transaction.get("imageId") and Transaction["imageId"] == imageId):
+                if (Transaction["imageId"] == imageId):
                     return Transaction["zEncoding64_val"]
 
         return -1
@@ -136,12 +144,26 @@ class Blockchain:
     def mine_block(self):
         previous_block = self.previous_block()
         new_block = Block(index=previous_block.index + 1,
+                          minerID=app_port,
                           transactions=self.transactions_to_be_confirmed,
                           transaction_counter = len(self.transactions_to_be_confirmed),
                           timestamp=str(datetime.datetime.now()),
                           previous_hash=previous_block.hash,
                           proof_of_work=0)
 
+        success, errors = validation.apply_block(new_block)
+
+        if not success:
+            erroneous_transactions = [err.trindex for err in errors]
+            new_transaction_list = []
+            for trindex, transaction in Block.transactions:
+                if trindex not in erroneous_transactions:
+                    new_transaction_list.append(transaction)
+            new_block.transactions = new_transaction_list
+            success, errors = validation.apply_block(new_block)
+            if not success:
+                raise Exception("Removing erroneous transactions still resulted in errors. -------\n"+str(errors))
+    
         proof = self.proof_of_work(new_block)
         self.append_block(new_block, proof)
 
@@ -181,6 +203,7 @@ def construct_chain_again(json_chain):
         if block_data["index"] == 0:
             continue  
         block = Block(block_data["index"],
+                      block_data["minerID"],
                       block_data["transactions"],
                       block_data["transaction_counter"],
                       block_data["timestamp"],

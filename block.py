@@ -3,9 +3,10 @@ import json
 
 class Block:
     # Constructor for Block
-    def __init__(self, index, transactions, transaction_counter, timestamp, previous_hash, proof_of_work=0):
+    def __init__(self, index, minerID, transactions, transaction_counter, timestamp, previous_hash, proof_of_work=0):
         self.index = index
-        self.transactions = transactions
+        self.minerID = minerID
+        self.transactions = list(transactions)
         self.transaction_counter = transaction_counter
         self.timestamp = timestamp
         self.previous_hash = previous_hash
