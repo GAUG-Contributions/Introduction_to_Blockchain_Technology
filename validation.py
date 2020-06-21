@@ -2,6 +2,8 @@ import node_state
 import atomic
 from wallet import NotEnoughCreditsException
 
+NEW_NODE_INITIAL_CREDITS = 5
+
 def apply_block(block, commit=False):
     """
     Try to update node_state based on all the transactions in the
@@ -18,7 +20,7 @@ def apply_block(block, commit=False):
         # Skip if it is a pseudo transaction (no type field)
         if not(transaction.get("type")):
             continue
-
+        ret = None
         try:
             ret = apply_transaction(transaction, block_ID, miner_ID)
         except TransactionException as Exp:
@@ -33,7 +35,7 @@ def apply_block(block, commit=False):
         atomic.revert()
         return False, errors
     
-    for memeID, meme in enumerate(memes_upvoted):
+    for memeID, meme in memes_upvoted.items():
         meme.reward_upvoters(block_ID) # Reward Upvoters that upvoted
                                        # the meme before block
                                        # `block_ID`
@@ -92,9 +94,9 @@ def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID):
     if node_id not in node_state.Nodes: #Means the node is new. Start
                                         #tracking the state of this
                                         #node
-        node = node_state.Node(node_id, 0)
+        node = node_state.Node(node_id, 5)
     else:
-        node = node_state.nodes[node_id]
+        node = node_state.Nodes[node_id]
 
     memeFormat = node_state.MemeFormat(transaction_data["imageId"],
                                        transaction_data["name"],
@@ -112,7 +114,7 @@ def apply_meme_transaction(transaction_data, block_ID, miner_ID):
     if node_id not in node_state.Nodes: # Means the node is new. Start
                                         # tracking the state of this
                                         # node
-        node = node_state.Node(node_id, 0)
+        node = node_state.Node(node_id, 5)
     else:
         node = node_state.Nodes[node_id]
 
@@ -121,6 +123,7 @@ def apply_meme_transaction(transaction_data, block_ID, miner_ID):
                                           transaction_data["imageId"]))
     meme = node_state.Meme(transaction_data["imageId"],
                            transaction_data["name"],
+                           transaction_data["memeFormat"],
                            transaction_data["zEncoding64_val"],
                            transaction_data["nodeID"],
                            block_ID,
@@ -141,7 +144,7 @@ class MemeNotFoundException(TransactionException):
 
 class NodeNotFoundForUpvoteException(TransactionException):
     def __init__(self, nodeID, transactionID):
-        super().__init__(transactionID, "Node `{}` not found".format(memeFormatID))
+        super().__init__(transactionID, "Node `{}` not found".format(nodeID))
 
 class UpvoteFailedNoCreditsException(TransactionException):
     def __init__(self, nodeID, transactionID, message):

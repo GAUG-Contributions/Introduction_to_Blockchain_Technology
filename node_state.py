@@ -39,7 +39,7 @@ class Node(Atomic):
         self.ID = ID
         self.wallet = Wallet(ID, credits=credits)
         if self.ID not in Nodes:
-            Nodes[ID] = ID
+            Nodes[ID] = self
         else:
             pass
         #TODO: Throw an exception
@@ -143,7 +143,7 @@ class Meme(Atomic):
 
     def add_upvote(self, upvote_ID):
         upvote = Upvotes[upvote_ID]
-        block_ID = upvote[block_ID]
+        block_ID = upvote.block_ID
 
         if block_ID not in self.blocklist:
             self.blocklist.append(block_ID) # Add block_ID to
