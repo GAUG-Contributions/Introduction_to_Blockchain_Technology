@@ -17,3 +17,7 @@ class Block:
         # self.__dict__ -> all variables inside the Block class
         encoded_block = json.dumps(self.__dict__, sort_keys=True).encode()
         return hashlib.sha256(encoded_block).hexdigest()
+
+    # Returns list of transactions within this Block
+    def get_transactions(self):
+        return self.transactions

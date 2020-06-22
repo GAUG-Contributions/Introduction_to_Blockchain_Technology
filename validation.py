@@ -20,6 +20,7 @@ def apply_block(block, commit=False):
         # Skip if it is a pseudo transaction (no type field)
         if not(transaction.get("type")):
             continue
+            
         ret = None
         try:
             ret = apply_transaction(transaction, block_ID, miner_ID)
@@ -94,7 +95,7 @@ def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID):
     if node_id not in node_state.Nodes: #Means the node is new. Start
                                         #tracking the state of this
                                         #node
-        node = node_state.Node(node_id, 5)
+        node = node_state.Node(node_id, NEW_NODE_INITIAL_CREDITS)
     else:
         node = node_state.Nodes[node_id]
 
@@ -114,7 +115,7 @@ def apply_meme_transaction(transaction_data, block_ID, miner_ID):
     if node_id not in node_state.Nodes: # Means the node is new. Start
                                         # tracking the state of this
                                         # node
-        node = node_state.Node(node_id, 5)
+        node = node_state.Node(node_id, NEW_NODE_INITIAL_CREDITS)
     else:
         node = node_state.Nodes[node_id]
 
