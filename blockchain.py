@@ -104,8 +104,6 @@ class Blockchain:
         if (self.previous_block().hash != block.previous_hash):
             return False
 
-        
-        
         block.hash = proof
 
         success, errors = validation.apply_block(block, commit=True)
@@ -134,7 +132,7 @@ class Blockchain:
         for Block in self.chain:
             current_block_transactions = Block.get_transactions()
             for Transaction in current_block_transactions:
-                if (Transaction["imageId"] == imageId):
+                if (Transaction.get("imageId") and Transaction["imageId"] == imageId):
                     return Transaction["zEncoding64_val"]
 
         return -1
