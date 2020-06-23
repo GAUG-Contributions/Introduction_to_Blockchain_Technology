@@ -11,7 +11,6 @@ class Atomic(object):
         self.__committed_once__ = True
         self.__var_backup__ = dict(vars(self))
         self.__var_backup__.pop("__var_backup__")
-        print(self.__var_backup__)
 
     def revert(self):
         for attr, val in self.__var_backup__.items():

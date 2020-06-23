@@ -4,6 +4,11 @@ from wallet import NotEnoughCreditsException
 
 NEW_NODE_INITIAL_CREDITS = 5
 
+class BlockException(Exception):
+    def __init__(self, transactionExceptions=[]):
+        self.transactionExceptions = transactionExceptions
+        super.__init__("Block failed to validate. Following Exceptions occured: {}".format(str(transactionExceptions)))
+
 def apply_block(block, commit=False):
     """
     Try to update node_state based on all the transactions in the

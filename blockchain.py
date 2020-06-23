@@ -7,7 +7,6 @@ import requests
 
 from block import Block
 import validation
-
 class Blockchain:
     # difficulty level of the Proof of Work
     # shows the pattern with which each hash has to start with
@@ -111,8 +110,7 @@ class Blockchain:
 
         success, errors = validation.apply_block(block, commit=True)
         if not success:
-            return False
-        
+            raise validation.BlockException(errors)
         self.chain.append(block)
         # reset the list since the transactions are confirmed now
         self.transactions_to_be_confirmed = [] #TODO Only remove
@@ -155,6 +153,8 @@ class Blockchain:
         success, errors = validation.apply_block(new_block)
 
         if not success:
+            print(errors)
+            print("Removing Erroneous transactions from transaction list")
             erroneous_transactions = [err.trindex for err in errors]
             new_transaction_list = []
             for trindex, transaction in enumerate(new_block.transactions):
@@ -166,6 +166,7 @@ class Blockchain:
                 raise Exception("Removing erroneous transactions still resulted in errors. -------\n"+str(errors))
     
         proof = self.proof_of_work(new_block)
+    
         self.append_block(new_block, proof)
 
 # Consensus mechanism to make sure that the nodes in 
