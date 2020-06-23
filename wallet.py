@@ -3,10 +3,10 @@ class NotEnoughCreditsException(Exception):
                  wallet_ID,
                  current_amount,
                  discredit_amount):
-        message = "Tried to discredit `{}` credits from wallet `{}` with only `{}` credits.".format(discredit_amount,
+        self.message = "Tried to discredit `{}` credits from wallet `{}` with only `{}` credits.".format(discredit_amount,
                                                                                                     wallet_ID,
                                                                                                     current_amount)
-        super().__init__(message)
+        super().__init__(self.message)
 
 class Wallet(object):
     """
