@@ -14,7 +14,7 @@ import requests
 
 from block import Block
 from blockchain import Blockchain, consensus_mechanism as consensus, construct_chain_again as construct_chain
-
+from node_state import Nodes as map_of_nodes
 # Creating a Flash Web App
 app = Flask(__name__)
 
@@ -244,6 +244,23 @@ def app_get_meme():
     html_image = "<html><img src='data:image/jpg; base64, " + image_ascii + "'></html>"
 
     return html_image, 201
+
+# GET method for getting (wallet) credit amount for a node
+@app.route('/get_node_credits', methods=['GET'])
+def app_get_node_credits():
+    # Excepted JSON data format
+    # {"nodeId" : "idValue"}
+    node_data = request.get_json()
+    if not node_data.get("nodeId"):
+        return jsonify({"Error" : "Missing nodeId element"}), 400
+    node_id = node_data.get("nodeId")
+    if node_id not in map_of_nodes:
+        return jsonify({"Error" : "Node `{}` not found".format(node_id)})
+
+    response = vars(map_of_nodes[node_id].wallet)
+    
+    return jsonify(response), 201
+
 
 # GET request for mining a block
 @app.route('/mine_block', methods=['GET'])
