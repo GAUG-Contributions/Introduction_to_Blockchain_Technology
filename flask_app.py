@@ -8,6 +8,8 @@ import json
 import datetime
 import sys
 import base64
+import threading
+import time
 
 from flask import Flask, jsonify, request
 import requests
@@ -15,6 +17,39 @@ import requests
 from block import Block
 from blockchain import Blockchain, consensus_mechanism as consensus, construct_chain_again as construct_chain
 from node_state import Nodes as map_of_nodes
+
+STOP_MINING = False
+
+MINING_THREAD = None
+
+MINING_RESULT = None
+
+MIN_TRANSACTIONS = 1
+
+def mine_block_new_thread(block):
+    global MINING_RESULT
+    satisfying_hash = False
+    block.proof_of_work = 0
+    print("In Mining Thread.")
+    while (not satisfying_hash) and (not STOP_MINING):
+        computed_hash = block.compute_hash()
+        if(computed_hash.startswith(Blockchain.difficultyPattern)):
+            satisfying_hash = True
+            block.hash = computed_hash
+        else:
+            block.proof_of_work += 1
+    if STOP_MINING:
+        MINING_RESULT = False
+        return
+    MINING_RESULT = block
+    print("Congo! We mined something")
+
+    def temporary_thread_to_notify_new_block(block):
+        notify_all_nodes_new_block(block)
+
+    tempoth  = threading.Thread(target=temporary_thread_to_notify_new_block, args=(block,))
+    tempoth.start()
+
 # Creating a Flash Web App
 app = Flask(__name__)
 
@@ -42,6 +77,7 @@ if(host_address == "http://127.0.0.1:5000/"):
 # A function which triggers /append_block POST method of 
 # other connected nodes in order to register the newly mined block
 def notify_all_nodes_new_block(block):
+    
     for node in connected_nodes:
         requests.post("{}append_block".format(node), 
                     data=json.dumps(block.__dict__, sort_keys=True), 
@@ -51,6 +87,9 @@ def notify_all_nodes_new_block(block):
 # Used internally to receive mined blocks from the network
 @app.route('/append_block', methods=['POST'])
 def app_append_block():
+    global STOP_MINING
+    global MINING_THREAD
+    print("In append_block")
     block_data = request.get_json()
     block = Block(block_data["index"],
                   block_data["minerID"],
@@ -60,11 +99,18 @@ def app_append_block():
                   block_data["previous_hash"],
                   block_data["proof_of_work"])
     proof = block_data["hash"]
-
+    
     # Append the block to the chain if the block is validated
     if(blockchain.append_block(block, proof)):
+        print("Trying to join MINING_THREAD")
+        STOP_MINING = True
+        if MINING_THREAD is not None:
+            MINING_THREAD.join()
+        STOP_MINING = False
+        print("Should enable mining again")
         response, status_code = {"Notification": "The block was appended to the chain."}, 201
     else:
+        print("Error, block was invalid")
         response, status_code = {"Error": "The block was invalid and discarded!"}, 400
 
     return jsonify(response), status_code
@@ -81,9 +127,16 @@ def notify_all_nodes_new_transaction(transaction):
 # Used internally to receive new transactions from the network
 @app.route('/append_transaction', methods=['POST'])
 def app_append_transaction():
+    global MINING_THREAD
     transaction_data = request.get_json()
     # Store the transaction received from the network in the local transactions_to_be_confirmed list
     blockchain.add_transaction(transaction_data)
+
+    if len(blockchain.transactions_to_be_confirmed) >= MIN_TRANSACTIONS:
+        new_block = blockchain.create_naked_block(app_port)
+        MINING_THREAD = threading.Thread(target = mine_block_new_thread, args=(new_block,))
+        MINING_THREAD.start()
+        print("Minimum number of transactions `{}`  met. Starting to Mine new Block.".format(MIN_TRANSACTIONS))
     return "Created", 201
 
 # A function which triggers /update_nodes_list POST method of 
@@ -111,7 +164,6 @@ def app_update_nodes_list():
     if not node_address in connected_nodes:
         # Add the new node to the connected_nodes
         connected_nodes.add(node_address)
-
     return "Created", 201
 
 # GET request for checking if the node's copy of the Blockchain is valid

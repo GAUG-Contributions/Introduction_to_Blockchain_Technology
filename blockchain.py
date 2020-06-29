@@ -99,9 +99,11 @@ class Blockchain:
     # Appends a block to the chain after verifying it's validity
     def append_block(self, block, proof):
         if not (Blockchain.is_proof_valid(block, proof)):
+            print("Proof is not valid")
             return False
 
         if (self.previous_block().hash != block.previous_hash):
+            print("Previous block hash is not correct")
             return False
 
         block.hash = proof
@@ -137,6 +139,33 @@ class Blockchain:
 
         return -1
 
+    
+    def create_naked_block(self, _minerID):
+        previous_block = self.previous_block()
+        new_block = Block(index=previous_block.index + 1,
+                          minerID=_minerID,
+                          transactions=self.transactions_to_be_confirmed,
+                          transaction_counter = len(self.transactions_to_be_confirmed),
+                          timestamp=str(datetime.datetime.now()),
+                          previous_hash=previous_block.hash,
+                          proof_of_work=0)
+
+        success, errors = validation.apply_block(new_block)
+
+        if not success:
+            print(errors)
+            print("Removing Erroneous transactions from transaction list")
+            erroneous_transactions = [err.trindex for err in errors]
+            new_transaction_list = []
+            for trindex, transaction in enumerate(new_block.transactions):
+                if trindex not in erroneous_transactions:
+                    new_transaction_list.append(transaction)
+            new_block.transactions = new_transaction_list
+            success, errors = validation.apply_block(new_block)
+            if not success:
+                raise Exception("Removing erroneous transactions still resulted in errors. -------\n"+str(errors))
+        return new_block
+    
     # mine_block encapsulation -> to be used in app_mine_block() function
     def mine_block(self, _minerID):
         previous_block = self.previous_block()
