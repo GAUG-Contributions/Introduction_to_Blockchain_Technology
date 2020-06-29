@@ -164,6 +164,7 @@ class Blockchain:
             success, errors = validation.apply_block(new_block)
             if not success:
                 raise Exception("Removing erroneous transactions still resulted in errors. -------\n"+str(errors))
+        self.transactions_to_be_confirmed = new_block.transactions
         return new_block
     
     # mine_block encapsulation -> to be used in app_mine_block() function

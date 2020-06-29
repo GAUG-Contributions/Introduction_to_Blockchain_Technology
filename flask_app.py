@@ -132,8 +132,9 @@ def app_append_transaction():
     # Store the transaction received from the network in the local transactions_to_be_confirmed list
     blockchain.add_transaction(transaction_data)
 
-    if len(blockchain.transactions_to_be_confirmed) >= MIN_TRANSACTIONS:
-        new_block = blockchain.create_naked_block(app_port)
+    new_block = blockchain.create_naked_block(app_port)#Remove transactions that are not valid
+    
+    if len(new_block.transactions) >= MIN_TRANSACTIONS:
         MINING_THREAD = threading.Thread(target = mine_block_new_thread, args=(new_block,))
         MINING_THREAD.start()
         print("Minimum number of transactions `{}`  met. Starting to Mine new Block.".format(MIN_TRANSACTIONS))
