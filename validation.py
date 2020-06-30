@@ -7,7 +7,7 @@ NEW_NODE_INITIAL_CREDITS = 5
 class BlockException(Exception):
     def __init__(self, transactionExceptions=[]):
         self.transactionExceptions = transactionExceptions
-        super.__init__("Block failed to validate. Following Exceptions occured: {}".format(str(transactionExceptions)))
+        super().__init__("Block failed to validate. Following Exceptions occured: {}".format(str(transactionExceptions)))
 
 def apply_block(block, commit=False):
     """
@@ -28,7 +28,7 @@ def apply_block(block, commit=False):
             
         ret = None
         try:
-            ret = apply_transaction(transaction, block_ID, miner_ID)
+            ret = apply_transaction(transaction, block_ID, miner_ID, just_validate=(not commit))
         except TransactionException as Exp:
             Exp.trindex = trindex
             errors.append(Exp)
@@ -40,11 +40,11 @@ def apply_block(block, commit=False):
     if errors:
         atomic.revert()
         return False, errors
-    
-    for memeID, meme in memes_upvoted.items():
-        meme.reward_upvoters(block_ID) # Reward Upvoters that upvoted
-                                       # the meme before block
-                                       # `block_ID`
+    if commit:
+        for memeID, meme in memes_upvoted.items():
+            meme.reward_upvoters(block_ID) # Reward Upvoters that upvoted
+                                           # the meme before block
+                                           # `block_ID`
 
     if commit:
         atomic.commit()
@@ -53,24 +53,24 @@ def apply_block(block, commit=False):
 
     return True, errors
 
-def apply_transaction(transaction_data, block_ID, miner_ID):
+def apply_transaction(transaction_data, block_ID, miner_ID, just_validate=False):
     """
     Update node_state based on transaction_data
     """
 
     if transaction_data["type"] == "Upvote":
-        return apply_upvote_transaction(transaction_data, block_ID, miner_ID)
+        return apply_upvote_transaction(transaction_data, block_ID, miner_ID, just_validate=just_validate)
     elif transaction_data["type"] == "Meme":
-        apply_meme_transaction(transaction_data, block_ID, miner_ID)
+        apply_meme_transaction(transaction_data, block_ID, miner_ID, just_validate=just_validate)
     elif transaction_data["type"] == "MemeFormat":
-        apply_memeFormat_transaction(transaction_data, block_ID, miner_ID)
+        apply_memeFormat_transaction(transaction_data, block_ID, miner_ID, just_validate=just_validate)
 
-def apply_upvote_transaction(transaction_data, block_ID, miner_ID):
+def apply_upvote_transaction(transaction_data, block_ID, miner_ID, just_validate=False):
     """
     Update node_state based on a memeFormat transaction
     """
     node_id = transaction_data["nodeID"]
-
+    print("Validating Upvote : {}".format(str(just_validate)))
     if node_id not in node_state.Nodes:
         raise(NodeNotFoundForUpvoteException(node_id,
                                              transaction_data["upvoteID"]))
@@ -84,19 +84,24 @@ def apply_upvote_transaction(transaction_data, block_ID, miner_ID):
                                        meme_id,
                                        node_id,
                                        block_ID,
-                                       miner_ID)
+                                       miner_ID,
+                                       discredit_only = just_validate)
     except NotEnoughCreditsException as Exp:
         raise UpvoteFailedNoCreditsException(node_id,
                                              transaction_data["upvoteID"],
                                              Exp.message)
     return meme_id
 
-def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID):
+def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID, just_validate=True):
     """
     Update node_state based on a memeFormat transaction
     """
     node_id = transaction_data["nodeID"]
     node = None
+    if just_validate:
+        # print(just_validate)
+        return
+    print("Creating MemeFormat")
     if node_id not in node_state.Nodes: #Means the node is new. Start
                                         #tracking the state of this
                                         #node
@@ -111,12 +116,19 @@ def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID):
                                        node_id,
                                        miner_ID)
 
-def apply_meme_transaction(transaction_data, block_ID, miner_ID):
+def apply_meme_transaction(transaction_data, block_ID, miner_ID, just_validate=False):
     """
     Update node_state based on a meme transaction
     """
     node_id = transaction_data["nodeID"]
     node = None
+
+    if transaction_data["memeFormat"] not in node_state.MemeFormats:
+        raise(MemeFormatNotFoundException(transaction_data["memeFormat"],
+                                          transaction_data["imageId"]))
+    if just_validate:
+        return
+    print("Creating Meme")
     if node_id not in node_state.Nodes: # Means the node is new. Start
                                         # tracking the state of this
                                         # node
@@ -124,9 +136,6 @@ def apply_meme_transaction(transaction_data, block_ID, miner_ID):
     else:
         node = node_state.Nodes[node_id]
 
-    if transaction_data["memeFormat"] not in node_state.MemeFormats:
-        raise(MemeFormatNotFoundException(transaction_data["memeFormat"],
-                                          transaction_data["imageId"]))
     meme = node_state.Meme(transaction_data["imageId"],
                            transaction_data["name"],
                            transaction_data["memeFormat"],

@@ -310,7 +310,7 @@ def app_get_node_credits():
     if node_id not in map_of_nodes:
         return jsonify({"Error" : "Node `{}` not found".format(node_id)})
 
-    response = vars(map_of_nodes[node_id].wallet)
+    response = str(vars(map_of_nodes[node_id].wallet))
     
     return jsonify(response), 201
 

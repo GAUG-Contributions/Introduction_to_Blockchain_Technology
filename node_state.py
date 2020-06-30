@@ -1,34 +1,35 @@
 from wallet import Wallet
 from atomic import Atomic
+from decimal import Decimal
 from collections import defaultdict
 Nodes = {}
 MemeFormats = {}
 Memes = {}
 Upvotes = {}
 
-UPVOTE_REWARD = 0.10 # Percentage, (in the form of a fraction) of
-                     # upvote credits rewarded to upvoters from
-                     # previous block.
+UPVOTE_REWARD = Decimal("0.10") # Percentage, (in the form of a fraction) of
+                                # upvote credits rewarded to upvoters from
+                                # previous block.
 
-MEME_POSTER_PORTION = 0.60 #Percentage, (in the form of a fraction) of
-                           #upvote credits claimed by node that posted
-                           #meme.
+MEME_POSTER_PORTION = Decimal("0.60") #Percentage, (in the form of a fraction) of
+                                      #upvote credits claimed by node that posted
+                                      #meme.
 
-MEME_MINER_PORTION = 0.10 #Percentage, (in the form of a fraction) of
-                          #upvote credits claimed by node that mined
-                          #the meme.
+MEME_MINER_PORTION = Decimal("0.10") #Percentage, (in the form of a fraction) of
+                                     #upvote credits claimed by node that mined
+                                     #the meme.
 
-MEME_FORMAT_OWNER_PORTION = 0.30 #Percentage, (in the form of a fraction) of
-                          #upvote credits claimed by meme owner.
+MEME_FORMAT_OWNER_PORTION = Decimal("0.30") #Percentage, (in the form of a fraction) of
+                                            #upvote credits claimed by meme owner.
 
-MEME_FORMAT_MINER_REWARD = 0.10 # Percentage, (in the form of a
-                                # fraction) of upvote credits
-                                # rewarded to the miner who mined to
-                                # MemeFormat
+MEME_FORMAT_MINER_REWARD = Decimal("0.10") # Percentage, (in the form of a
+                                           # fraction) of upvote credits
+                                           # rewarded to the miner who mined to
+                                           # MemeFormat
 
-UPVOTE_MINER_REWARD = 0.10 #Percentage, (in the form of a fraction) of
-                           #upvote credits rewarded to miner who mined
-                           #the upvote.
+UPVOTE_MINER_REWARD = Decimal("0.10") #Percentage, (in the form of a fraction) of
+                                      #upvote credits rewarded to miner who mined
+                                      #the upvote.
 
 class Node(Atomic):
     """
@@ -158,6 +159,7 @@ class Meme(Atomic):
         Reward upvoters who upvoted before block `block_ID`.  All upvotes
         in the block should already be added using Meme.add_upvote
         """
+        print("Rewarding Upvoters")
         reward_amount = self.upvote_credits[block_ID] * UPVOTE_REWARD
 
         for block_id in self.blocklist:
@@ -171,14 +173,14 @@ class Upvote(Atomic):
     Class that handles all the functions pertaining to maintaining state
     of an Upvote
     """
-    def __init__(self, ID, meme_ID, upvoter_ID, block_ID, miner_ID, credits=1):
+    def __init__(self, ID, meme_ID, upvoter_ID, block_ID, miner_ID, credits=1, discredit_only=False):
         """
         Initializes the upvote and transfers appropriate credits to meme
         poster, MemeFormat owner. Also rewards the UpvoteMiner,
         MemeMiner, MemeFormatMiner
 
         """
-        self.ID, self.meme_ID, self.upvoter_ID, self.block_ID, self.miner_ID, self.credits = ID, meme_ID, upvoter_ID, block_ID, miner_ID, credits
+        self.ID, self.meme_ID, self.upvoter_ID, self.block_ID, self.miner_ID, self.credits = ID, meme_ID, upvoter_ID, block_ID, miner_ID, Decimal(str(credits))
 
         if self.ID not in Upvotes:
             Upvotes[self.ID] = self
@@ -198,10 +200,12 @@ class Upvote(Atomic):
         meme_format_miner_id = MemeFormats[Memes[self.meme_ID].meme_format].miner
         
         Nodes[upvoter_ID].wallet.discredit_amount(self.credits)
-        
-        Nodes[meme_poster_id].wallet.credit_amount(self.credits * MEME_POSTER_PORTION) # Credit Meme Poster
-        Nodes[meme_miner_id].wallet.credit_amount(self.credits * MEME_MINER_PORTION)# Credit Meme Miner
-        Nodes[meme_format_owner_id].wallet.credit_amount(self.credits * MEME_FORMAT_OWNER_PORTION)# Credit MemeFormat Owner
+        if not discredit_only:
+            print("Distributing and Computing Rewards for Upvote `{}`".format(self.ID))
+            Nodes[meme_poster_id].wallet.credit_amount(self.credits * MEME_POSTER_PORTION) # Credit Meme Poster
+            Nodes[meme_miner_id].wallet.credit_amount(self.credits * MEME_MINER_PORTION)# Credit Meme Miner
+            Nodes[meme_format_owner_id].wallet.credit_amount(self.credits * MEME_FORMAT_OWNER_PORTION)# Credit MemeFormat Owner
 
-        Nodes[meme_format_miner_id].wallet.credit_amount(self.credits * MEME_FORMAT_MINER_REWARD)# Reward MemeFormat Miner
-        Nodes[self.miner_ID].wallet.credit_amount(self.credits * UPVOTE_MINER_REWARD)# Reward Upvote Miner
+            Nodes[meme_format_miner_id].wallet.credit_amount(self.credits * MEME_FORMAT_MINER_REWARD)# Reward MemeFormat Miner
+            Nodes[self.miner_ID].wallet.credit_amount(self.credits * UPVOTE_MINER_REWARD)# Reward Upvote Miner
+        

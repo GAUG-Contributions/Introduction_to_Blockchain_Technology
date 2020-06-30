@@ -1,3 +1,4 @@
+from decimal import Decimal
 class NotEnoughCreditsException(Exception):
     def __init__(self,
                  wallet_ID,
@@ -19,7 +20,7 @@ class Wallet(object):
         ID: The unique identifier for the node (String)
         credits: Initial amount
         """
-        self.credits = credits
+        self.credits = Decimal(str(credits))
         self.ID = ID
 
     def __repr__(self):
@@ -30,14 +31,14 @@ class Wallet(object):
         Never call this function from outside the internal scope of the
         object.
         """
-        self.credits+=credits
+        self.credits+=Decimal(str(credits))
 
     def __discredit_amount__(self, credits=0):
         """
         Never call this function from outside the internal scope of the
         object.        
         """
-        self.credits-=credits
+        self.credits-=Decimal(str(credits))
 
     def credit_amount(self, credits):
         """
