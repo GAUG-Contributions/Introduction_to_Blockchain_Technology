@@ -34,4 +34,3 @@ def revert():
             atomic_object.revert()
         else:
             atomic_object.revert()
-

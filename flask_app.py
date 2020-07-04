@@ -26,30 +26,6 @@ MINING_RESULT = None
 
 MIN_TRANSACTIONS = 1
 
-def mine_block_new_thread(block):
-    global MINING_RESULT
-    satisfying_hash = False
-    block.proof_of_work = 0
-    print("In Mining Thread.")
-    while (not satisfying_hash) and (not STOP_MINING):
-        computed_hash = block.compute_hash()
-        if(computed_hash.startswith(Blockchain.difficultyPattern)):
-            satisfying_hash = True
-            block.hash = computed_hash
-        else:
-            block.proof_of_work += 1
-    if STOP_MINING:
-        MINING_RESULT = False
-        return
-    MINING_RESULT = block
-    print("Congo! We mined something")
-
-    def temporary_thread_to_notify_new_block(block):
-        notify_all_nodes_new_block(block)
-
-    tempoth  = threading.Thread(target=temporary_thread_to_notify_new_block, args=(block,))
-    tempoth.start()
-
 # Creating a Flash Web App
 app = Flask(__name__)
 
@@ -359,6 +335,32 @@ def app_connect_new_nodes():
     # so the most recently connected node can synchronize
     return app_get_chain()
 
+
+def connect_to_node(node_address):
+    """
+    Connect to the default node
+    """
+     # Make a request to register with remote node and obtain information
+    response = requests.post("{}connect_node".format(node_address),
+                             data=json.dumps({"node_address": "http://127.0.0.1:{}/".format(app_port)}), 
+                             headers={"Content-Type": "application/json"})
+
+    # If we are successfully connected to the network,
+    # get the dump of the up-to-date chain and transactions
+    # and construct the local copy of them. This response 
+    # is a result of the return app_get_chain() in /connect_code
+    if response.status_code == 200:
+        global blockchain
+        global connected_nodes
+        # update chain, pending transactions and the connected_nodes
+        blockchain = construct_chain(response.json()['chain'])
+        blockchain.transactions_to_be_confirmed = response.json()['pending transactions']
+        connected_nodes.update(response.json()['peers'])
+        return "Connection successful", 200
+    else:
+        # if something goes wrong, pass it on to the API response
+        return response.content, response.status_code
+
 # A function which triggers /connect_node POST method to 
 # connect to the network and get up-to-data chain and transactions information
 @app.route('/connect_to_node', methods=['POST'])
@@ -371,7 +373,6 @@ def app_connect_to_node():
     if not node_address:
         return jsonify({"Error": "Missing node_address element!"}), 400
 
-    # Make a request to register with remote node and obtain information
     response = requests.post("{}connect_node".format(node_address),
                              data=json.dumps({"node_address": request.host_url}), 
                              headers={"Content-Type": "application/json"})
@@ -391,5 +392,33 @@ def app_connect_to_node():
     else:
         # if something goes wrong, pass it on to the API response
         return response.content, response.status_code
+
+def mine_block_new_thread(block):
+    global MINING_RESULT
+    satisfying_hash = False
+    block.proof_of_work = 0
+    print("In Mining Thread.")
+    while (not satisfying_hash) and (not STOP_MINING):
+        computed_hash = block.compute_hash()
+        if(computed_hash.startswith(Blockchain.difficultyPattern)):
+            satisfying_hash = True
+            block.hash = computed_hash
+        else:
+            block.proof_of_work += 1
+    if STOP_MINING:
+        MINING_RESULT = False
+        return
+    MINING_RESULT = block
+    print("Congo! We mined something")
+
+    def temporary_thread_to_notify_new_block(block):
+        notify_all_nodes_new_block(block)
+        
+    if not consensus(blockchain.chain, connected_nodes):
+        tempoth  = threading.Thread(target=temporary_thread_to_notify_new_block, args=(block,))
+        tempoth.start()
+
+if app_port != 5000:
+    connect_to_node("http://127.0.0.1:5000/")
 
 app.run(host='0.0.0.0', port=app_port)

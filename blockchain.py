@@ -6,11 +6,12 @@ import sys
 import requests
 
 from block import Block
+import node_state
 import validation
 class Blockchain:
     # difficulty level of the Proof of Work
     # shows the pattern with which each hash has to start with
-    difficultyPattern = '0'
+    difficultyPattern = '00'
 
     # Constructor for Blockchain
     def __init__(self):
@@ -70,7 +71,7 @@ class Blockchain:
 
         # Get origin block's hash as a starting point
         previous_hash = chain[0].hash
-
+        
         for current_block in chain:
             # Skip the origin block
             if(current_block.index == 0):
@@ -86,12 +87,20 @@ class Blockchain:
             # Approve the validity of the block
             if not(cls.is_proof_valid(current_block, current_block_hash)):
                 chain_is_valid = False
+
+            # Check if transactions are valid
+            success, errors = validation.apply_block(current_block, commit=True)
+
+            if not success:
+                chain_is_valid = False
+                print("Block transactions are not valid")
+            
             # Restore the current block's hash
             current_block.hash = current_block_hash
             # Update previous hash parameter for the next iteration
             previous_hash = current_block_hash
             # If the current block is not validated, no need to continue checking
-            if not (chain_is_valid):
+            if not chain_is_valid:
                 break
 
         return chain_is_valid 
@@ -205,21 +214,25 @@ def consensus_mechanism(_chain, _connected_nodes):
     # If a longer chain is found, current node's chain is 
     # replaced in order to keep the blockchain up-to-date
     global blockchain
-    current_node_chain_lenght = len(_chain)
+    current_node_chain_length = len(_chain)
     chain_updated = False
-
+    
     for node in _connected_nodes:
         node_response = requests.get("{}get_chain".format(node))
         response_length = node_response.json()["length"] 
         response_chain = node_response.json()["chain"]
         # If the response holds longer chain and the chain is valid
-        if(current_node_chain_lenght < response_length and 
-            Blockchain.check_validity(response_chain)):
-            # Update the length and chain
-            current_node_chain_lenght = response_length
-            blockchain = response_chain
-            chain_updated = True
-
+        if(current_node_chain_length < response_length):
+            response_chain_object = construct_chain_again(response_chain)
+            if Blockchain.check_validity(response_chain_object):
+                node_state.commit_state()
+                # Update the length and chain
+                current_node_chain_length = response_length
+                blockchain = response_chain
+                chain_updated = True
+            else:
+                node_state.revert_state()
+    print("Chain updated" if chain_updated else "Chain is up to date")
     return chain_updated
 
 # A function which builds chain and transactions structure
@@ -227,7 +240,8 @@ def consensus_mechanism(_chain, _connected_nodes):
 def construct_chain_again(json_chain):
     generated_blockchain = Blockchain()
     generated_blockchain.create_origin_block()
-
+    node_state.backup_state()
+    node_state.fresh_state()
     for block_data in json_chain:
         # Skip the Origin block
         if block_data["index"] == 0:
@@ -242,5 +256,6 @@ def construct_chain_again(json_chain):
         proof = block_data['hash']
         # If a block of the chain cannot be validated
         if not generated_blockchain.append_block(block, proof):
+            node_state.revert_state()
             raise Exception("The chain data is altered!")
     return generated_blockchain

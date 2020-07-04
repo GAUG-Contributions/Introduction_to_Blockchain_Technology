@@ -2,10 +2,36 @@ from wallet import Wallet
 from atomic import Atomic
 from decimal import Decimal
 from collections import defaultdict
+
+import copy
 Nodes = {}
 MemeFormats = {}
 Memes = {}
 Upvotes = {}
+
+def commit_state():
+    __Nodes__ = copy.deepcopy(Nodes)
+    __MemeFormats__ = copy.deepcopy(MemeFormats)
+    __Memes__ = copy.deepcopy(Memes)
+    __Upvotes__ = copy.deepcopy(Upvotes)
+
+def backup_state():
+    commit_state()
+
+def fresh_state():
+    global Nodes, MemeFormats, Memes, Upvotes
+    Nodes = {}
+    MemeFormats = {}
+    Memes = {}
+    Upvotes = {}
+
+def revert_state():
+    global Nodes, MemeFormats, Memes, Upvotes
+    Nodes = copy.deepcopy(__Nodes__)
+    MemeFormats = copy.deepcopy(__MemeFormats__)
+    Memes = copy.deepcopy(__Memes__)
+    Upvotes = copy.deepcopy(__Upvotes__)
+
 
 UPVOTE_REWARD = Decimal("0.10") # Percentage, (in the form of a fraction) of
                                 # upvote credits rewarded to upvoters from
