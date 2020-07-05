@@ -9,7 +9,15 @@ MemeFormats = {}
 Memes = {}
 Upvotes = {}
 
+__Nodes__ = {}
+__MemeFormats__ = {}
+__Memes__ = {}
+__Upvotes__ = {}
+
+
+
 def commit_state():
+    global __Nodes__, __MemeFormats__, __Memes__, __Upvotes__
     __Nodes__ = copy.deepcopy(Nodes)
     __MemeFormats__ = copy.deepcopy(MemeFormats)
     __Memes__ = copy.deepcopy(Memes)

@@ -11,7 +11,7 @@ import validation
 class Blockchain:
     # difficulty level of the Proof of Work
     # shows the pattern with which each hash has to start with
-    difficultyPattern = '00'
+    difficultyPattern = '000'
 
     # Constructor for Blockchain
     def __init__(self):
