@@ -418,7 +418,12 @@ def mine_block_new_thread(block):
         tempoth  = threading.Thread(target=temporary_thread_to_notify_new_block, args=(block,))
         tempoth.start()
 
-if app_port != 5000:
-    connect_to_node("http://127.0.0.1:5000/")
+# This is not something we would like to have,
+# it makes the network in some sense centralized.
+# If the node running on port 5000 ever disconnects,
+# no other nodes can connect to the network anymore.  
+
+#if app_port != 5000:
+#    connect_to_node("http://127.0.0.1:5000/")
 
 app.run(host='0.0.0.0', port=app_port)
