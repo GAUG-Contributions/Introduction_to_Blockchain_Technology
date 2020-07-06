@@ -174,21 +174,53 @@ def app_get_pending_transactions():
     response = {"pending_transactions": blockchain.transactions_to_be_confirmed}
     return jsonify(response), 200
 
-# POST method for pushing a new transaction to the local mempool
-@app.route('/add_transaction', methods=['POST'])      
-def app_add_transaction():
-    # Expected JSON data format
-    # {"sender":"SenderName","receiver":"ReceiverName","amount":300}
+def image_base64encoding(imagePath):
+    with open(imagePath, "rb") as media_file:
+        encoded_image = base64.b64encode(media_file.read())
+
+    return encoded_image
+
+# NOTE: The image id's are currently not unique and collisions are possible
+
+
+
+@app.route("/add_meme", methods=["POST"])
+def app_add_meme_transaction():
+    """
+    POST method for pushing a new meme transaction to the local mempool
+    Expected JSON data formats
+    {"type":"Meme","imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
+    """
     transaction_data = request.get_json()
-    transaction_keys = ["sender", "receiver", "amount"]
+    
+    if not transaction_data.get("type") and transaction_data.get("type") == "Meme":
+        return jsonify({"Error": "Transaction type not specified or not `Meme`."})
+    if not transaction_data.get("imagePath"):
+        return jsonify({"Error": "Missing imagePath element!"}), 400
+    if not transaction_data.get("name"):
+        return jsonify({"Error": "Missing name element!"}), 400
+    encodedImage = image_base64encoding(transaction_data["imagePath"])
 
-    # Verify if the required transaction keys are in the json
-    for key in transaction_keys:
-        if not transaction_data.get(key):
-            return jsonify({"Error": "Missing transaction elements!"}), 400
+    # Append the base64 encoding of the Meme or MemeFormat
+    transaction_data["zEncoding64_val"] = encodedImage.decode('ascii')
+    # Append the base64 encoding length
+    transaction_data["zEncoding64_len"] = len(encodedImage)
+    
+    host_port = request.host.split(":")[1]
+    # Append image ID -> Format: HostPort_MemeName
+    transaction_data["imageId"] = "{}_{}".format(host_port, transaction_data["name"])
 
+    host_port = request.host.split(":")[1]
+    # Append image ID -> Format: HostPort_MemeName
+    transaction_data["imageId"] = "{}_{}".format(host_port, transaction_data["name"])
+
+
+    
+    # Get IP and Port of the Node calling this method
+    transaction_data["senderHost"] = request.host
+    transaction_data["nodeID"] = app_port # Temporary NodeID for V3
     # Produce an index and a timestamp for the transaction
-    transaction_data["index"] = len(blockchain.transactions_to_be_confirmed)
+    transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
     transaction_data["timestamp"] = str(datetime.datetime.now())
 
     # Notify all nodes in the network for this new transaction 
@@ -198,48 +230,67 @@ def app_add_transaction():
     response = {"Notification": "The transaction was received."}
     return jsonify(response), 201
 
-def image_base64encoding(imagePath):
-    with open(imagePath, "rb") as media_file:
-        encoded_image = base64.b64encode(media_file.read())
 
-    return encoded_image
+@app.route("/add_memeFormat", methods=["POST"])
+def app_add_memeFormat_transaction():
+    """
+    POST method for pushing a new memeFormat transaction to the local mempool
+    Expected JSON data formats
+    {"type":"MemeFormat","imagePath":"block.jpg", "name": "nameValue"}
+    """
+    transaction_data = request.get_json()
+    
+    if not transaction_data.get("type") and transaction_data.get("type") == "MemeFormat":
+        return jsonify({"Error": "Transaction type not specified or not `MemeFormat`."})
+    if not transaction_data.get("imagePath"):
+        return jsonify({"Error": "Missing imagePath element!"}), 400
+    if not transaction_data.get("name"):
+        return jsonify({"Error": "Missing name element!"}), 400
+    encodedImage = image_base64encoding(transaction_data["imagePath"])
 
-# NOTE: The image id's are currently not unique and collisions are possible
-# POST method for pushing a new transaction to the local mempool
-@app.route('/add_transaction2', methods=['POST'])      
-def app_add_transaction2():
-    # Expected JSON data formats
-    # {"type":"Upvote","imageVoteId":"imageIdValue", "upvoteID":"..."}
-    # {"type":"MemeFormat","imagePath":"block.jpg", "name": "nameValue"}
-    # {"type":"Meme","imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
+    # Append the base64 encoding of the Meme or MemeFormat
+    transaction_data["zEncoding64_val"] = encodedImage.decode('ascii')
+    # Append the base64 encoding length
+    transaction_data["zEncoding64_len"] = len(encodedImage)
+    
+    host_port = request.host.split(":")[1]
+    # Append image ID -> Format: HostPort_MemeName
+    transaction_data["imageId"] = "{}_{}".format(host_port, transaction_data["name"])
+
+    host_port = request.host.split(":")[1]
+    # Append image ID -> Format: HostPort_MemeName
+    transaction_data["imageId"] = "{}_{}".format(host_port, transaction_data["name"])
+
+
+    
+    # Get IP and Port of the Node calling this method
+    transaction_data["senderHost"] = request.host
+    transaction_data["nodeID"] = app_port # Temporary NodeID for V3
+    # Produce an index and a timestamp for the transaction
+    transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
+    transaction_data["timestamp"] = str(datetime.datetime.now())
+
+    # Notify all nodes in the network for this new transaction 
+    # so they can add it to their local mempool
+    notify_all_nodes_new_transaction(transaction_data)
+
+    response = {"Notification": "The transaction was received."}
+    return jsonify(response), 201
+
+
+@app.route("/add_upvote", methods=["POST"])
+def app_add_upvote_transaction():
+    """
+    POST method for pushing a new upvote transaction to the local mempool
+    Expected JSON data formats
+    {"type":"Meme","imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
+    """
     transaction_data = request.get_json()
 
-    if not transaction_data.get("type"):
-        return jsonify({"Error": "Missing type element!"}), 400
-
-    # Check whether the received data format is valid
-    transactionType = transaction_data["type"]
-    if(transactionType == "Upvote"):
-        if not transaction_data.get("imageVoteId"):
-            return jsonify({"Error": "Missing imageId element!"}), 400
-    elif(transactionType == "Meme" or transactionType == "MemeFormat"):
-        if not transaction_data.get("imagePath"):
-            return jsonify({"Error": "Missing imagePath element!"}), 400
-        if not transaction_data.get("name"):
-            return jsonify({"Error": "Missing name element!"}), 400
-
-        encodedImage = image_base64encoding(transaction_data["imagePath"])
-
-        # Append the base64 encoding of the Meme or MemeFormat
-        transaction_data["zEncoding64_val"] = encodedImage.decode('ascii')
-        # Append the base64 encoding length
-        transaction_data["zEncoding64_len"] = len(encodedImage)
-
-        host_port = request.host.split(":")[1]
-        # Append image ID -> Format: HostPort_MemeName
-        transaction_data["imageId"] = "{}_{}".format(host_port, transaction_data["name"])
-    else:
-        return jsonify({"Error": "Wrong type format!"}), 400
+    if not transaction_data.get("type") and transaction_data.get("type") == "Meme":
+        return jsonify({"Error": "Transaction type not specified or not `Meme`."})
+    if not transaction_data.get("imageVoteId"):
+        return jsonify({"Error": "Missing imageId element!"}), 400
 
     # Get IP and Port of the Node calling this method
     transaction_data["senderHost"] = request.host
@@ -254,6 +305,7 @@ def app_add_transaction2():
 
     response = {"Notification": "The transaction was received."}
     return jsonify(response), 201
+
 
 # GET method for visualizing image by it's name
 @app.route('/get_meme', methods=['GET'])
@@ -418,5 +470,16 @@ def mine_block_new_thread(block):
         tempoth  = threading.Thread(target=temporary_thread_to_notify_new_block, args=(block,))
         tempoth.start()
 
+
+# This is not something we would like to have,
+# it makes the network in some sense centralized.
+# If the node running on port 5000 ever disconnects,
+# no other nodes can connect to the network anymore.  
+
+#if app_port != 5000:
+#    connect_to_node("http://127.0.0.1:5000/")
+
+
+        
 app.run(host='0.0.0.0', port=app_port)
->>>>>>> 50e325c2f427e2a80707ecb94891692ca6c8c0a0
+
