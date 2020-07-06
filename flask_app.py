@@ -20,6 +20,8 @@ from node_state import Nodes as map_of_nodes
 
 STOP_MINING = False
 
+AUTOMATIC_MINING = True
+
 MINING_THREAD = None
 
 MINING_RESULT = None
@@ -110,7 +112,7 @@ def app_append_transaction():
 
     new_block = blockchain.create_naked_block(app_port)#Remove transactions that are not valid
     
-    if len(new_block.transactions) >= MIN_TRANSACTIONS:
+    if len(new_block.transactions) >= MIN_TRANSACTIONS and AUTOMATIC_MINING:
         MINING_THREAD = threading.Thread(target = mine_block_new_thread, args=(new_block,))
         MINING_THREAD.start()
         print("Minimum number of transactions `{}`  met. Starting to Mine new Block.".format(MIN_TRANSACTIONS))
@@ -416,21 +418,27 @@ def app_mine_block():
     # then there isn't a reason to mine a new block
     if not blockchain.pending_transactions():
         return jsonify({"Warning": "No pending transactions available!"}), 405
+    new_block = blockchain.create_naked_block(app_port)#Remove transactions that are not valid
 
-    blockchain.mine_block(app_port) # app_port is minerID
-    mined_block = blockchain.previous_block()
-
-    # Store the local lenght of the current node
-    chain_length = len(blockchain.chain)
-    # Check if the chain of the current node is up-to-date with the network
-    consensus(blockchain.chain, connected_nodes)
-    # If our lenght haven't changed, then we are up-to-date
-    if chain_length == len(blockchain.chain):
-        # Notify other nodes in the network for the recently mined block
-        notify_all_nodes_new_block(mined_block)
-
-    response = {"Notification": "Wohooo, you have just mined a block!",
-                "Block Info": mined_block.__dict__}
+    satisfying_hash = False
+    new_block.proof_of_work = 0
+    print("In Manual Mining Mode")
+    while (not satisfying_hash) and (not STOP_MINING):
+        computed_hash = new_block.compute_hash()
+        if(computed_hash.startswith(Blockchain.difficultyPattern)):
+            satisfying_hash = True
+            new_block.hash = computed_hash
+        else:
+            new_block.proof_of_work += 1
+    if STOP_MINING:
+        MINING_RESULT = False
+        response = "Stopped Mining Because another valid block was recieved"
+        return jsonify(response), 200
+    
+    print("Congo! We mined something")
+    notify_all_nodes_new_block(new_block)
+    
+    response = str(new_block)
     return jsonify(response), 200
 
 # POST method for connecting a new node to the network
@@ -512,6 +520,10 @@ def app_connect_to_node():
         return response.content, response.status_code
 
 def mine_block_new_thread(block):
+    """
+    Function used inside the thread used to start mining in a new
+    thread
+    """
     global MINING_RESULT
     satisfying_hash = False
     block.proof_of_work = 0
