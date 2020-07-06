@@ -223,7 +223,11 @@ def consensus_mechanism(_chain, _connected_nodes):
         response_chain = node_response.json()["chain"]
         # If the response holds longer chain and the chain is valid
         if(current_node_chain_length < response_length):
-            response_chain_object = construct_chain_again(response_chain)
+            try:
+                response_chain_object = construct_chain_again(response_chain)
+            except Exception as Exp2:
+                print(Exp2.message)
+                return False
             if Blockchain.check_validity(response_chain_object):
                 node_state.commit_state()
                 # Update the length and chain

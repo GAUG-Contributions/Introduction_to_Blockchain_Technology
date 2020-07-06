@@ -308,6 +308,71 @@ def app_add_upvote_transaction():
     return jsonify(response), 201
 
 
+@app.route("/add_ownership_sale_offer", methods=["POST"])
+def app_add_ownership_sale_offer_transaction():
+    """
+    POST method for pushing a new ownership sale offer transaction to the local mempool
+    Expected JSON data formats
+    {"ownershipSaleOfferID": "ownershipSaleOfferID", "memeFormat":"memeFormatID", "saleAmount" : "saleAmount"}
+    """
+    transaction_data = request.get_json()
+
+    
+    if not transaction_data.get("ownershipSaleOfferID"):
+        return jsonify({"Error" : "Missing ownershipSaleOfferID element"}), 400
+    
+    if not transaction_data.get("memeFormat"):
+        return jsonify({"Error" : "Missing memeFormat element"}), 400
+
+    if not transaction_data.get("saleAmount"):
+        return jsonify({"Error" : "Missing saleAmount element"}), 400
+    # Get IP and Port of the Node calling this method
+    transaction_data["senderHost"] = request.host
+    transaction_data["nodeID"] = app_port # Temporary NodeID for V3
+    # Produce an index and a timestamp for the transaction
+    transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
+    transaction_data["timestamp"] = str(datetime.datetime.now())
+
+    
+    transaction_data["type"] = "OwnershipSaleOffer"
+
+    notify_all_nodes_new_transaction(transaction_data)
+    response = {"Notification": "The transaction was received."}
+    return jsonify(response), 201
+
+@app.route("/add_ownership_purchase", methods=["POST"])
+def app_add_ownership_purchase_transaction():
+    """
+    POST method for pushing a new ownership purchase transaction to the local mempool
+    Expected JSON data formats
+    {
+    "ownershipPurchaseID":"ownershipPurchaseID",
+    "ownershipSaleOfferID":"ownershipSaleOfferID"}
+    """
+    transaction_data = request.get_json()
+    
+    if not transaction_data.get("ownershipPurchaseID"):
+        return jsonify({"Error" : "Missing ownershipPurchaseID element"}), 400
+
+    
+    if not transaction_data.get("ownershipSaleOfferID"):
+        return jsonify({"Error" : "Missing ownershipSaleOfferID element"}), 400
+    
+    # Get IP and Port of the Node calling this method
+    transaction_data["senderHost"] = request.host
+    transaction_data["nodeID"] = app_port # Temporary NodeID for V3
+    # Produce an index and a timestamp for the transaction
+    transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
+    transaction_data["timestamp"] = str(datetime.datetime.now())
+
+    
+    transaction_data["type"] = "OwnershipPurchase"
+
+    notify_all_nodes_new_transaction(transaction_data)
+    response = {"Notification": "The transaction was received."}
+    return jsonify(response), 201
+
+
 # GET method for visualizing image by it's name
 @app.route('/get_meme', methods=['GET'])
 def app_get_meme():
