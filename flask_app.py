@@ -189,12 +189,11 @@ def app_add_meme_transaction():
     """
     POST method for pushing a new meme transaction to the local mempool
     Expected JSON data formats
-    {"type":"Meme","imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
+    {"imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
     """
     transaction_data = request.get_json()
     
-    if not transaction_data.get("type") and transaction_data.get("type") == "Meme":
-        return jsonify({"Error": "Transaction type not specified or not `Meme`."})
+    
     if not transaction_data.get("imagePath"):
         return jsonify({"Error": "Missing imagePath element!"}), 400
     if not transaction_data.get("name"):
@@ -222,9 +221,11 @@ def app_add_meme_transaction():
     # Produce an index and a timestamp for the transaction
     transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
     transaction_data["timestamp"] = str(datetime.datetime.now())
-
+    
     # Notify all nodes in the network for this new transaction 
     # so they can add it to their local mempool
+
+    transaction_data["type"] = "Meme"
     notify_all_nodes_new_transaction(transaction_data)
 
     response = {"Notification": "The transaction was received."}
@@ -236,12 +237,10 @@ def app_add_memeFormat_transaction():
     """
     POST method for pushing a new memeFormat transaction to the local mempool
     Expected JSON data formats
-    {"type":"MemeFormat","imagePath":"block.jpg", "name": "nameValue"}
+    {"imagePath":"block.jpg", "name": "nameValue"}
     """
     transaction_data = request.get_json()
     
-    if not transaction_data.get("type") and transaction_data.get("type") == "MemeFormat":
-        return jsonify({"Error": "Transaction type not specified or not `MemeFormat`."})
     if not transaction_data.get("imagePath"):
         return jsonify({"Error": "Missing imagePath element!"}), 400
     if not transaction_data.get("name"):
@@ -272,6 +271,8 @@ def app_add_memeFormat_transaction():
 
     # Notify all nodes in the network for this new transaction 
     # so they can add it to their local mempool
+
+    transaction_data["type"] = "MemeFormat"
     notify_all_nodes_new_transaction(transaction_data)
 
     response = {"Notification": "The transaction was received."}
@@ -283,12 +284,10 @@ def app_add_upvote_transaction():
     """
     POST method for pushing a new upvote transaction to the local mempool
     Expected JSON data formats
-    {"type":"Meme","imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
+    {"imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
     """
     transaction_data = request.get_json()
 
-    if not transaction_data.get("type") and transaction_data.get("type") == "Meme":
-        return jsonify({"Error": "Transaction type not specified or not `Meme`."})
     if not transaction_data.get("imageVoteId"):
         return jsonify({"Error": "Missing imageId element!"}), 400
 
@@ -301,6 +300,8 @@ def app_add_upvote_transaction():
 
     # Notify all nodes in the network for this new transaction 
     # so they can add it to their local mempool
+
+    transaction_data["type"] = "Upvote"
     notify_all_nodes_new_transaction(transaction_data)
 
     response = {"Notification": "The transaction was received."}
