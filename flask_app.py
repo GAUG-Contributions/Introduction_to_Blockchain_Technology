@@ -284,7 +284,7 @@ def app_add_upvote_transaction():
     """
     POST method for pushing a new upvote transaction to the local mempool
     Expected JSON data formats
-    {"imagePath":"block.jpg", "name": "nameValue", "memeFormat" : "memeFormatID"}
+    {"imageVoteId":"memeID", "upvoteID" : "upvoteID"}
     """
     transaction_data = request.get_json()
 
