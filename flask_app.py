@@ -1,3 +1,9 @@
+"""
+flask_app.py
+Flask application for Meme Economy
+"""
+
+
 # To be installed:
 # Flask==1.1.2: pip install Flask==1.1.2
 # Postman HTTP Client: https://www.getpostman.com/
@@ -43,7 +49,10 @@ connected_nodes = set()
 def get_args(name='default', port="8000"):
     return int(port)
 
-app_port = get_args(*sys.argv)
+if __name__ == "__main__":
+    app_port = get_args(*sys.argv)
+else:
+    app_port = 8000
 host_address = f"http://127.0.0.1:{app_port}/"
 
 # If this is the origin/first node with port number 5000, register it in connected_nodes
@@ -579,6 +588,6 @@ def mine_block_new_thread(block):
 #    connect_to_node("http://127.0.0.1:5000/")
 
 
-        
-app.run(host='0.0.0.0', port=app_port)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=app_port)
 

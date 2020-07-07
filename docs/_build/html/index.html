@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to MemeEconomy (Codename Order66)’s documentation! &#8212; MemeEconomy (Codename Order66) 0.5 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-memeeconomy-codename-order66-s-documentation">
+<h1>Welcome to MemeEconomy (Codename Order66)’s documentation!<a class="headerlink" href="#welcome-to-memeeconomy-codename-order66-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+<span class="target" id="module-block"></span><div class="section" id="block-py">
+<h2>block.py<a class="headerlink" href="#block-py" title="Permalink to this headline">¶</a></h2>
+<p>Defines the Block structure</p>
+</div>
+<span class="target" id="module-blockchain"></span><span class="target" id="module-validation"></span><dl class="py exception">
+<dt id="validation.BlockException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">BlockException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transactionExceptions</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.BlockException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.MemeFormatHasPendingSaleOfferException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">MemeFormatHasPendingSaleOfferException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">memeFormatID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.MemeFormatHasPendingSaleOfferException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.MemeFormatNotFoundException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">MemeFormatNotFoundException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">memeFormatID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.MemeFormatNotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.MemeFormatNotOwnedByNodeException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">MemeFormatNotOwnedByNodeException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nodeID</span></em>, <em class="sig-param"><span class="n">memeFormatID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.MemeFormatNotOwnedByNodeException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.MemeNotFoundException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">MemeNotFoundException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">memeID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.MemeNotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.NodeNotFoundException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">NodeNotFoundException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nodeID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.NodeNotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.OwnershipPurchaseFailedNoCreditsException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">OwnershipPurchaseFailedNoCreditsException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nodeID</span></em>, <em class="sig-param"><span class="n">memeFormatID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em>, <em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.OwnershipPurchaseFailedNoCreditsException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.OwnershipSaleAmountNotPositiveException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">OwnershipSaleAmountNotPositiveException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ownershipSaleOfferID</span></em>, <em class="sig-param"><span class="n">saleAmount</span></em>, <em class="sig-param"><span class="n">transactionID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.OwnershipSaleAmountNotPositiveException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.OwnershipSaleOfferAlreadyAcceptedException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">OwnershipSaleOfferAlreadyAcceptedException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ownershipSaleOfferID</span></em>, <em class="sig-param"><span class="n">nodeID</span></em>, <em class="sig-param"><span class="n">blockID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.OwnershipSaleOfferAlreadyAcceptedException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.OwnershipSaleOfferNotFoundException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">OwnershipSaleOfferNotFoundException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ownershipSaleOfferID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.OwnershipSaleOfferNotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.TransactionException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">TransactionException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transactionID</span></em>, <em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.TransactionException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="validation.UpvoteFailedNoCreditsException">
+<em class="property">exception </em><code class="sig-prename descclassname">validation.</code><code class="sig-name descname">UpvoteFailedNoCreditsException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nodeID</span></em>, <em class="sig-param"><span class="n">transactionID</span></em>, <em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.UpvoteFailedNoCreditsException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="validation.apply_block">
+<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block</span></em>, <em class="sig-param"><span class="n">commit</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to update node_state based on all the transactions in the
+block.  If commit is False, then it will revert node_state, else
+it will commit node_state</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="validation.apply_memeFormat_transaction">
+<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_memeFormat_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction_data</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">just_validate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_memeFormat_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node_state based on a memeFormat transaction</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="validation.apply_meme_transaction">
+<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_meme_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction_data</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">just_validate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_meme_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node_state based on a meme transaction</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="validation.apply_ownership_purchase_transaction">
+<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_ownership_purchase_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction_data</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">just_validate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_ownership_purchase_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node_state based on a ownership purchase transaction</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="validation.apply_ownership_sale_offer_transaction">
+<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_ownership_sale_offer_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction_data</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">just_validate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_ownership_sale_offer_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node_state based on a ownership sale offer transaction</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="validation.apply_transaction">
+<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction_data</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">just_validate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node_state based on transaction_data</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="validation.apply_upvote_transaction">
+<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_upvote_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction_data</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">just_validate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_upvote_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update node_state based on a memeFormat transaction</p>
+</dd></dl>
+
+<span class="target" id="module-node_state"></span><dl class="py class">
+<dt id="node_state.Meme">
+<em class="property">class </em><code class="sig-prename descclassname">node_state.</code><code class="sig-name descname">Meme</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ID</span></em>, <em class="sig-param"><span class="n">title</span></em>, <em class="sig-param"><span class="n">meme_format</span></em>, <em class="sig-param"><span class="n">binary</span></em>, <em class="sig-param"><span class="n">poster_ID</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">'jpg'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that handles all functions pertaining to maintaining state
+of a Meme.</p>
+<dl class="py method">
+<dt id="node_state.Meme.reward_upvoters">
+<code class="sig-name descname">reward_upvoters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block_ID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Meme.reward_upvoters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reward upvoters who upvoted before block <cite>block_ID</cite>.  All upvotes
+in the block should already be added using Meme.add_upvote</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="node_state.MemeFormat">
+<em class="property">class </em><code class="sig-prename descclassname">node_state.</code><code class="sig-name descname">MemeFormat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ID</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">binary</span></em>, <em class="sig-param"><span class="n">owner</span></em>, <em class="sig-param"><span class="n">miner</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.MemeFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that handles all functions pertaining to maintaining state
+of a MemeFormat.</p>
+<dl class="py method">
+<dt id="node_state.MemeFormat.add_meme">
+<code class="sig-name descname">add_meme</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">meme_ID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.MemeFormat.add_meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add meme to MemeFormat</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_state.MemeFormat.add_ownership_sale_offer">
+<code class="sig-name descname">add_ownership_sale_offer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ownershipSaleOfferID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.MemeFormat.add_ownership_sale_offer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add Ownership Sale Offer to MemeFormat</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="node_state.Node">
+<em class="property">class </em><code class="sig-prename descclassname">node_state.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ID</span></em>, <em class="sig-param"><span class="n">credits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that handles all functions pertaining to maintaining state
+of a Node.</p>
+<dl class="py method">
+<dt id="node_state.Node.add_meme">
+<code class="sig-name descname">add_meme</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">meme_ID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Node.add_meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a meme to the node</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_state.Node.add_meme_format">
+<code class="sig-name descname">add_meme_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">meme_format_ID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Node.add_meme_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Meme format to the Node
+ownership : percentage of ownership of meme_format</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="node_state.Node.add_upvote">
+<code class="sig-name descname">add_upvote</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upvote_ID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Node.add_upvote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an upvote to the node</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="node_state.OwnershipSaleOffer">
+<em class="property">class </em><code class="sig-prename descclassname">node_state.</code><code class="sig-name descname">OwnershipSaleOffer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ownershipSaleOfferID</span></em>, <em class="sig-param"><span class="n">sellerID</span></em>, <em class="sig-param"><span class="n">memeFormatID</span></em>, <em class="sig-param"><span class="n">sellBlockID</span></em>, <em class="sig-param"><span class="n">sellBlockMinerID</span></em>, <em class="sig-param"><span class="n">amount</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.OwnershipSaleOffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that handles mehthods pertaining to OwnershipSaleOffer</p>
+<dl class="py method">
+<dt id="node_state.OwnershipSaleOffer.buy">
+<code class="sig-name descname">buy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buyerID</span></em>, <em class="sig-param"><span class="n">buyBlockID</span></em>, <em class="sig-param"><span class="n">buyBlockMinerID</span></em>, <em class="sig-param"><span class="n">discredit_only</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.OwnershipSaleOffer.buy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that handles the buying of Ownership based on the ownership Sale offer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="node_state.Upvote">
+<em class="property">class </em><code class="sig-prename descclassname">node_state.</code><code class="sig-name descname">Upvote</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ID</span></em>, <em class="sig-param"><span class="n">meme_ID</span></em>, <em class="sig-param"><span class="n">upvoter_ID</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">credits</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">discredit_only</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Upvote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that handles all the functions pertaining to maintaining state
+of an Upvote</p>
+</dd></dl>
+
+<span class="target" id="module-wallet"></span><dl class="py exception">
+<dt id="wallet.NotEnoughCreditsException">
+<em class="property">exception </em><code class="sig-prename descclassname">wallet.</code><code class="sig-name descname">NotEnoughCreditsException</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wallet_ID</span></em>, <em class="sig-param"><span class="n">current_amount</span></em>, <em class="sig-param"><span class="n">discredit_amount</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wallet.NotEnoughCreditsException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="wallet.Wallet">
+<em class="property">class </em><code class="sig-prename descclassname">wallet.</code><code class="sig-name descname">Wallet</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ID</span></em>, <em class="sig-param"><span class="n">credits</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wallet.Wallet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that handles all functions pertaining to a node’s crypto
+wallet.  Objects of this class are never transmitted, but stored
+locally for ease of validating transactions and blocks.</p>
+<dl class="py method">
+<dt id="wallet.Wallet.credit_amount">
+<code class="sig-name descname">credit_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">credits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wallet.Wallet.credit_amount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use this function to credit the wallet with a certain amount of
+credits</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wallet.Wallet.discredit_amount">
+<code class="sig-name descname">discredit_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">credits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wallet.Wallet.discredit_amount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use this function to discredit the wallet with a certain amount of
+credits</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-atomic"></span></div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">MemeEconomy (Codename Order66)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Akshay Katyal, Anant Sujatanagarjuna, Chris Warin, Mehmed Mustafa, Rahul Agrawal, Steffen Tunkel.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

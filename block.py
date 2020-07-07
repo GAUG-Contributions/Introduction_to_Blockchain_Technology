@@ -1,3 +1,9 @@
+"""
+block.py
+====================================
+Defines the Block structure
+"""
+
 import hashlib
 import json
 
