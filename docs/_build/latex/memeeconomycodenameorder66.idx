@@ -1,0 +1,92 @@
+\indexentry{module@\spxentry{module}!block@\spxentry{block}|hyperpage}{1}
+\indexentry{block@\spxentry{block}!module@\spxentry{module}|hyperpage}{1}
+\indexentry{Block (class in block)@\spxentry{Block}\spxextra{class in block}|hyperpage}{1}
+\indexentry{compute\_hash() (block.Block method)@\spxentry{compute\_hash()}\spxextra{block.Block method}|hyperpage}{1}
+\indexentry{get\_transactions() (block.Block method)@\spxentry{get\_transactions()}\spxextra{block.Block method}|hyperpage}{1}
+\indexentry{module@\spxentry{module}!blockchain@\spxentry{blockchain}|hyperpage}{1}
+\indexentry{blockchain@\spxentry{blockchain}!module@\spxentry{module}|hyperpage}{1}
+\indexentry{Blockchain (class in blockchain)@\spxentry{Blockchain}\spxextra{class in blockchain}|hyperpage}{1}
+\indexentry{add\_transaction() (blockchain.Blockchain method)@\spxentry{add\_transaction()}\spxextra{blockchain.Blockchain method}|hyperpage}{1}
+\indexentry{append\_block() (blockchain.Blockchain method)@\spxentry{append\_block()}\spxextra{blockchain.Blockchain method}|hyperpage}{1}
+\indexentry{check\_validity() (blockchain.Blockchain class method)@\spxentry{check\_validity()}\spxextra{blockchain.Blockchain class method}|hyperpage}{1}
+\indexentry{create\_naked\_block() (blockchain.Blockchain method)@\spxentry{create\_naked\_block()}\spxextra{blockchain.Blockchain method}|hyperpage}{1}
+\indexentry{create\_origin\_block() (blockchain.Blockchain method)@\spxentry{create\_origin\_block()}\spxextra{blockchain.Blockchain method}|hyperpage}{1}
+\indexentry{difficultyPattern (blockchain.Blockchain attribute)@\spxentry{difficultyPattern}\spxextra{blockchain.Blockchain attribute}|hyperpage}{1}
+\indexentry{find\_image() (blockchain.Blockchain method)@\spxentry{find\_image()}\spxextra{blockchain.Blockchain method}|hyperpage}{2}
+\indexentry{is\_proof\_valid() (blockchain.Blockchain class method)@\spxentry{is\_proof\_valid()}\spxextra{blockchain.Blockchain class method}|hyperpage}{2}
+\indexentry{pending\_transactions() (blockchain.Blockchain method)@\spxentry{pending\_transactions()}\spxextra{blockchain.Blockchain method}|hyperpage}{2}
+\indexentry{previous\_block() (blockchain.Blockchain method)@\spxentry{previous\_block()}\spxextra{blockchain.Blockchain method}|hyperpage}{2}
+\indexentry{proof\_of\_work() (blockchain.Blockchain static method)@\spxentry{proof\_of\_work()}\spxextra{blockchain.Blockchain static method}|hyperpage}{2}
+\indexentry{consensus\_mechanism() (in module blockchain)@\spxentry{consensus\_mechanism()}\spxextra{in module blockchain}|hyperpage}{2}
+\indexentry{construct\_chain\_again() (in module blockchain)@\spxentry{construct\_chain\_again()}\spxextra{in module blockchain}|hyperpage}{2}
+\indexentry{module@\spxentry{module}!validation@\spxentry{validation}|hyperpage}{2}
+\indexentry{validation@\spxentry{validation}!module@\spxentry{module}|hyperpage}{2}
+\indexentry{BlockException@\spxentry{BlockException}|hyperpage}{2}
+\indexentry{MemeFormatHasPendingSaleOfferException@\spxentry{MemeFormatHasPendingSaleOfferException}|hyperpage}{2}
+\indexentry{MemeFormatNotFoundException@\spxentry{MemeFormatNotFoundException}|hyperpage}{2}
+\indexentry{MemeFormatNotOwnedByNodeException@\spxentry{MemeFormatNotOwnedByNodeException}|hyperpage}{2}
+\indexentry{MemeNotFoundException@\spxentry{MemeNotFoundException}|hyperpage}{2}
+\indexentry{NodeNotFoundException@\spxentry{NodeNotFoundException}|hyperpage}{2}
+\indexentry{OwnershipPurchaseFailedNoCreditsException@\spxentry{OwnershipPurchaseFailedNoCreditsException}|hyperpage}{2}
+\indexentry{OwnershipSaleAmountNotPositiveException@\spxentry{OwnershipSaleAmountNotPositiveException}|hyperpage}{2}
+\indexentry{OwnershipSaleOfferAlreadyAcceptedException@\spxentry{OwnershipSaleOfferAlreadyAcceptedException}|hyperpage}{3}
+\indexentry{OwnershipSaleOfferNotFoundException@\spxentry{OwnershipSaleOfferNotFoundException}|hyperpage}{3}
+\indexentry{TransactionException@\spxentry{TransactionException}|hyperpage}{3}
+\indexentry{UpvoteFailedNoCreditsException@\spxentry{UpvoteFailedNoCreditsException}|hyperpage}{3}
+\indexentry{apply\_block() (in module validation)@\spxentry{apply\_block()}\spxextra{in module validation}|hyperpage}{3}
+\indexentry{apply\_memeFormat\_transaction() (in module validation)@\spxentry{apply\_memeFormat\_transaction()}\spxextra{in module validation}|hyperpage}{3}
+\indexentry{apply\_meme\_transaction() (in module validation)@\spxentry{apply\_meme\_transaction()}\spxextra{in module validation}|hyperpage}{3}
+\indexentry{apply\_ownership\_purchase\_transaction() (in module validation)@\spxentry{apply\_ownership\_purchase\_transaction()}\spxextra{in module validation}|hyperpage}{3}
+\indexentry{apply\_ownership\_sale\_offer\_transaction() (in module validation)@\spxentry{apply\_ownership\_sale\_offer\_transaction()}\spxextra{in module validation}|hyperpage}{3}
+\indexentry{apply\_transaction() (in module validation)@\spxentry{apply\_transaction()}\spxextra{in module validation}|hyperpage}{3}
+\indexentry{apply\_upvote\_transaction() (in module validation)@\spxentry{apply\_upvote\_transaction()}\spxextra{in module validation}|hyperpage}{3}
+\indexentry{module@\spxentry{module}!node\_state@\spxentry{node\_state}|hyperpage}{3}
+\indexentry{node\_state@\spxentry{node\_state}!module@\spxentry{module}|hyperpage}{3}
+\indexentry{BUY\_TRANSACTION\_MINER\_REWARD (in module node\_state)@\spxentry{BUY\_TRANSACTION\_MINER\_REWARD}\spxextra{in module node\_state}|hyperpage}{3}
+\indexentry{MEME\_FORMAT\_MINER\_REWARD (in module node\_state)@\spxentry{MEME\_FORMAT\_MINER\_REWARD}\spxextra{in module node\_state}|hyperpage}{3}
+\indexentry{MEME\_FORMAT\_OWNER\_PORTION (in module node\_state)@\spxentry{MEME\_FORMAT\_OWNER\_PORTION}\spxextra{in module node\_state}|hyperpage}{3}
+\indexentry{MEME\_MINER\_PORTION (in module node\_state)@\spxentry{MEME\_MINER\_PORTION}\spxextra{in module node\_state}|hyperpage}{4}
+\indexentry{MEME\_POSTER\_PORTION (in module node\_state)@\spxentry{MEME\_POSTER\_PORTION}\spxextra{in module node\_state}|hyperpage}{4}
+\indexentry{Meme (class in node\_state)@\spxentry{Meme}\spxextra{class in node\_state}|hyperpage}{4}
+\indexentry{\_\_init\_\_() (node\_state.Meme method)@\spxentry{\_\_init\_\_()}\spxextra{node\_state.Meme method}|hyperpage}{4}
+\indexentry{\_\_repr\_\_() (node\_state.Meme method)@\spxentry{\_\_repr\_\_()}\spxextra{node\_state.Meme method}|hyperpage}{4}
+\indexentry{add\_upvote() (node\_state.Meme method)@\spxentry{add\_upvote()}\spxextra{node\_state.Meme method}|hyperpage}{4}
+\indexentry{reward\_upvoters() (node\_state.Meme method)@\spxentry{reward\_upvoters()}\spxextra{node\_state.Meme method}|hyperpage}{4}
+\indexentry{MemeFormat (class in node\_state)@\spxentry{MemeFormat}\spxextra{class in node\_state}|hyperpage}{4}
+\indexentry{\_\_init\_\_() (node\_state.MemeFormat method)@\spxentry{\_\_init\_\_()}\spxextra{node\_state.MemeFormat method}|hyperpage}{4}
+\indexentry{\_\_repr\_\_() (node\_state.MemeFormat method)@\spxentry{\_\_repr\_\_()}\spxextra{node\_state.MemeFormat method}|hyperpage}{4}
+\indexentry{add\_meme() (node\_state.MemeFormat method)@\spxentry{add\_meme()}\spxextra{node\_state.MemeFormat method}|hyperpage}{4}
+\indexentry{add\_ownership\_sale\_offer() (node\_state.MemeFormat method)@\spxentry{add\_ownership\_sale\_offer()}\spxextra{node\_state.MemeFormat method}|hyperpage}{4}
+\indexentry{Node (class in node\_state)@\spxentry{Node}\spxextra{class in node\_state}|hyperpage}{4}
+\indexentry{\_\_init\_\_() (node\_state.Node method)@\spxentry{\_\_init\_\_()}\spxextra{node\_state.Node method}|hyperpage}{4}
+\indexentry{\_\_repr\_\_() (node\_state.Node method)@\spxentry{\_\_repr\_\_()}\spxextra{node\_state.Node method}|hyperpage}{5}
+\indexentry{add\_meme() (node\_state.Node method)@\spxentry{add\_meme()}\spxextra{node\_state.Node method}|hyperpage}{5}
+\indexentry{add\_meme\_format() (node\_state.Node method)@\spxentry{add\_meme\_format()}\spxextra{node\_state.Node method}|hyperpage}{5}
+\indexentry{add\_upvote() (node\_state.Node method)@\spxentry{add\_upvote()}\spxextra{node\_state.Node method}|hyperpage}{5}
+\indexentry{OwnershipSaleOffer (class in node\_state)@\spxentry{OwnershipSaleOffer}\spxextra{class in node\_state}|hyperpage}{5}
+\indexentry{\_\_init\_\_() (node\_state.OwnershipSaleOffer method)@\spxentry{\_\_init\_\_()}\spxextra{node\_state.OwnershipSaleOffer method}|hyperpage}{5}
+\indexentry{\_\_repr\_\_() (node\_state.OwnershipSaleOffer method)@\spxentry{\_\_repr\_\_()}\spxextra{node\_state.OwnershipSaleOffer method}|hyperpage}{5}
+\indexentry{buy() (node\_state.OwnershipSaleOffer method)@\spxentry{buy()}\spxextra{node\_state.OwnershipSaleOffer method}|hyperpage}{5}
+\indexentry{SELL\_TRANSACTION\_MINER\_REWARD (in module node\_state)@\spxentry{SELL\_TRANSACTION\_MINER\_REWARD}\spxextra{in module node\_state}|hyperpage}{5}
+\indexentry{UPVOTE\_MINER\_REWARD (in module node\_state)@\spxentry{UPVOTE\_MINER\_REWARD}\spxextra{in module node\_state}|hyperpage}{5}
+\indexentry{UPVOTE\_REWARD (in module node\_state)@\spxentry{UPVOTE\_REWARD}\spxextra{in module node\_state}|hyperpage}{5}
+\indexentry{Upvote (class in node\_state)@\spxentry{Upvote}\spxextra{class in node\_state}|hyperpage}{5}
+\indexentry{\_\_init\_\_() (node\_state.Upvote method)@\spxentry{\_\_init\_\_()}\spxextra{node\_state.Upvote method}|hyperpage}{5}
+\indexentry{\_\_repr\_\_() (node\_state.Upvote method)@\spxentry{\_\_repr\_\_()}\spxextra{node\_state.Upvote method}|hyperpage}{5}
+\indexentry{backup\_state() (in module node\_state)@\spxentry{backup\_state()}\spxextra{in module node\_state}|hyperpage}{5}
+\indexentry{commit\_state() (in module node\_state)@\spxentry{commit\_state()}\spxextra{in module node\_state}|hyperpage}{5}
+\indexentry{fresh\_state() (in module node\_state)@\spxentry{fresh\_state()}\spxextra{in module node\_state}|hyperpage}{5}
+\indexentry{revert\_state() (in module node\_state)@\spxentry{revert\_state()}\spxextra{in module node\_state}|hyperpage}{5}
+\indexentry{module@\spxentry{module}!wallet@\spxentry{wallet}|hyperpage}{5}
+\indexentry{wallet@\spxentry{wallet}!module@\spxentry{module}|hyperpage}{5}
+\indexentry{NotEnoughCreditsException@\spxentry{NotEnoughCreditsException}|hyperpage}{6}
+\indexentry{Wallet (class in wallet)@\spxentry{Wallet}\spxextra{class in wallet}|hyperpage}{6}
+\indexentry{credit\_amount() (wallet.Wallet method)@\spxentry{credit\_amount()}\spxextra{wallet.Wallet method}|hyperpage}{6}
+\indexentry{discredit\_amount() (wallet.Wallet method)@\spxentry{discredit\_amount()}\spxextra{wallet.Wallet method}|hyperpage}{6}
+\indexentry{module@\spxentry{module}!atomic@\spxentry{atomic}|hyperpage}{6}
+\indexentry{atomic@\spxentry{atomic}!module@\spxentry{module}|hyperpage}{6}
+\indexentry{Atomic (class in atomic)@\spxentry{Atomic}\spxextra{class in atomic}|hyperpage}{6}
+\indexentry{commit() (atomic.Atomic method)@\spxentry{commit()}\spxextra{atomic.Atomic method}|hyperpage}{6}
+\indexentry{revert() (atomic.Atomic method)@\spxentry{revert()}\spxextra{atomic.Atomic method}|hyperpage}{6}
+\indexentry{commit() (in module atomic)@\spxentry{commit()}\spxextra{in module atomic}|hyperpage}{6}
+\indexentry{revert() (in module atomic)@\spxentry{revert()}\spxextra{in module atomic}|hyperpage}{6}

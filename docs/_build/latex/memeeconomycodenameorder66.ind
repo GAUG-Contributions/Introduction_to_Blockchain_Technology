@@ -1,0 +1,162 @@
+\begin{sphinxtheindex}
+\let\bigletter\sphinxstyleindexlettergroup
+\let\spxpagem \sphinxstyleindexpagemain
+\let\spxentry \sphinxstyleindexentry
+\let\spxextra \sphinxstyleindexextra
+
+  \bigletter {\sphinxsymbolsname}
+  \item \spxentry{\_\_init\_\_()}\spxextra{node\_state.Meme method}, \hyperpage{4}
+  \item \spxentry{\_\_init\_\_()}\spxextra{node\_state.MemeFormat method}, \hyperpage{4}
+  \item \spxentry{\_\_init\_\_()}\spxextra{node\_state.Node method}, \hyperpage{4}
+  \item \spxentry{\_\_init\_\_()}\spxextra{node\_state.OwnershipSaleOffer method}, \hyperpage{5}
+  \item \spxentry{\_\_init\_\_()}\spxextra{node\_state.Upvote method}, \hyperpage{5}
+  \item \spxentry{\_\_repr\_\_()}\spxextra{node\_state.Meme method}, \hyperpage{4}
+  \item \spxentry{\_\_repr\_\_()}\spxextra{node\_state.MemeFormat method}, \hyperpage{4}
+  \item \spxentry{\_\_repr\_\_()}\spxextra{node\_state.Node method}, \hyperpage{5}
+  \item \spxentry{\_\_repr\_\_()}\spxextra{node\_state.OwnershipSaleOffer method}, \hyperpage{5}
+  \item \spxentry{\_\_repr\_\_()}\spxextra{node\_state.Upvote method}, \hyperpage{5}
+
+  \indexspace
+  \bigletter A
+  \item \spxentry{add\_meme()}\spxextra{node\_state.MemeFormat method}, \hyperpage{4}
+  \item \spxentry{add\_meme()}\spxextra{node\_state.Node method}, \hyperpage{5}
+  \item \spxentry{add\_meme\_format()}\spxextra{node\_state.Node method}, \hyperpage{5}
+  \item \spxentry{add\_ownership\_sale\_offer()}\spxextra{node\_state.MemeFormat method}, 
+		\hyperpage{4}
+  \item \spxentry{add\_transaction()}\spxextra{blockchain.Blockchain method}, \hyperpage{1}
+  \item \spxentry{add\_upvote()}\spxextra{node\_state.Meme method}, \hyperpage{4}
+  \item \spxentry{add\_upvote()}\spxextra{node\_state.Node method}, \hyperpage{5}
+  \item \spxentry{append\_block()}\spxextra{blockchain.Blockchain method}, \hyperpage{1}
+  \item \spxentry{apply\_block()}\spxextra{in module validation}, \hyperpage{3}
+  \item \spxentry{apply\_meme\_transaction()}\spxextra{in module validation}, \hyperpage{3}
+  \item \spxentry{apply\_memeFormat\_transaction()}\spxextra{in module validation}, \hyperpage{3}
+  \item \spxentry{apply\_ownership\_purchase\_transaction()}\spxextra{in module validation}, 
+		\hyperpage{3}
+  \item \spxentry{apply\_ownership\_sale\_offer\_transaction()}\spxextra{in module validation}, 
+		\hyperpage{3}
+  \item \spxentry{apply\_transaction()}\spxextra{in module validation}, \hyperpage{3}
+  \item \spxentry{apply\_upvote\_transaction()}\spxextra{in module validation}, \hyperpage{3}
+  \item \spxentry{atomic}
+    \subitem \spxentry{module}, \hyperpage{6}
+  \item \spxentry{Atomic}\spxextra{class in atomic}, \hyperpage{6}
+
+  \indexspace
+  \bigletter B
+  \item \spxentry{backup\_state()}\spxextra{in module node\_state}, \hyperpage{5}
+  \item \spxentry{block}
+    \subitem \spxentry{module}, \hyperpage{1}
+  \item \spxentry{Block}\spxextra{class in block}, \hyperpage{1}
+  \item \spxentry{blockchain}
+    \subitem \spxentry{module}, \hyperpage{1}
+  \item \spxentry{Blockchain}\spxextra{class in blockchain}, \hyperpage{1}
+  \item \spxentry{BlockException}, \hyperpage{2}
+  \item \spxentry{buy()}\spxextra{node\_state.OwnershipSaleOffer method}, \hyperpage{5}
+  \item \spxentry{BUY\_TRANSACTION\_MINER\_REWARD}\spxextra{in module node\_state}, \hyperpage{3}
+
+  \indexspace
+  \bigletter C
+  \item \spxentry{check\_validity()}\spxextra{blockchain.Blockchain class method}, \hyperpage{1}
+  \item \spxentry{commit()}\spxextra{atomic.Atomic method}, \hyperpage{6}
+  \item \spxentry{commit()}\spxextra{in module atomic}, \hyperpage{6}
+  \item \spxentry{commit\_state()}\spxextra{in module node\_state}, \hyperpage{5}
+  \item \spxentry{compute\_hash()}\spxextra{block.Block method}, \hyperpage{1}
+  \item \spxentry{consensus\_mechanism()}\spxextra{in module blockchain}, \hyperpage{2}
+  \item \spxentry{construct\_chain\_again()}\spxextra{in module blockchain}, \hyperpage{2}
+  \item \spxentry{create\_naked\_block()}\spxextra{blockchain.Blockchain method}, \hyperpage{1}
+  \item \spxentry{create\_origin\_block()}\spxextra{blockchain.Blockchain method}, \hyperpage{1}
+  \item \spxentry{credit\_amount()}\spxextra{wallet.Wallet method}, \hyperpage{6}
+
+  \indexspace
+  \bigletter D
+  \item \spxentry{difficultyPattern}\spxextra{blockchain.Blockchain attribute}, \hyperpage{1}
+  \item \spxentry{discredit\_amount()}\spxextra{wallet.Wallet method}, \hyperpage{6}
+
+  \indexspace
+  \bigletter F
+  \item \spxentry{find\_image()}\spxextra{blockchain.Blockchain method}, \hyperpage{2}
+  \item \spxentry{fresh\_state()}\spxextra{in module node\_state}, \hyperpage{5}
+
+  \indexspace
+  \bigletter G
+  \item \spxentry{get\_transactions()}\spxextra{block.Block method}, \hyperpage{1}
+
+  \indexspace
+  \bigletter I
+  \item \spxentry{is\_proof\_valid()}\spxextra{blockchain.Blockchain class method}, \hyperpage{2}
+
+  \indexspace
+  \bigletter M
+  \item \spxentry{Meme}\spxextra{class in node\_state}, \hyperpage{4}
+  \item \spxentry{MEME\_FORMAT\_MINER\_REWARD}\spxextra{in module node\_state}, \hyperpage{3}
+  \item \spxentry{MEME\_FORMAT\_OWNER\_PORTION}\spxextra{in module node\_state}, \hyperpage{3}
+  \item \spxentry{MEME\_MINER\_PORTION}\spxextra{in module node\_state}, \hyperpage{4}
+  \item \spxentry{MEME\_POSTER\_PORTION}\spxextra{in module node\_state}, \hyperpage{4}
+  \item \spxentry{MemeFormat}\spxextra{class in node\_state}, \hyperpage{4}
+  \item \spxentry{MemeFormatHasPendingSaleOfferException}, \hyperpage{2}
+  \item \spxentry{MemeFormatNotFoundException}, \hyperpage{2}
+  \item \spxentry{MemeFormatNotOwnedByNodeException}, \hyperpage{2}
+  \item \spxentry{MemeNotFoundException}, \hyperpage{2}
+  \item \spxentry{module}
+    \subitem \spxentry{atomic}, \hyperpage{6}
+    \subitem \spxentry{block}, \hyperpage{1}
+    \subitem \spxentry{blockchain}, \hyperpage{1}
+    \subitem \spxentry{node\_state}, \hyperpage{3}
+    \subitem \spxentry{validation}, \hyperpage{2}
+    \subitem \spxentry{wallet}, \hyperpage{5}
+
+  \indexspace
+  \bigletter N
+  \item \spxentry{Node}\spxextra{class in node\_state}, \hyperpage{4}
+  \item \spxentry{node\_state}
+    \subitem \spxentry{module}, \hyperpage{3}
+  \item \spxentry{NodeNotFoundException}, \hyperpage{2}
+  \item \spxentry{NotEnoughCreditsException}, \hyperpage{6}
+
+  \indexspace
+  \bigletter O
+  \item \spxentry{OwnershipPurchaseFailedNoCreditsException}, \hyperpage{2}
+  \item \spxentry{OwnershipSaleAmountNotPositiveException}, \hyperpage{2}
+  \item \spxentry{OwnershipSaleOffer}\spxextra{class in node\_state}, \hyperpage{5}
+  \item \spxentry{OwnershipSaleOfferAlreadyAcceptedException}, \hyperpage{3}
+  \item \spxentry{OwnershipSaleOfferNotFoundException}, \hyperpage{3}
+
+  \indexspace
+  \bigletter P
+  \item \spxentry{pending\_transactions()}\spxextra{blockchain.Blockchain method}, \hyperpage{2}
+  \item \spxentry{previous\_block()}\spxextra{blockchain.Blockchain method}, \hyperpage{2}
+  \item \spxentry{proof\_of\_work()}\spxextra{blockchain.Blockchain static method}, \hyperpage{2}
+
+  \indexspace
+  \bigletter R
+  \item \spxentry{revert()}\spxextra{atomic.Atomic method}, \hyperpage{6}
+  \item \spxentry{revert()}\spxextra{in module atomic}, \hyperpage{6}
+  \item \spxentry{revert\_state()}\spxextra{in module node\_state}, \hyperpage{5}
+  \item \spxentry{reward\_upvoters()}\spxextra{node\_state.Meme method}, \hyperpage{4}
+
+  \indexspace
+  \bigletter S
+  \item \spxentry{SELL\_TRANSACTION\_MINER\_REWARD}\spxextra{in module node\_state}, \hyperpage{5}
+
+  \indexspace
+  \bigletter T
+  \item \spxentry{TransactionException}, \hyperpage{3}
+
+  \indexspace
+  \bigletter U
+  \item \spxentry{Upvote}\spxextra{class in node\_state}, \hyperpage{5}
+  \item \spxentry{UPVOTE\_MINER\_REWARD}\spxextra{in module node\_state}, \hyperpage{5}
+  \item \spxentry{UPVOTE\_REWARD}\spxextra{in module node\_state}, \hyperpage{5}
+  \item \spxentry{UpvoteFailedNoCreditsException}, \hyperpage{3}
+
+  \indexspace
+  \bigletter V
+  \item \spxentry{validation}
+    \subitem \spxentry{module}, \hyperpage{2}
+
+  \indexspace
+  \bigletter W
+  \item \spxentry{wallet}
+    \subitem \spxentry{module}, \hyperpage{5}
+  \item \spxentry{Wallet}\spxextra{class in wallet}, \hyperpage{6}
+
+\end{sphinxtheindex}
