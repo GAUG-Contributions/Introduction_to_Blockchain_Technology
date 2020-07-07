@@ -30,6 +30,7 @@ Indices and tables
 
 .. automodule:: node_state
    :members:
+   :special-members:
 
 .. automodule:: wallet
    :members:

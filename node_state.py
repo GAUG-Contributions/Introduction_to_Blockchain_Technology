@@ -1,3 +1,12 @@
+"""
+node_state.py 
+======================== 
+Module that keeps track of
+state such as wallet amounts of Nodes for making validation of
+transactions easy
+"""
+
+
 from wallet import Wallet
 from atomic import Atomic
 from decimal import Decimal
@@ -17,6 +26,9 @@ __Upvotes__ = {}
 __OwnershipSaleOffers__ = {}
 
 def commit_state():
+    """
+    Commit node_state
+    """
     global __Nodes__, __MemeFormats__, __Memes__, __Upvotes__
     __Nodes__ = copy.deepcopy(Nodes)
     __MemeFormats__ = copy.deepcopy(MemeFormats)
@@ -25,9 +37,15 @@ def commit_state():
     __OwnershipSaleOffers__ = copy.deepcopy(OwnershipSaleOffers)
 
 def backup_state():
+    """
+    Create backup of node_state
+    """
     commit_state()
 
 def fresh_state():
+    """
+    Create a fresh empty node_state
+    """
     global Nodes, MemeFormats, Memes, Upvotes
     Nodes = {}
     MemeFormats = {}
@@ -36,6 +54,9 @@ def fresh_state():
     OwnershipSaleOffers = {}
 
 def revert_state():
+    """
+    Revert node_state to backup
+    """
     global Nodes, MemeFormats, Memes, Upvotes
     Nodes = copy.deepcopy(__Nodes__)
     MemeFormats = copy.deepcopy(__MemeFormats__)
@@ -44,46 +65,47 @@ def revert_state():
     OwnershipSaleOffers = copy.deepcopy(__OwnershipSaleOffers__)
 
 
-UPVOTE_REWARD = Decimal("0.10") # Percentage, (in the form of a fraction) of
-                                # upvote credits rewarded to upvoters from
-                                # previous block.
-
-MEME_POSTER_PORTION = Decimal("0.60") #Percentage, (in the form of a fraction) of
-                                      #upvote credits claimed by node that posted
-                                      #meme.
-
-MEME_MINER_PORTION = Decimal("0.10") #Percentage, (in the form of a fraction) of
-                                     #upvote credits claimed by node that mined
-                                     #the meme.
-
-MEME_FORMAT_OWNER_PORTION = Decimal("0.30") #Percentage, (in the form of a fraction) of
-                                            #upvote credits claimed by meme owner.
-
-MEME_FORMAT_MINER_REWARD = Decimal("0.10") # Percentage, (in the form of a
-                                           # fraction) of upvote credits
-                                           # rewarded to the miner who mined to
-                                           # MemeFormat
-
-UPVOTE_MINER_REWARD = Decimal("0.10") #Percentage, (in the form of a fraction) of
-                                      #upvote credits rewarded to miner who mined
-                                      #the upvote.
-
-SELL_TRANSACTION_MINER_REWARD = Decimal("0.05") # Percentage, (in the
-                                                # form of a fraction)
-                                                # of the successful
-                                                # sale of ownership
-                                                # credited to the
-                                                # miner of the Sell
-                                                # transaction
-
-BUY_TRANSACTION_MINER_REWARD = Decimal("0.05")  # Percentage, (in the
-                                                # form of a fraction)
-                                                # of the successful
-                                                # sale of ownership
-                                                # credited to the
-                                                # miner of the Buy
-                                                # transaction
-
+UPVOTE_REWARD = Decimal("0.10")
+"""
+Percentage, (in the form of a fraction) of upvote credits rewarded
+to upvoters from previous block.
+"""
+MEME_POSTER_PORTION = Decimal("0.60")
+"""
+Percentage, (in the form of a fraction) ofupvote credits claimed
+by node that posted meme.
+"""
+MEME_MINER_PORTION = Decimal("0.10")
+"""
+Percentage, (in the form of a fraction) of
+upvote credits claimed by node that mined
+the meme.
+"""
+MEME_FORMAT_OWNER_PORTION = Decimal("0.30")
+"""
+Percentage, (in the form of a fraction) of upvote credits claimed
+by meme owner.
+"""
+MEME_FORMAT_MINER_REWARD = Decimal("0.10")
+"""
+Percentage, (in the form of a fraction) of upvote credits rewarded
+to the miner who mined to MemeFormat.
+"""
+UPVOTE_MINER_REWARD = Decimal("0.10")
+"""
+Percentage, (in the form of a fraction) of upvote credits rewarded
+to miner who mined the upvote.
+"""
+SELL_TRANSACTION_MINER_REWARD = Decimal("0.05")
+"""
+Percentage, (in the form of a fraction) of the successful sale of
+ownership credited to the miner of the Sell transaction
+"""
+BUY_TRANSACTION_MINER_REWARD = Decimal("0.05")
+"""
+Percentage, (in the form of a fraction) of the successful sale of
+ownership credited to the miner of the Buy transaction
+"""
 
 class Node(Atomic):
     """
@@ -193,11 +215,15 @@ class MemeFormat(Atomic):
     def __init__(self, ID, name, description, binary, owner, miner):
         """
         ID : Uniquely Identifiable ID for the MemeFormat
+
         name : Any Display Name for the MemeFormat
+
         description : Some textual description of the MemeFormat
-        binary : binary data of a meme example, possible related 
-                 to the description
+
+        binary : binary data of a meme example, possible related to the description
+
         owner : ID(s) of the node(s) that own the MemeFormat
+
         miner : ID(s) of the node that mined the MemeFormat
         """
         self.ID, self.name, self.description, self.binary, self.owner, self.miner = ID, name, description, binary, owner, miner
@@ -240,12 +266,17 @@ class Meme(Atomic):
     def __init__(self, ID, title, meme_format, binary, poster_ID, block_ID, miner_ID, extension="jpg" ):
         """
         ID : Uniquely identifiable ID for the Meme
+
         title : Some string Title for the Meme
+
         meme_format : ID of the meme_format
+
         binary : binary bits of the meme
+
         poster_ID : ID of node that posted meme
-        block_ID : ID of block which contains the transaction 
-                   posting the meme
+
+        block_ID : ID of block which contains the transaction posting the meme
+
         miner_ID : ID of miner node who created the block with block_ID
         """
         self.ID, self.title, self.meme_format, self.binary, self.poster_ID, self.block_ID, self.miner_ID, self.extension = ID, title, meme_format, binary, poster_ID, block_ID, miner_ID, extension
@@ -275,6 +306,9 @@ class Meme(Atomic):
                                                                                                                  str(dict(self.upvote_credits)))
 
     def add_upvote(self, upvote_ID):
+        """
+        Add upvote to the Meme
+        """
         upvote = Upvotes[upvote_ID]
         block_ID = upvote.block_ID
 

@@ -1,3 +1,10 @@
+"""
+blockchain.py
+===============================
+Module that handles the blockchain
+"""
+
+
 import hashlib
 import json
 import datetime
@@ -9,11 +16,14 @@ from block import Block
 import node_state
 import validation
 class Blockchain:
-    # difficulty level of the Proof of Work
-    # shows the pattern with which each hash has to start with
+    """
+    Class that maintains the functions and structure of the Blockchain
+    """
     difficultyPattern = '000'
-
-    # Constructor for Blockchain
+    """
+    difficulty level of the Proof of Work
+    shows the pattern with which each hash has to start with
+    """
     def __init__(self):
         # stores all blocks
         self.chain = []
@@ -21,21 +31,28 @@ class Blockchain:
         self.transactions_to_be_confirmed = [] 
 
     # Creating of the Origin/First block in the chain
+
     def create_origin_block(self):
-        # The block has empty list of transactions
-        # The block has 0 as a value for index, previous_hash, proof_of_work
+        """
+        The block has empty list of transactions
+        The block has 0 as a value for index, previous_hash, proof_of_work
+        """
         origin_block = Block(0, None, [], 0, "0", 0)
         origin_block.hash = origin_block.compute_hash()
         self.chain.append(origin_block)
-
-    # Returns the previous block of the chain
+        
     def previous_block(self):
+        """
+        Returns the previous block of the chain
+        """
         return self.chain[-1]
 
-    # Finds a value for proof_of_work which produces 
-    # a hash that satisfies the difficulty pattern
     @staticmethod
     def proof_of_work(block):
+        """
+        Finds a value for proof_of_work which produces 
+        a hash that satisfies the difficulty pattern
+        """
         satisfying_hash = False
         block.proof_of_work = 0
 
@@ -48,10 +65,13 @@ class Blockchain:
 
         return computed_hash
 
-    # Checks whether the hash value of a block is valid 
-    # and satisfies the difficulty pattern or not
     @classmethod
     def is_proof_valid(cls, block, block_hash):
+        """
+        Checks whether the hash value of a block is valid 
+        and satisfies the difficulty pattern or not
+        """
+
         # If the hash of the block doesn't match with the computed hash
         if(block.compute_hash() != block_hash):
             return False
@@ -64,9 +84,11 @@ class Blockchain:
 
         return True
 
-    # Checks whether the current chain is valid or not
     @classmethod
     def check_validity(cls, chain):
+        """
+        Checks whether the current chain is valid or not
+        """
         chain_is_valid = True
 
         # Get origin block's hash as a starting point
@@ -105,8 +127,10 @@ class Blockchain:
 
         return chain_is_valid 
 
-    # Appends a block to the chain after verifying it's validity
     def append_block(self, block, proof):
+        """
+        Appends a block to the chain after verifying it's validity
+        """
         if not (Blockchain.is_proof_valid(block, proof)):
             print("Proof is not valid")
             return False
@@ -128,18 +152,25 @@ class Blockchain:
 
         return True
 
-    # Adds a transaction to the list of pending transactions (mempool)
     def add_transaction(self, transaction):
+        """
+        Adds a transaction to the list of pending transactions (mempool)
+        """
         self.transactions_to_be_confirmed.append(transaction)
 
-    # Checks whether there are pending transactions or not
     def pending_transactions(self):
+        """
+        Checks whether there are pending transactions or not
+        """
         # 0 = False
         return len(self.transactions_to_be_confirmed)
 
-    # Checks whether the blockchain contains image with imageId
-    # if exists, returns image's decoded ascii value, otherwise -1
+
     def find_image(self, imageId):
+        """
+        Checks whether the blockchain contains image with imageId
+        if exists, returns image's decoded ascii value, otherwise -1
+        """
         for Block in self.chain:
             current_block_transactions = Block.get_transactions()
             for Transaction in current_block_transactions:
@@ -150,6 +181,9 @@ class Blockchain:
 
     
     def create_naked_block(self, _minerID):
+        """
+        Create a block without valid nonce
+        """
         previous_block = self.previous_block()
         new_block = Block(index=previous_block.index + 1,
                           minerID=_minerID,
@@ -206,13 +240,18 @@ class Blockchain:
     
         self.append_block(new_block, proof)
 
-# Consensus mechanism to make sure that the nodes in 
-# the network always have the longest (valid) chain
+
 def consensus_mechanism(_chain, _connected_nodes):
-    # A basic algorithm which sends /get_chain requests
-    # to all other connected nodes in the network. 
-    # If a longer chain is found, current node's chain is 
-    # replaced in order to keep the blockchain up-to-date
+    """
+    Consensus mechanism to make sure that the nodes in 
+    the network always have the longest (valid) chain
+    
+    A basic algorithm which sends /get_chain requests
+    to all other connected nodes in the network. 
+    If a longer chain is found, current node's chain is 
+    replaced in order to keep the blockchain up-to-date
+    """
+    
     global blockchain
     current_node_chain_length = len(_chain)
     chain_updated = False
@@ -239,9 +278,11 @@ def consensus_mechanism(_chain, _connected_nodes):
     print("Chain updated" if chain_updated else "Chain is up to date")
     return chain_updated
 
-# A function which builds chain and transactions structure
-# from the json data
 def construct_chain_again(json_chain):
+    """
+    A function which builds chain and transactions structure
+    from the json data
+    """
     generated_blockchain = Blockchain()
     generated_blockchain.create_origin_block()
     node_state.backup_state()
