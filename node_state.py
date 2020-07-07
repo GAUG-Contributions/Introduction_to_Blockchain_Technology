@@ -106,7 +106,11 @@ class Node(Atomic):
         super().__init__()
 
     def __repr__(self):
-        return "ID=`{}`, Wallet={}".format(self.ID, str(self.wallet))
+        return "ID=`{}`, Wallet={}, Meme Formats=`{}`, Memes=`{}`, Upvotes=`{}`".format(self.ID,
+                                                                                        str(self.wallet),
+                                                                                        str(list(self.meme_formats.keys())),
+                                                                                        str(list(self.memes.keys())),
+                                                                                        str(list(self.upvotes.keys())))
 
     def add_meme_format(self, meme_format_ID):
         """
@@ -149,6 +153,17 @@ class OwnershipSaleOffer(Atomic):
         super().__init__()
 
         MemeFormats[memeFormatID].add_ownership_sale_offer(self.ID)
+
+    def __repr__(self):
+        return "OwnershipSaleOffer(ID=`{}`, sellerID=`{}`, memeFormatID=`{}`, sellBlockID=`{}`, sellBlockMinerID=`{}`, amount=`{}`, buyerID=`{}`, buyBlockMinerID=`{}`, buyBlockID=`{}`)".format(self.ID,
+                                                                                                                                                                                                 self.sellerID,
+                                                                                                                                                                                                 self.memeFormatID,
+                                                                                                                                                                                                 self.sellBlockID,
+                                                                                                                                                                                                 self.sellBlockMinerID,
+                                                                                                                                                                                                 self.amount,
+                                                                                                                                                                                                 self.buyerID,
+                                                                                                                                                                                                 self.buyBlockMinerID,
+                                                                                                                                                                                                 self.buyBlockID)
 
     def buy(self, buyerID, buyBlockID, buyBlockMinerID, discredit_only = False):
         """
@@ -199,6 +214,12 @@ class MemeFormat(Atomic):
 
         Nodes[self.owner].add_meme_format(self.ID)
 
+    def __repr__(self):
+        return "MemeFormat(ID=`{}`, name=`{}`, owner=`{}`, miner=`{}`)".format(self.ID,
+                                                                               self.name,
+                                                                               self.owner,
+                                                                               self.miner)
+
     def add_meme(self, meme_ID):
         """
         Add meme to MemeFormat
@@ -245,6 +266,14 @@ class Meme(Atomic):
         MemeFormats[meme_format].add_meme(self.ID)
         Nodes[poster_ID].add_meme(self.ID)
 
+    def __repr__(self):
+        return "Meme(ID=`{}`, MemeFormat=`{}`, poster=`{}`, block=`{}`, miner=`{}`, upvote_credits=`{}`)".format(self.ID,
+                                                                                                                 self.meme_format,
+                                                                                                                 self.poster_ID,
+                                                                                                                 self.block_ID,
+                                                                                                                 self.miner_ID,
+                                                                                                                 str(dict(self.upvote_credits)))
+
     def add_upvote(self, upvote_ID):
         upvote = Upvotes[upvote_ID]
         block_ID = upvote.block_ID
@@ -276,6 +305,14 @@ class Upvote(Atomic):
     Class that handles all the functions pertaining to maintaining state
     of an Upvote
     """
+    def __repr__(self):
+        return "Upvote(ID=`{}`, meme=`{}`, upvoter=`{}`, block=`{}`, miner=`{}`, credits={})".format(self.ID,
+                                                                                                     self.meme_ID,
+                                                                                                     self.upvoter_ID,
+                                                                                                     self.block_ID,
+                                                                                                     self.miner_ID,
+                                                                                                     self.credits)
+    
     def __init__(self, ID, meme_ID, upvoter_ID, block_ID, miner_ID, credits=1, discredit_only=False):
         """
         Initializes the upvote and transfers appropriate credits to meme

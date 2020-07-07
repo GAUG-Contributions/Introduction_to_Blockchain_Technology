@@ -16,11 +16,11 @@ import requests
 
 from block import Block
 from blockchain import Blockchain, consensus_mechanism as consensus, construct_chain_again as construct_chain
-from node_state import Nodes as map_of_nodes
+from node_state import Nodes as map_of_nodes, MemeFormats as map_of_memeformats, Memes as map_of_memes, Upvotes as map_of_upvotes, OwnershipSaleOffers as map_of_ownershipoffers
 
 STOP_MINING = False
 
-AUTOMATIC_MINING = False
+AUTOMATIC_MINING = True
 
 MINING_THREAD = None
 
@@ -310,8 +310,8 @@ def app_add_upvote_transaction():
     return jsonify(response), 201
 
 
-@app.route("/add_ownership_sale_offer", methods=["POST"])
-def app_add_ownership_sale_offer_transaction():
+@app.route("/sell_ownership", methods=["POST"])
+def app_sell_ownership_transaction():
     """
     POST method for pushing a new ownership sale offer transaction to the local mempool
     Expected JSON data formats
@@ -342,8 +342,8 @@ def app_add_ownership_sale_offer_transaction():
     response = {"Notification": "The transaction was received."}
     return jsonify(response), 201
 
-@app.route("/add_ownership_purchase", methods=["POST"])
-def app_add_ownership_purchase_transaction():
+@app.route("/purchase_ownership", methods=["POST"])
+def app_purchase_ownership_transaction():
     """
     POST method for pushing a new ownership purchase transaction to the local mempool
     Expected JSON data formats
@@ -411,6 +411,27 @@ def app_get_node_credits():
     return jsonify(response), 201
 
 
+@app.route("/node_state", methods=["GET"])
+def app_get_node_state():
+    """
+    Get all the objects currently tracked by node_state
+    """
+    Nodes = {}
+    MemeFormats = {}
+    Memes = {}
+    Upvotes = {}
+    OwnershipSaleOffers = {}
+
+    ns = {"Nodes" : map_of_nodes,
+          "MemeFormats" : map_of_memeformats,
+          "Memes" : map_of_memes,
+          "Upvotes" : map_of_upvotes,
+          "OwnershipSaleOffers" : map_of_ownershipoffers}
+    response = ns
+
+    return jsonify(response), 201
+
+
 # GET request for mining a block
 @app.route('/mine_block', methods=['GET'])
 def app_mine_block():
@@ -438,7 +459,7 @@ def app_mine_block():
     print("Congo! We mined something")
     notify_all_nodes_new_block(new_block)
     
-    response = str(vars(new_block))
+    response = vars(new_block)
     return jsonify(response), 200
 
 # POST method for connecting a new node to the network
