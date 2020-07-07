@@ -20,7 +20,7 @@ from node_state import Nodes as map_of_nodes
 
 STOP_MINING = False
 
-AUTOMATIC_MINING = True
+AUTOMATIC_MINING = False
 
 MINING_THREAD = None
 
@@ -438,7 +438,7 @@ def app_mine_block():
     print("Congo! We mined something")
     notify_all_nodes_new_block(new_block)
     
-    response = str(new_block)
+    response = str(vars(new_block))
     return jsonify(response), 200
 
 # POST method for connecting a new node to the network
