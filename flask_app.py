@@ -506,12 +506,16 @@ def app_get_node_state():
 def app_get_memeformats():
     """
     Get all the memeformats currently tracked by node_state
-    {"info":true/false} (Optional)
+    {"info":true/false} (Optional) Whether or not to return all information
     
     """
-    data = request.get_json()
-    
-    response = json.dumps(map_of_memeformats if data and data.get("info") else list(map_of_memeformats.keys()), cls=GlobalEncoder)
+    data = request.get_json()    
+
+    if data and data.get("info"):
+        response = json.dumps(map_of_memeformats, cls=GlobalEncoder)
+    else:
+        obj = {mfid : [meme for meme in mf.memes] for mfid,mf in map_of_memeformats.items()}
+        response = json.dumps(obj, cls=GlobalEncoder)
     
     return app.response_class(response=response,status=201, mimetype="application/json")
 
