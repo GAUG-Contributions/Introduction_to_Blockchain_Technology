@@ -1,3 +1,12 @@
+"""
+node_state.py 
+======================== 
+Module that keeps track of
+state such as wallet amounts of Nodes for making validation of
+transactions easy
+"""
+
+
 from wallet import Wallet
 from atomic import Atomic
 from decimal import Decimal
@@ -8,62 +17,95 @@ Nodes = {}
 MemeFormats = {}
 Memes = {}
 Upvotes = {}
+OwnershipSaleOffers = {}
 
 __Nodes__ = {}
 __MemeFormats__ = {}
 __Memes__ = {}
 __Upvotes__ = {}
-
-
+__OwnershipSaleOffers__ = {}
 
 def commit_state():
+    """
+    Commit node_state
+    """
     global __Nodes__, __MemeFormats__, __Memes__, __Upvotes__
     __Nodes__ = copy.deepcopy(Nodes)
     __MemeFormats__ = copy.deepcopy(MemeFormats)
     __Memes__ = copy.deepcopy(Memes)
     __Upvotes__ = copy.deepcopy(Upvotes)
+    __OwnershipSaleOffers__ = copy.deepcopy(OwnershipSaleOffers)
 
 def backup_state():
+    """
+    Create backup of node_state
+    """
     commit_state()
 
 def fresh_state():
+    """
+    Create a fresh empty node_state
+    """
     global Nodes, MemeFormats, Memes, Upvotes
     Nodes = {}
     MemeFormats = {}
     Memes = {}
     Upvotes = {}
+    OwnershipSaleOffers = {}
 
 def revert_state():
+    """
+    Revert node_state to backup
+    """
     global Nodes, MemeFormats, Memes, Upvotes
     Nodes = copy.deepcopy(__Nodes__)
     MemeFormats = copy.deepcopy(__MemeFormats__)
     Memes = copy.deepcopy(__Memes__)
     Upvotes = copy.deepcopy(__Upvotes__)
+    OwnershipSaleOffers = copy.deepcopy(__OwnershipSaleOffers__)
 
 
-UPVOTE_REWARD = Decimal("0.10") # Percentage, (in the form of a fraction) of
-                                # upvote credits rewarded to upvoters from
-                                # previous block.
-
-MEME_POSTER_PORTION = Decimal("0.60") #Percentage, (in the form of a fraction) of
-                                      #upvote credits claimed by node that posted
-                                      #meme.
-
-MEME_MINER_PORTION = Decimal("0.10") #Percentage, (in the form of a fraction) of
-                                     #upvote credits claimed by node that mined
-                                     #the meme.
-
-MEME_FORMAT_OWNER_PORTION = Decimal("0.30") #Percentage, (in the form of a fraction) of
-                                            #upvote credits claimed by meme owner.
-
-MEME_FORMAT_MINER_REWARD = Decimal("0.10") # Percentage, (in the form of a
-                                           # fraction) of upvote credits
-                                           # rewarded to the miner who mined to
-                                           # MemeFormat
-
-UPVOTE_MINER_REWARD = Decimal("0.10") #Percentage, (in the form of a fraction) of
-                                      #upvote credits rewarded to miner who mined
-                                      #the upvote.
+UPVOTE_REWARD = Decimal("0.10")
+"""
+Percentage, (in the form of a fraction) of upvote credits rewarded
+to upvoters from previous block.
+"""
+MEME_POSTER_PORTION = Decimal("0.60")
+"""
+Percentage, (in the form of a fraction) ofupvote credits claimed
+by node that posted meme.
+"""
+MEME_MINER_PORTION = Decimal("0.10")
+"""
+Percentage, (in the form of a fraction) of
+upvote credits claimed by node that mined
+the meme.
+"""
+MEME_FORMAT_OWNER_PORTION = Decimal("0.30")
+"""
+Percentage, (in the form of a fraction) of upvote credits claimed
+by meme owner.
+"""
+MEME_FORMAT_MINER_REWARD = Decimal("0.10")
+"""
+Percentage, (in the form of a fraction) of upvote credits rewarded
+to the miner who mined to MemeFormat.
+"""
+UPVOTE_MINER_REWARD = Decimal("0.10")
+"""
+Percentage, (in the form of a fraction) of upvote credits rewarded
+to miner who mined the upvote.
+"""
+SELL_TRANSACTION_MINER_REWARD = Decimal("0.05")
+"""
+Percentage, (in the form of a fraction) of the successful sale of
+ownership credited to the miner of the Sell transaction
+"""
+BUY_TRANSACTION_MINER_REWARD = Decimal("0.05")
+"""
+Percentage, (in the form of a fraction) of the successful sale of
+ownership credited to the miner of the Buy transaction
+"""
 
 class Node(Atomic):
     """
@@ -85,9 +127,16 @@ class Node(Atomic):
         
         super().__init__()
 
-    def __repr__(self):
-        return "ID=`{}`, Wallet={}".format(self.ID, str(self.wallet))
-        
+    def __json__(self):
+        return str(vars(self))
+    
+    # def __repr__(self):
+    #     return vars()
+    #     return "ID=`{}`, Wallet={}, Meme Formats=`{}`, Memes=`{}`, Upvotes=`{}`".format(self.ID,
+    #                                                                                     str(self.wallet),
+    #                                                                                     str(list(self.meme_formats.keys())),
+    #                                                                                     str(list(self.memes.keys())),
+    #                                                                                     str(list(self.upvotes.keys())))
 
     def add_meme_format(self, meme_format_ID):
         """
@@ -108,6 +157,63 @@ class Node(Atomic):
         """
         self.upvotes[upvote_ID] = Upvotes[upvote_ID]
 
+class OwnershipSaleOffer(Atomic):
+    """
+    Class that handles mehthods pertaining to OwnershipSaleOffer
+    """
+    def __init__(self, ownershipSaleOfferID, sellerID, memeFormatID, sellBlockID, sellBlockMinerID, amount=0):
+        self.ID = ownershipSaleOfferID
+        self.sellerID = sellerID
+        self.memeFormatID = memeFormatID
+        self.sellBlockID = sellBlockID
+        self.sellBlockMinerID = sellBlockMinerID
+        self.amount = Decimal(str(amount))
+        self.buyerID  = None
+        self.buyBlockMinerID = None
+        self.buyBlockID = None
+
+        if not self.ID in OwnershipSaleOffers:
+            OwnershipSaleOffers[self.ID] = self
+        else:
+            pass # TODO raise Exception
+        super().__init__()
+
+        MemeFormats[memeFormatID].add_ownership_sale_offer(self.ID)
+
+    def __json__(self):
+        return str(vars(self))
+    
+    # def __repr__(self):
+    #     return "OwnershipSaleOffer(ID=`{}`, sellerID=`{}`, memeFormatID=`{}`, sellBlockID=`{}`, sellBlockMinerID=`{}`, amount=`{}`, buyerID=`{}`, buyBlockMinerID=`{}`, buyBlockID=`{}`)".format(self.ID,
+    #                                                                                                                                                                                              self.sellerID,
+    #                                                                                                                                                                                              self.memeFormatID,
+    #                                                                                                                                                                                              self.sellBlockID,
+    #                                                                                                                                                                                              self.sellBlockMinerID,
+    #                                                                                                                                                                                              self.amount,
+    #                                                                                                                                                                                              self.buyerID,
+    #                                                                                                                                                                                              self.buyBlockMinerID,
+    #                                                                                                                                                                                              self.buyBlockID)
+
+    def buy(self, buyerID, buyBlockID, buyBlockMinerID, discredit_only = False):
+        """
+        Method that handles the buying of Ownership based on the ownership Sale offer
+        """
+        amount_to_discredit = self.amount * (Decimal("1") + SELL_TRANSACTION_MINER_REWARD + BUY_TRANSACTION_MINER_REWARD)
+        Nodes[buyerID].wallet.discredit_amount(amount_to_discredit)
+
+        if not discredit_only:
+            print("Processing Sale of Ownership of `{}`".format(self.memeFormatID))
+            self.buyerID = buyerID
+            self.buyBlockID = buyBlockID
+            self.buyBlockMinerID = buyBlockMinerID
+            Nodes[self.sellerID].wallet.credit_amount(self.amount)
+
+            Nodes[self.sellBlockMinerID].wallet.credit_amount(self.amount * SELL_TRANSACTION_MINER_REWARD)
+
+            Nodes[self.buyBlockMinerID].wallet.credit_amount(self.amount * BUY_TRANSACTION_MINER_REWARD)
+
+            MemeFormats[self.memeFormatID].owner = self.buyerID
+
 class MemeFormat(Atomic):
     """
     Class that handles all functions pertaining to maintaining state
@@ -116,11 +222,15 @@ class MemeFormat(Atomic):
     def __init__(self, ID, name, description, binary, owner, miner):
         """
         ID : Uniquely Identifiable ID for the MemeFormat
+
         name : Any Display Name for the MemeFormat
+
         description : Some textual description of the MemeFormat
-        binary : binary data of a meme example, possible related 
-                 to the description
+
+        binary : binary data of a meme example, possible related to the description
+
         owner : ID(s) of the node(s) that own the MemeFormat
+
         miner : ID(s) of the node that mined the MemeFormat
         """
         self.ID, self.name, self.description, self.binary, self.owner, self.miner = ID, name, description, binary, owner, miner
@@ -132,15 +242,35 @@ class MemeFormat(Atomic):
         #TODO : Throw Exception
         
         self.memes = {}
+        self.ownership_sales = []
         super().__init__()
 
         Nodes[self.owner].add_meme_format(self.ID)
+
+    def __json__(self):
+        return str(vars(self))
+    
+    # def __repr__(self):
+        
+    #     return "MemeFormat(ID=`{}`, name=`{}`, owner=`{}`, miner=`{}`)".format(self.ID,
+    #                                                                            self.name,
+    #                                                                            self.owner,
+    #                                                                            self.miner)
+
+    def __json__(self):
+        return str(vars(self))
 
     def add_meme(self, meme_ID):
         """
         Add meme to MemeFormat
         """
         self.memes[meme_ID] = Memes[meme_ID]
+
+    def add_ownership_sale_offer(self, ownershipSaleOfferID):
+        """
+        Add Ownership Sale Offer to MemeFormat
+        """
+        self.ownership_sales.append(OwnershipSaleOffers[ownershipSaleOfferID])
 
 class Meme(Atomic):
     """
@@ -150,12 +280,17 @@ class Meme(Atomic):
     def __init__(self, ID, title, meme_format, binary, poster_ID, block_ID, miner_ID, extension="jpg" ):
         """
         ID : Uniquely identifiable ID for the Meme
+
         title : Some string Title for the Meme
+
         meme_format : ID of the meme_format
+
         binary : binary bits of the meme
+
         poster_ID : ID of node that posted meme
-        block_ID : ID of block which contains the transaction 
-                   posting the meme
+
+        block_ID : ID of block which contains the transaction posting the meme
+
         miner_ID : ID of miner node who created the block with block_ID
         """
         self.ID, self.title, self.meme_format, self.binary, self.poster_ID, self.block_ID, self.miner_ID, self.extension = ID, title, meme_format, binary, poster_ID, block_ID, miner_ID, extension
@@ -176,7 +311,21 @@ class Meme(Atomic):
         MemeFormats[meme_format].add_meme(self.ID)
         Nodes[poster_ID].add_meme(self.ID)
 
+    def __json__(self):
+        return str(vars(self))
+    
+    # def __repr__(self):
+    #     return "Meme(ID=`{}`, MemeFormat=`{}`, poster=`{}`, block=`{}`, miner=`{}`, upvote_credits=`{}`)".format(self.ID,
+    #                                                                                                              self.meme_format,
+    #                                                                                                              self.poster_ID,
+    #                                                                                                              self.block_ID,
+    #                                                                                                              self.miner_ID,
+    #                                                                                                              str(dict(self.upvote_credits)))
+
     def add_upvote(self, upvote_ID):
+        """
+        Add upvote to the Meme
+        """
         upvote = Upvotes[upvote_ID]
         block_ID = upvote.block_ID
 
@@ -207,6 +356,17 @@ class Upvote(Atomic):
     Class that handles all the functions pertaining to maintaining state
     of an Upvote
     """
+    # def __repr__(self):
+    #     return "Upvote(ID=`{}`, meme=`{}`, upvoter=`{}`, block=`{}`, miner=`{}`, credits={})".format(self.ID,
+    #                                                                                                  self.meme_ID,
+    #                                                                                                  self.upvoter_ID,
+    #                                                                                                  self.block_ID,
+    #                                                                                                  self.miner_ID,
+    #                                                                                                  self.credits)
+
+    def __json__(self):
+        return str(vars(self))
+    
     def __init__(self, ID, meme_ID, upvoter_ID, block_ID, miner_ID, credits=1, discredit_only=False):
         """
         Initializes the upvote and transfers appropriate credits to meme

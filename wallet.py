@@ -1,5 +1,15 @@
+"""
+wallet.py
+==================
+Module that handles operations relating to a node's wallet
+"""
+
 from decimal import Decimal
 class NotEnoughCreditsException(Exception):
+    """
+    Exception raised when a wallet does not have enough credits for
+    discredit operation.
+    """
     def __init__(self,
                  wallet_ID,
                  current_amount,

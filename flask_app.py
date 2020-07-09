@@ -1,3 +1,9 @@
+"""
+flask_app.py
+Flask application for Meme Economy
+"""
+
+
 # To be installed:
 # Flask==1.1.2: pip install Flask==1.1.2
 # Postman HTTP Client: https://www.getpostman.com/
@@ -16,9 +22,35 @@ import requests
 
 from block import Block
 from blockchain import Blockchain, consensus_mechanism as consensus, construct_chain_again as construct_chain
-from node_state import Nodes as map_of_nodes
+from node_state import Nodes as map_of_nodes, MemeFormats as map_of_memeformats, Memes as map_of_memes, Upvotes as map_of_upvotes, OwnershipSaleOffers as map_of_ownershipoffers
+
+import atomic, decimal, wallet
+
+
+class GlobalEncoder(json.JSONEncoder):
+    """
+    """
+    def default(self, o):
+        """
+        Custom method that is used buy json.dumps for json encoding
+        """
+        if isinstance(o, decimal.Decimal):
+            return str(o)
+
+        elif isinstance(o, atomic.Atomic) or isinstance(o, wallet.Wallet):
+            vrs = dict(vars(o))
+            if "__var_backup__" in vrs:
+                del vrs["__var_backup__"]
+            if "__committed_once__" in vrs:
+                del vrs["__committed_once__"]
+            return vrs
+        else:
+            return json.JSONEncoder.default(self, o)
+
 
 STOP_MINING = False
+
+AUTOMATIC_MINING = True
 
 MINING_THREAD = None
 
@@ -41,7 +73,10 @@ connected_nodes = set()
 def get_args(name='default', port="8000"):
     return int(port)
 
-app_port = get_args(*sys.argv)
+if __name__ == "__main__":
+    app_port = get_args(*sys.argv)
+else:
+    app_port = 8000
 host_address = f"http://127.0.0.1:{app_port}/"
 
 # If this is the origin/first node with port number 5000, register it in connected_nodes
@@ -61,6 +96,13 @@ def notify_all_nodes_new_block(block):
 
 # POST method for pushing a newly mined block by someone else to a node's chain
 # Used internally to receive mined blocks from the network
+
+def json_serialize_object(obj):
+    """
+    Method that is used to json serialize an arbitrary object
+    """
+    return str(vars(obj))
+
 @app.route('/append_block', methods=['POST'])
 def app_append_block():
     global STOP_MINING
@@ -110,7 +152,7 @@ def app_append_transaction():
 
     new_block = blockchain.create_naked_block(app_port)#Remove transactions that are not valid
     
-    if len(new_block.transactions) >= MIN_TRANSACTIONS:
+    if len(new_block.transactions) >= MIN_TRANSACTIONS and AUTOMATIC_MINING:
         MINING_THREAD = threading.Thread(target = mine_block_new_thread, args=(new_block,))
         MINING_THREAD.start()
         print("Minimum number of transactions `{}`  met. Starting to Mine new Block.".format(MIN_TRANSACTIONS))
@@ -308,30 +350,127 @@ def app_add_upvote_transaction():
     return jsonify(response), 201
 
 
-# GET method for visualizing image by it's name
-@app.route('/get_meme', methods=['GET'])
-def app_get_meme():
-    # Expected JSON data format
-    # {"imageId":"idValue"}
+@app.route("/sell_ownership", methods=["POST"])
+def app_sell_ownership_transaction():
+    """
+    POST method for pushing a new ownership sale offer transaction to the local mempool
+    Expected JSON data formats
+    {"ownershipSaleOfferID": "ownershipSaleOfferID", "memeFormat":"memeFormatID", "saleAmount" : "saleAmount"}
+    """
+    transaction_data = request.get_json()
+
+    
+    if not transaction_data.get("ownershipSaleOfferID"):
+        return jsonify({"Error" : "Missing ownershipSaleOfferID element"}), 400
+    
+    if not transaction_data.get("memeFormat"):
+        return jsonify({"Error" : "Missing memeFormat element"}), 400
+
+    if not transaction_data.get("saleAmount"):
+        return jsonify({"Error" : "Missing saleAmount element"}), 400
+    # Get IP and Port of the Node calling this method
+    transaction_data["senderHost"] = request.host
+    transaction_data["nodeID"] = app_port # Temporary NodeID for V3
+    # Produce an index and a timestamp for the transaction
+    transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
+    transaction_data["timestamp"] = str(datetime.datetime.now())
+
+    
+    transaction_data["type"] = "OwnershipSaleOffer"
+
+    notify_all_nodes_new_transaction(transaction_data)
+    response = {"Notification": "The transaction was received."}
+    return jsonify(response), 201
+
+@app.route("/purchase_ownership", methods=["POST"])
+def app_purchase_ownership_transaction():
+    """
+    POST method for pushing a new ownership purchase transaction to the local mempool
+    Expected JSON data formats
+    {
+    "ownershipPurchaseID":"ownershipPurchaseID",
+    "ownershipSaleOfferID":"ownershipSaleOfferID"}
+    """
+    transaction_data = request.get_json()
+    
+    if not transaction_data.get("ownershipPurchaseID"):
+        return jsonify({"Error" : "Missing ownershipPurchaseID element"}), 400
+
+    
+    if not transaction_data.get("ownershipSaleOfferID"):
+        return jsonify({"Error" : "Missing ownershipSaleOfferID element"}), 400
+    
+    # Get IP and Port of the Node calling this method
+    transaction_data["senderHost"] = request.host
+    transaction_data["nodeID"] = app_port # Temporary NodeID for V3
+    # Produce an index and a timestamp for the transaction
+    transaction_data["tx_index"] = len(blockchain.transactions_to_be_confirmed)
+    transaction_data["timestamp"] = str(datetime.datetime.now())
+
+    
+    transaction_data["type"] = "OwnershipPurchase"
+
+    notify_all_nodes_new_transaction(transaction_data)
+    response = {"Notification": "The transaction was received."}
+    return jsonify(response), 201
+
+
+
+@app.route('/visualize_meme', methods=['GET'])
+
+def app_visualize_meme():
+    """
+    GET method for visualizing meme by it's imageId
+
+    Expected JSON data format
+    {"imageId":"idValue"}
+    """
     image_data = request.get_json()
 
     if not image_data.get("imageId"):
-        return jsonify({"Error": "Missing imageName element!"}), 400
+        return jsonify({"Error": "Missing imageId element!"}), 400
 
-    image_ascii = blockchain.find_image(image_data["imageId"])
+    # image_ascii = blockchain.find_image(image_data["imageId"])
+    if image_data["imageId"] not in map_of_memes:
+        return jsonify({"Error": "Meme was not found!"}), 400
 
-    if(image_ascii == -1):
-        return jsonify({"Error": "Image was not found!"}), 400
+    html_image = "<html><img src='data:image/jpg; base64, " + map_of_memes[image_data["imageId"]].binary + "'></html>"
 
-    html_image = "<html><img src='data:image/jpg; base64, " + image_ascii + "'></html>"
+    return app.response_class(response=html_image,status=201, mimetype="text/html")
 
-    return html_image, 201
 
-# GET method for getting (wallet) credit amount for a node
+
+@app.route('/visualize_memeformat', methods=['GET'])
+
+def app_visualize_memeformat():
+    """
+    GET method for visualizing memeformat by it's imageId
+
+    Expected JSON data format
+    {"memeformatId":"idValue"}
+    """
+    image_data = request.get_json()
+
+    if not image_data.get("memeformatId"):
+        return jsonify({"Error": "Missing memeformatId element!"}), 400
+
+
+    if image_data["memeformatId"] not in map_of_memeformats:
+        return jsonify({"Error": "MemeFormat was not found!"}), 400
+
+    html_image = "<html><img src='data:image/jpg; base64, " + map_of_memeformats[image_data["memeformatId"]].binary + "'></html>"
+
+    return app.response_class(response=html_image,status=201, mimetype="text/html")
+
+
+
 @app.route('/get_node_credits', methods=['GET'])
 def app_get_node_credits():
-    # Excepted JSON data format
-    # {"nodeId" : "idValue"}
+    """
+    GET method for getting (wallet) credit amount for a node
+    Excepted JSON data format
+    {"nodeId" : "idValue"}
+    """
     node_data = request.get_json()
     if not node_data.get("nodeId"):
         return jsonify({"Error" : "Missing nodeId element"}), 400
@@ -339,9 +478,47 @@ def app_get_node_credits():
     if node_id not in map_of_nodes:
         return jsonify({"Error" : "Node `{}` not found".format(node_id)})
 
-    response = str(vars(map_of_nodes[node_id].wallet))
+    response = json.dumps(map_of_nodes[node_id].wallet, cls=GlobalEncoder)
+    return app.response_class(response=response,status=201, mimetype="application/json")
+
+@app.route("/node_state", methods=["GET"])
+def app_get_node_state():
+    """
+    Get all the objects currently tracked by node_state
+    """
+    Nodes = {}
+    MemeFormats = {}
+    Memes = {}
+    Upvotes = {}
+    OwnershipSaleOffers = {}
+
+    ns = {"Nodes" : map_of_nodes,
+          "MemeFormats" : map_of_memeformats,
+          "Memes" : map_of_memes,
+          "Upvotes" : map_of_upvotes,
+          "OwnershipSaleOffers" : map_of_ownershipoffers}
+    response = json.dumps(ns, cls=GlobalEncoder)
     
-    return jsonify(response), 201
+    
+    return app.response_class(response=response,status=201, mimetype="application/json")
+
+@app.route("/memeformats", methods=["GET"])
+def app_get_memeformats():
+    """
+    Get all the memeformats currently tracked by node_state
+    {"info":true/false} (Optional) Whether or not to return all information
+    
+    """
+    data = request.get_json()    
+
+    if data and data.get("info"):
+        response = json.dumps(map_of_memeformats, cls=GlobalEncoder)
+    else:
+        obj = {mfid : [meme for meme in mf.memes] for mfid,mf in map_of_memeformats.items()}
+        response = json.dumps(obj, cls=GlobalEncoder)
+    
+    return app.response_class(response=response,status=201, mimetype="application/json")
+
 
 
 # GET request for mining a block
@@ -351,21 +528,27 @@ def app_mine_block():
     # then there isn't a reason to mine a new block
     if not blockchain.pending_transactions():
         return jsonify({"Warning": "No pending transactions available!"}), 405
+    new_block = blockchain.create_naked_block(app_port)#Remove transactions that are not valid
 
-    blockchain.mine_block(app_port) # app_port is minerID
-    mined_block = blockchain.previous_block()
-
-    # Store the local lenght of the current node
-    chain_length = len(blockchain.chain)
-    # Check if the chain of the current node is up-to-date with the network
-    consensus(blockchain.chain, connected_nodes)
-    # If our lenght haven't changed, then we are up-to-date
-    if chain_length == len(blockchain.chain):
-        # Notify other nodes in the network for the recently mined block
-        notify_all_nodes_new_block(mined_block)
-
-    response = {"Notification": "Wohooo, you have just mined a block!",
-                "Block Info": mined_block.__dict__}
+    satisfying_hash = False
+    new_block.proof_of_work = 0
+    print("In Manual Mining Mode")
+    while (not satisfying_hash) and (not STOP_MINING):
+        computed_hash = new_block.compute_hash()
+        if(computed_hash.startswith(Blockchain.difficultyPattern)):
+            satisfying_hash = True
+            new_block.hash = computed_hash
+        else:
+            new_block.proof_of_work += 1
+    if STOP_MINING:
+        MINING_RESULT = False
+        response = "Stopped Mining Because another valid block was recieved"
+        return jsonify(response), 200
+    
+    print("Congo! We mined something")
+    notify_all_nodes_new_block(new_block)
+    
+    response = vars(new_block)
     return jsonify(response), 200
 
 # POST method for connecting a new node to the network
@@ -447,6 +630,10 @@ def app_connect_to_node():
         return response.content, response.status_code
 
 def mine_block_new_thread(block):
+    """
+    Function used inside the thread used to start mining in a new
+    thread
+    """
     global MINING_RESULT
     satisfying_hash = False
     block.proof_of_work = 0
@@ -481,6 +668,6 @@ def mine_block_new_thread(block):
 #    connect_to_node("http://127.0.0.1:5000/")
 
 
-        
-app.run(host='0.0.0.0', port=app_port)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=app_port)
 
