@@ -24,6 +24,30 @@ from block import Block
 from blockchain import Blockchain, consensus_mechanism as consensus, construct_chain_again as construct_chain
 from node_state import Nodes as map_of_nodes, MemeFormats as map_of_memeformats, Memes as map_of_memes, Upvotes as map_of_upvotes, OwnershipSaleOffers as map_of_ownershipoffers
 
+import atomic, decimal, wallet
+
+
+class GlobalEncoder(json.JSONEncoder):
+    """
+    """
+    def default(self, o):
+        """
+        Custom method that is used buy json.dumps for json encoding
+        """
+        if isinstance(o, decimal.Decimal):
+            return str(o)
+
+        elif isinstance(o, atomic.Atomic) or isinstance(o, wallet.Wallet):
+            vrs = dict(vars(o))
+            if "__var_backup__" in vrs:
+                del vrs["__var_backup__"]
+            if "__committed_once__" in vrs:
+                del vrs["__committed_once__"]
+            return vrs
+        else:
+            return json.JSONEncoder.default(self, o)
+
+
 STOP_MINING = False
 
 AUTOMATIC_MINING = True
@@ -72,6 +96,13 @@ def notify_all_nodes_new_block(block):
 
 # POST method for pushing a newly mined block by someone else to a node's chain
 # Used internally to receive mined blocks from the network
+
+def json_serialize_object(obj):
+    """
+    Method that is used to json serialize an arbitrary object
+    """
+    return str(vars(obj))
+
 @app.route('/append_block', methods=['POST'])
 def app_append_block():
     global STOP_MINING
@@ -384,30 +415,62 @@ def app_purchase_ownership_transaction():
     return jsonify(response), 201
 
 
-# GET method for visualizing image by it's name
-@app.route('/get_meme', methods=['GET'])
-def app_get_meme():
-    # Expected JSON data format
-    # {"imageId":"idValue"}
+
+@app.route('/visualize_meme', methods=['GET'])
+
+def app_visualize_meme():
+    """
+    GET method for visualizing meme by it's imageId
+
+    Expected JSON data format
+    {"imageId":"idValue"}
+    """
     image_data = request.get_json()
 
     if not image_data.get("imageId"):
-        return jsonify({"Error": "Missing imageName element!"}), 400
+        return jsonify({"Error": "Missing imageId element!"}), 400
 
-    image_ascii = blockchain.find_image(image_data["imageId"])
+    # image_ascii = blockchain.find_image(image_data["imageId"])
+    if image_data["imageId"] not in map_of_memes:
+        return jsonify({"Error": "Meme was not found!"}), 400
 
-    if(image_ascii == -1):
-        return jsonify({"Error": "Image was not found!"}), 400
+    html_image = "<html><img src='data:image/jpg; base64, " + map_of_memes[image_data["imageId"]].binary + "'></html>"
 
-    html_image = "<html><img src='data:image/jpg; base64, " + image_ascii + "'></html>"
+    return app.response_class(response=html_image,status=201, mimetype="text/html")
 
-    return html_image, 201
 
-# GET method for getting (wallet) credit amount for a node
+
+@app.route('/visualize_memeformat', methods=['GET'])
+
+def app_visualize_memeformat():
+    """
+    GET method for visualizing memeformat by it's imageId
+
+    Expected JSON data format
+    {"memeformatId":"idValue"}
+    """
+    image_data = request.get_json()
+
+    if not image_data.get("memeformatId"):
+        return jsonify({"Error": "Missing memeformatId element!"}), 400
+
+
+    if image_data["memeformatId"] not in map_of_memeformats:
+        return jsonify({"Error": "MemeFormat was not found!"}), 400
+
+    html_image = "<html><img src='data:image/jpg; base64, " + map_of_memeformats[image_data["memeformatId"]].binary + "'></html>"
+
+    return app.response_class(response=html_image,status=201, mimetype="text/html")
+
+
+
 @app.route('/get_node_credits', methods=['GET'])
 def app_get_node_credits():
-    # Excepted JSON data format
-    # {"nodeId" : "idValue"}
+    """
+    GET method for getting (wallet) credit amount for a node
+    Excepted JSON data format
+    {"nodeId" : "idValue"}
+    """
     node_data = request.get_json()
     if not node_data.get("nodeId"):
         return jsonify({"Error" : "Missing nodeId element"}), 400
@@ -415,10 +478,8 @@ def app_get_node_credits():
     if node_id not in map_of_nodes:
         return jsonify({"Error" : "Node `{}` not found".format(node_id)})
 
-    response = str(vars(map_of_nodes[node_id].wallet))
-    
-    return jsonify(response), 201
-
+    response = json.dumps(map_of_nodes[node_id].wallet, cls=GlobalEncoder)
+    return app.response_class(response=response,status=201, mimetype="application/json")
 
 @app.route("/node_state", methods=["GET"])
 def app_get_node_state():
@@ -436,9 +497,24 @@ def app_get_node_state():
           "Memes" : map_of_memes,
           "Upvotes" : map_of_upvotes,
           "OwnershipSaleOffers" : map_of_ownershipoffers}
-    response = ns
+    response = json.dumps(ns, cls=GlobalEncoder)
+    
+    
+    return app.response_class(response=response,status=201, mimetype="application/json")
 
-    return jsonify(response), 201
+@app.route("/memeformats", methods=["GET"])
+def app_get_memeformats():
+    """
+    Get all the memeformats currently tracked by node_state
+    {"info":true/false} (Optional)
+    
+    """
+    data = request.get_json()
+    
+    response = json.dumps(map_of_memeformats if data and data.get("info") else list(map_of_memeformats.keys()), cls=GlobalEncoder)
+    
+    return app.response_class(response=response,status=201, mimetype="application/json")
+
 
 
 # GET request for mining a block

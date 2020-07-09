@@ -6,8 +6,10 @@ Module that makes allows for changing the instance variables of multiple objects
 import copy
 __initialized_objects__ = []
 
+
 __branched__ = False
-class Atomic(object):
+
+class Atomic():
     """
     Class that implements the psuedo 'atomic' operations of objects
     """
