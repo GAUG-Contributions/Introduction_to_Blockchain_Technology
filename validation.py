@@ -226,6 +226,7 @@ def apply_ownership_purchase_transaction(transaction_data, block_ID, miner_ID, j
                                                         transaction_data["ownershipPurchaseID"],
                                                         Exp.message)
 
+
 class TransactionException(Exception):
     """
     Exception raised when an exception occurs validating a transaction
@@ -233,28 +234,24 @@ class TransactionException(Exception):
     def __init__(self, transactionID, message):
         self.transactionID = transactionID
         super().__init__("Error in transaction `{}`. {}".format(self.transactionID, message))
-
 class MemeFormatNotFoundException(TransactionException):
     """
     Exception raised when the specified MemeFormat is not found in node_state
     """
     def __init__(self, memeFormatID, transactionID):
         super().__init__(transactionID, "MemeFormat `{}` not found".format(memeFormatID))
-
 class MemeNotFoundException(TransactionException):
     """
     Exception raised when the specified Meme is not found in node_state
     """
     def __init__(self, memeID, transactionID):
         super().__init__(transactionID, "Meme `{}` not found".format(memeID))
-
 class NodeNotFoundException(TransactionException):
     """
     Exception raised when the specified Node is not found in node_state
     """
     def __init__(self, nodeID, transactionID):
         super().__init__(transactionID, "Node `{}` not found".format(nodeID))
-
 class UpvoteFailedNoCreditsException(TransactionException):
     """
     Exception raised when Upvote transaction fails to proceed due to
@@ -264,7 +261,6 @@ class UpvoteFailedNoCreditsException(TransactionException):
         super().__init__(transactionID,
                        "{}. Node `{}` does not have enough credits for Upvote".format(message,
                                                                                       nodeID))
-
 class MemeFormatNotOwnedByNodeException(TransactionException):
     """
     Exception raised when a node attempts to sell ownership to a
@@ -273,7 +269,6 @@ class MemeFormatNotOwnedByNodeException(TransactionException):
     def __init__(self, nodeID, memeFormatID, transactionID):
         super().__init__(transactionID,
                          "MemeFormat `{}` is not owned by Node `{}`".format(memeFormatID, nodeID))
-
 class OwnershipSaleOfferAlreadyAcceptedException(TransactionException):
     """
     Exception raised when node attempts to buy ownership based on a
@@ -282,7 +277,6 @@ class OwnershipSaleOfferAlreadyAcceptedException(TransactionException):
     def __init__(self, ownershipSaleOfferID, nodeID, blockID, transactionID):
         super().__init__(transactionID,
                          "The Ownership Sale Offer `{}` has already been accepted and ownership has been assigned to Node `{}` in block `{}`".format(ownershipSaleOfferID, nodeID, blockID))
-
 class OwnershipSaleAmountNotPositiveException(TransactionException):
     """
     Exception raised when OwnershipSaleOffer amount is non-positive
@@ -290,7 +284,6 @@ class OwnershipSaleAmountNotPositiveException(TransactionException):
     def __init__(self, ownershipSaleOfferID, saleAmount,transactionID):
         super().__init__(transactionID,
                          "The saleAmount `{}` for Ownership Sale Offer `{}` is non positive".format(saleAmount,ownershipSaleOfferID))
-
 class MemeFormatHasPendingSaleOfferException(TransactionException):
     """
     Exception raised when a node tries to add an Ownership Sale offer
@@ -300,7 +293,6 @@ class MemeFormatHasPendingSaleOfferException(TransactionException):
     def __init__(self, memeFormatID, transactionID):
         super().__init__(transactionID,
                          "The MemeFormat `{}` still has a pending Ownership Sale Offer".format(memeFormatID))
-
 class OwnershipSaleOfferNotFoundException(TransactionException):
     """
     Exception raised when Ownership Sale Offer is not found in node_state
@@ -308,7 +300,6 @@ class OwnershipSaleOfferNotFoundException(TransactionException):
     def __init__(self, ownershipSaleOfferID, transactionID):
         super().__init__(transactionID,
                          "The Ownership Sale Offer `{}` was not found.".format(ownershipSaleOfferID))
-
 class OwnershipPurchaseFailedNoCreditsException(TransactionException):
     """
     Exception raised when OwnershipPurchase fails due to the buyer not
