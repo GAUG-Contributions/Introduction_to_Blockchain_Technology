@@ -43,7 +43,7 @@ Our current difficulty pattern is `0000` and mining of a new block takes no more
 
 `NEW_NODE_INITIAL_CREDITS` = 5
 
-The amount of initial credits each node receive after connecting to the networ. To change this value check inside `validation.py`
+The amount of initial credits each node receive after connecting to the network. To change this value check inside `validation.py`
 
 ### 3. Initialization of the Peer-to-Peer Network
 All of the peers are currently running on the local network. The `core` node must run on port `5000` in order to initialize the network.

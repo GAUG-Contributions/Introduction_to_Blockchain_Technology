@@ -181,7 +181,7 @@ def apply_ownership_sale_offer_transaction(transaction_data, block_ID, miner_ID,
 
     if Decimal(transaction_data["saleAmount"]) <= 0:
         raise OwnershipSaleAmountNotPositiveException(transaction_data["ownershipSaleOfferID"],
-                                                      transacttion_data["saleAmount"],
+                                                      transaction_data["saleAmount"],
                                                       transaction_data["ownershipSaleOfferID"])
     
     if just_validate:
