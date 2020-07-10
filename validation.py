@@ -171,8 +171,8 @@ def apply_ownership_sale_offer_transaction(transaction_data, block_ID, miner_ID,
         raise NodeNotFoundException(node_id, transaction_data["ownershipSaleOfferID"])
 
     if transaction_data["memeFormat"] not in node_state.Nodes[node_id].meme_formats:
-        raise MemeFormatNotOwnedByNodeException(sellerID,
-                                                memeFormatID,
+        raise MemeFormatNotOwnedByNodeException(node_id,
+                                                transaction_data["memeFormat"],
                                                 transaction_data["ownershipSaleOfferID"])
 
     if node_state.MemeFormats[transaction_data["memeFormat"]].ownership_sales and node_state.MemeFormats[transaction_data["memeFormat"]].ownership_sales[-1].buyerID is None:
@@ -181,7 +181,7 @@ def apply_ownership_sale_offer_transaction(transaction_data, block_ID, miner_ID,
 
     if Decimal(transaction_data["saleAmount"]) <= 0:
         raise OwnershipSaleAmountNotPositiveException(transaction_data["ownershipSaleOfferID"],
-                                                      transacttion_data["saleAmount"],
+                                                      transaction_data["saleAmount"],
                                                       transaction_data["ownershipSaleOfferID"])
     
     if just_validate:
@@ -195,7 +195,7 @@ def apply_ownership_sale_offer_transaction(transaction_data, block_ID, miner_ID,
                                   block_ID,
                                   miner_ID,
                                   amount=transaction_data["saleAmount"])
-
+    
 def apply_ownership_purchase_transaction(transaction_data, block_ID, miner_ID, just_validate=False):
     """
     Update node_state based on a ownership purchase transaction
