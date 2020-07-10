@@ -4,7 +4,6 @@ blockchain.py
 Module that handles the blockchain
 """
 
-
 import hashlib
 import json
 import datetime
@@ -19,7 +18,7 @@ class Blockchain:
     """
     Class that maintains the functions and structure of the Blockchain
     """
-    difficultyPattern = '000'
+    difficultyPattern = '0000'
     """
     difficulty level of the Proof of Work
     shows the pattern with which each hash has to start with
@@ -31,7 +30,6 @@ class Blockchain:
         self.transactions_to_be_confirmed = [] 
 
     # Creating of the Origin/First block in the chain
-
     def create_origin_block(self):
         """
         The block has empty list of transactions
@@ -115,7 +113,7 @@ class Blockchain:
 
             if not success:
                 chain_is_valid = False
-                print("Block transactions are not valid")
+                print("Error: Block transactions are not valid")
             
             # Restore the current block's hash
             current_block.hash = current_block_hash
@@ -132,11 +130,11 @@ class Blockchain:
         Appends a block to the chain after verifying it's validity
         """
         if not (Blockchain.is_proof_valid(block, proof)):
-            print("Proof is not valid")
+            print("Error: Proof is not valid")
             return False
 
         if (self.previous_block().hash != block.previous_hash):
-            print("Previous block hash is not correct")
+            print("Error: Previous block hash is not correct")
             return False
 
         block.hash = proof
@@ -165,7 +163,6 @@ class Blockchain:
         # 0 = False
         return len(self.transactions_to_be_confirmed)
 
-
     def find_image(self, imageId):
         """
         Checks whether the blockchain contains image with imageId
@@ -178,7 +175,6 @@ class Blockchain:
                     return Transaction["zEncoding64_val"]
 
         return -1
-
     
     def create_naked_block(self, _minerID):
         """
@@ -239,7 +235,6 @@ class Blockchain:
         proof = self.proof_of_work(new_block)
     
         self.append_block(new_block, proof)
-
 
 def consensus_mechanism(_chain, _connected_nodes):
     """
