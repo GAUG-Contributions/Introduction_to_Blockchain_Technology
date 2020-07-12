@@ -18,7 +18,7 @@ class Blockchain:
     """
     Class that maintains the functions and structure of the Blockchain
     """
-    difficultyPattern = '0000'
+    difficultyPattern = '000'
     """
     difficulty level of the Proof of Work
     shows the pattern with which each hash has to start with

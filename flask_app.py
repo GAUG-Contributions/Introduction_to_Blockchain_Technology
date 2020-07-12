@@ -28,7 +28,7 @@ import atomic, decimal, wallet
 # Parameters that could be edited
 AUTOMATIC_MINING = True # For toggling between auto and manual mining
 MIN_TRANSACTIONS = 1 # Minimum transactions amount needed to start auto mining
-DEBUG_PRINTS = False # Set to True for more print debugging on the terminal
+DEBUG_PRINTS = True # Set to True for more print debugging on the terminal
 
 # Do not edit
 MINING_RESULT = None
@@ -408,7 +408,7 @@ def app_visualize_meme():
     if image_data["imageId"] not in node_state.Memes:
         return jsonify({"Error": "Meme was not found!"}), 400
 
-    html_image = "<html><img src='data:image/jpg; base64, " + Meme[simage_data["imageId"]].binary + "'></html>"
+    html_image = "<html><img src='data:image/jpg; base64, " + node_state.Memes[image_data["imageId"]].binary + "'></html>"
 
     return app.response_class(response=html_image,status=201, mimetype="text/html")
 
