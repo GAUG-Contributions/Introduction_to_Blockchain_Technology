@@ -21,7 +21,7 @@ import requests
 
 from block import Block
 from blockchain import Blockchain, consensus_mechanism as consensus, construct_chain_again as construct_chain
-from node_state import Nodes as map_of_nodes, MemeFormats as map_of_memeformats, Memes as map_of_memes, Upvotes as map_of_upvotes, OwnershipSaleOffers as map_of_ownershipoffers
+import node_state
 
 import atomic, decimal, wallet
 
@@ -405,10 +405,10 @@ def app_visualize_meme():
         return jsonify({"Error": "Missing imageId element!"}), 400
 
     # image_ascii = blockchain.find_image(image_data["imageId"])
-    if image_data["imageId"] not in map_of_memes:
+    if image_data["imageId"] not in node_state.Memes:
         return jsonify({"Error": "Meme was not found!"}), 400
 
-    html_image = "<html><img src='data:image/jpg; base64, " + map_of_memes[image_data["imageId"]].binary + "'></html>"
+    html_image = "<html><img src='data:image/jpg; base64, " + Meme[simage_data["imageId"]].binary + "'></html>"
 
     return app.response_class(response=html_image,status=201, mimetype="text/html")
 
@@ -425,10 +425,10 @@ def app_visualize_memeformat():
     if not image_data.get("memeformatId"):
         return jsonify({"Error": "Missing memeformatId element!"}), 400
 
-    if image_data["memeformatId"] not in map_of_memeformats:
+    if image_data["memeformatId"] not in node_state.MemeFormats:
         return jsonify({"Error": "MemeFormat was not found!"}), 400
 
-    html_image = "<html><img src='data:image/jpg; base64, " + map_of_memeformats[image_data["memeformatId"]].binary + "'></html>"
+    html_image = "<html><img src='data:image/jpg; base64, " + node_state.MemeFormats[image_data["memeformatId"]].binary + "'></html>"
 
     return app.response_class(response=html_image,status=201, mimetype="text/html")
 
@@ -443,10 +443,10 @@ def app_get_node_credits():
     if not node_data.get("nodeId"):
         return jsonify({"Error" : "Missing nodeId element"}), 400
     node_id = node_data.get("nodeId")
-    if node_id not in map_of_nodes:
+    if node_id not in node_state.Nodes:
         return jsonify({"Error" : "Node `{}` not found".format(node_id)})
 
-    response = json.dumps(map_of_nodes[node_id].wallet, cls=GlobalEncoder)
+    response = json.dumps(node_state.Nodes[node_id].wallet, cls=GlobalEncoder)
     return app.response_class(response=response,status=201, mimetype="application/json")
 
 @app.route("/node_state", methods=["GET"])
@@ -460,11 +460,11 @@ def app_get_node_state():
     Upvotes = {}
     OwnershipSaleOffers = {}
 
-    ns = {"Nodes" : map_of_nodes,
-          "MemeFormats" : map_of_memeformats,
-          "Memes" : map_of_memes,
-          "Upvotes" : map_of_upvotes,
-          "OwnershipSaleOffers" : map_of_ownershipoffers}
+    ns = {"Nodes" : node_state.Nodes,
+          "MemeFormats" : node_state.MemeFormats,
+          "Memes" : node_state.Memes,
+          "Upvotes" : node_state.Upvotes,
+          "OwnershipSaleOffers" : node_state.OwnershipSaleOffers}
     response = json.dumps(ns, cls=GlobalEncoder)
     
     return app.response_class(response=response,status=201, mimetype="application/json")
@@ -478,9 +478,9 @@ def app_get_memeformats():
     data = request.get_json()    
 
     if data and data.get("info"):
-        response = json.dumps(map_of_memeformats, cls=GlobalEncoder)
+        response = json.dumps(node_state.MemeFormats, cls=GlobalEncoder)
     else:
-        obj = {mfid : [meme for meme in mf.memes] for mfid,mf in map_of_memeformats.items()}
+        obj = {mfid : [meme for meme in mf.memes] for mfid,mf in node_state.MemeFormats.items()}
         response = json.dumps(obj, cls=GlobalEncoder)
     
     return app.response_class(response=response,status=201, mimetype="application/json")
