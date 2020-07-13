@@ -1,3 +1,20 @@
+# Copyright 2020 Akshay Katyal, Anant Sujatanagarjuna, Chris Warin, Mehmed Mustafa, Rahul Agrawal, Steffen Tunkel
+
+# This file is part of order66
+
+# order66 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# order66 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with order66.  If not, see <https://www.gnu.org/licenses/>.
+
 """
 flask_app.py
 Flask application for Meme Economy
@@ -15,8 +32,9 @@ import sys
 import base64
 import threading
 import time
-
-from flask import Flask, jsonify, request
+import zipfile
+from flask import Flask, jsonify, request, send_file
+from io import BytesIO
 import requests
 
 from block import Block
@@ -542,13 +560,18 @@ def app_connect_new_nodes():
     # so the most recently connected node can synchronize
     return app_get_chain()
 
-# A function which triggers /connect_node POST method to 
-# connect to the network and get up-to-data chain and transactions information
+
 @app.route('/connect_to_node', methods=['POST'])
 def app_connect_to_node():
-    #Internally calls the `register_node` endpoint to
-    #register current node with the node specified in the
-    #request, and sync the blockchain as well as peer data.
+    """
+    A function which triggers /connect_node POST method to connect to
+    the network and get up-to-data chain and transactions information
+
+    Internally calls the `register_node` endpoint to
+    register current node with the node specified in the
+    request, and sync the blockchain as well as peer data.
+
+    """
 
     node_address = request.get_json()["node_address"]
     if not node_address:
@@ -573,6 +596,28 @@ def app_connect_to_node():
     else:
         # if something goes wrong, pass it on to the API response
         return response.content, response.status_code
+
+@app.route('/source.zip', methods=['GET'])
+def app_get_source():
+    """
+    Route used to get source of order66
+    """
+
+    memory_file = BytesIO()
+    zipf = zipfile.ZipFile(memory_file, "w", zipfile.ZIP_DEFLATED)
+    zipf.write("atomic.py")
+    zipf.write("block.py")
+    zipf.write("blockchain.py")
+    zipf.write("flask_app.py")
+    zipf.write("node_state.py")
+    zipf.write("validation.py")
+    zipf.write("wallet.py")
+    zipf.write("LICENSE")
+    zipf.write("README.md")
+    zipf.close()
+
+    memory_file.seek(0)
+    return send_file(memory_file, attachment_filename='source.zip', as_attachment=True)
 
 # A function used by the miner thread inside app_append_transaction()
 def mine_block_new_thread(block):
