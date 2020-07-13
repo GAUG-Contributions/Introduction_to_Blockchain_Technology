@@ -7,7 +7,7 @@ Akshay Katyal, Anant Sujatanagarjuna, Chris Warin, Mehmed Mustafa, Rahul Agrawal
 Meme economy, we got the inspiration from: `https://www.reddit.com/r/MemeEconomy/`
 
 ## Running a demo test
-`Format` and `Template` words are used interchangeably accross the project and they mean the same thing.
+`Format` and `Template` words are used interchangeably across the project and they mean the same thing.
 Check the `memes folder` to see examples of different `templates` and `memes` created using the `templates`.
 
 ### 1. Requirements
