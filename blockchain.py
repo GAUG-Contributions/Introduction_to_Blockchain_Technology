@@ -100,7 +100,7 @@ class Blockchain:
         return True
 
     @classmethod
-    def check_validity(cls, chain):
+    def check_validity(cls, chain, check_transactions=True):
         """
         Checks whether the current chain is valid or not
         """
@@ -126,11 +126,12 @@ class Blockchain:
                 chain_is_valid = False
 
             # Check if transactions are valid
-            success, errors = validation.apply_block(current_block, commit=True)
+            if check_transactions:
+                success, errors = validation.apply_block(current_block, commit=True)
 
-            if not success:
-                chain_is_valid = False
-                print("Error: Block transactions are not valid")
+                if not success:
+                    chain_is_valid = False
+                    print("Error: Block transactions are not valid")
             
             # Restore the current block's hash
             current_block.hash = current_block_hash
@@ -279,7 +280,7 @@ def consensus_mechanism(_chain, _connected_nodes):
             except Exception as Exp2:
                 print(Exp2.message)
                 return False
-            if Blockchain.check_validity(response_chain_object):
+            if Blockchain.check_validity(response_chain_object.chain, check_transactions=False):
                 node_state.commit_state()
                 # Update the length and chain
                 current_node_chain_length = response_length

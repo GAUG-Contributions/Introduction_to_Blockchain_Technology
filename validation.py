@@ -46,6 +46,13 @@ def apply_block(block, commit=False):
     miner_ID = block.minerID
     memes_upvoted = {}
     errors = []
+
+    for trindex, transaction in enumerate(block.transactions):
+        if transaction["nodeID"] not in node_state.Nodes:
+            node_state.Node(transaction["nodeID"], 5)
+    if miner_ID not in node_state.Nodes:
+        node_state.Node(miner_ID, 5)
+    atomic.commit()
     
     for trindex, transaction in enumerate(block.transactions):
         # Skip if it is a pseudo transaction (no type field)
