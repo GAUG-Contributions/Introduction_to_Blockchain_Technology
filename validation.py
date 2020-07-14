@@ -236,7 +236,7 @@ def apply_ownership_purchase_transaction(transaction_data, block_ID, miner_ID, j
     if node_state.OwnershipSaleOffers[transaction_data["ownershipSaleOfferID"]].buyerID is not None:
         raise OwnershipSaleOfferAlreadyAcceptedException(transaction_data["ownershipSaleOfferID"],
                                                          node_state.OwnershipSaleOffers[transaction_data["ownershipSaleOfferID"]].buyerID,
-                                                         node_state.OwnershipSaleOffers[transaction_data["ownershipSaleOfferID"]].buyerBlockID,
+                                                         node_state.OwnershipSaleOffers[transaction_data["ownershipSaleOfferID"]].buyBlockID,
                                                          transaction_data["ownershipPurchaseID"])
 
     try:
