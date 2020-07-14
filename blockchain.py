@@ -278,6 +278,8 @@ def consensus_mechanism(_chain, _connected_nodes):
             try:
                 response_chain_object = construct_chain_again(response_chain)
             except Exception as Exp2:
+                node_state.revert_state()
+                print("This should not happen")
                 print(Exp2.message)
                 return False
             if Blockchain.check_validity(response_chain_object.chain, check_transactions=False):

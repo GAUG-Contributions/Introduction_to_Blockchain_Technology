@@ -46,7 +46,7 @@ def apply_block(block, commit=False):
     miner_ID = block.minerID
     memes_upvoted = {}
     errors = []
-
+    print("Trying to `{}` block `{}`, by miner `{}`".format("apply" if commit else "just_validate" ,block_ID, miner_ID))
     for trindex, transaction in enumerate(block.transactions):
         if transaction["nodeID"] not in node_state.Nodes:
             node_state.Node(transaction["nodeID"], 5)
