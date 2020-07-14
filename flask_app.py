@@ -116,10 +116,17 @@ def notify_all_nodes_new_block(block):
 
 # POST method for pushing a newly mined block by someone else to a node's chain
 # Used internally to receive mined blocks from the network
+
+APPENDING = False
+
 @app.route('/append_block', methods=['POST'])
 def app_append_block():
     global STOP_MINING
     global MINING_THREAD
+    global APPENDING
+    while(APPENDING):
+        continue
+    APPENDING = True
     if(DEBUG_PRINTS): print("In append_block")
     block_data = request.get_json()
     block = Block(block_data["index"],
@@ -130,20 +137,21 @@ def app_append_block():
                   block_data["previous_hash"],
                   block_data["proof_of_work"])
     proof = block_data["hash"]
-    
+
+    if(DEBUG_PRINTS): print("Trying to join MINING_THREAD")
+    STOP_MINING = True
+    if MINING_THREAD is not None:
+        MINING_THREAD.join()
+    STOP_MINING = False
+    if(DEBUG_PRINTS): print("Should enable mining again")
     # Append the block to the chain if the block is validated
     if(blockchain.append_block(block, proof)):
-        if(DEBUG_PRINTS): print("Trying to join MINING_THREAD")
-        STOP_MINING = True
-        if MINING_THREAD is not None:
-            MINING_THREAD.join()
-        STOP_MINING = False
-        if(DEBUG_PRINTS): print("Should enable mining again")
+        
         response, status_code = {"Notification": "The block was appended to the chain."}, 201
     else:
         print("Error, an invalid block encountered!")
         response, status_code = {"Error": "The block was invalid and discarded!"}, 400
-
+    APPENDING=False
     return jsonify(response), status_code
 
 # A function which triggers /append_transaction POST method of 
@@ -560,6 +568,10 @@ def app_connect_new_nodes():
     # so the most recently connected node can synchronize
     return app_get_chain()
 
+@app.route('/do_consensus', methods=['POST'])
+def app_do_consensus():
+    return jsonify(consensus(blockchain.chain, connected_nodes))
+
 
 @app.route('/connect_to_node', methods=['POST'])
 def app_connect_to_node():
@@ -589,7 +601,10 @@ def app_connect_to_node():
         global blockchain
         global connected_nodes
         # update chain, pending transactions and the connected_nodes
-        blockchain = construct_chain(response.json()['chain'])
+        try:
+            blockchain = construct_chain(response.json()['chain'])
+        except Exception as Exp:
+            print(Exp)
         blockchain.transactions_to_be_confirmed = response.json()['pending transactions']
         connected_nodes.update(response.json()['peers'])
         return "Connection successful", 200

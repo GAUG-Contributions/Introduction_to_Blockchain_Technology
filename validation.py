@@ -129,7 +129,7 @@ def apply_upvote_transaction(transaction_data, block_ID, miner_ID, just_validate
                                              Exp.message)
     return meme_id
 
-def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID, just_validate=True):
+def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID, just_validate=False):
     """
     Update node_state based on a memeFormat transaction
     """

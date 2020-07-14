@@ -159,7 +159,9 @@ class Blockchain:
 
         success, errors = validation.apply_block(block, commit=True)
         if not success:
-            raise validation.BlockException(errors)
+            # print(validation.BlockException(errors))
+            pass
+            
         self.chain.append(block)
         # reset the list since the transactions are confirmed now
         self.transactions_to_be_confirmed = [] #TODO Only remove
@@ -268,28 +270,36 @@ def consensus_mechanism(_chain, _connected_nodes):
     global blockchain
     current_node_chain_length = len(_chain)
     chain_updated = False
-    
+    best_chain = None
     for node in _connected_nodes:
         node_response = requests.get("{}get_chain".format(node))
         response_length = node_response.json()["length"] 
         response_chain = node_response.json()["chain"]
         # If the response holds longer chain and the chain is valid
         if(current_node_chain_length < response_length):
-            try:
-                response_chain_object = construct_chain_again(response_chain)
-            except Exception as Exp2:
-                node_state.revert_state()
-                print("This should not happen")
-                print(Exp2)
-                return False
-            if Blockchain.check_validity(response_chain_object.chain, check_transactions=False):
-                node_state.commit_state()
-                # Update the length and chain
-                current_node_chain_length = response_length
-                blockchain = response_chain
-                chain_updated = True
-            else:
-                node_state.revert_state()
+            best_chain = response_chain
+            print("Found Longer chain")
+            # try:
+            #     response_chain_object = construct_chain_again(response_chain)
+            # except Exception as Exp2:
+            #     # node_state.revert_state()
+            #     print("This should not happen")
+            #     print(Exp2)
+            #     return False
+            # if Blockchain.check_validity(response_chain_object.chain, check_transactions=False):
+            #     node_state.commit_state()
+            #     # Update the length and chain
+            #     current_node_chain_length = response_length
+            #     blockchain = response_chain
+            #     chain_updated = True
+            # else:
+            #     node_state.revert_state()
+    if best_chain is not None:
+        try:
+            response_chain_obj = construct_chain_again(best_chain)
+            chain_updated=True
+        except Exception as Exp:
+            print("Best chain ain't good homes.")
     print("Chain updated" if chain_updated else "Chain is up to date")
     return chain_updated
 
