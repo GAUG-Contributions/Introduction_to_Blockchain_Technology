@@ -25,6 +25,10 @@ Indices and tables
 .. automodule:: blockchain
    :members:
 
+
+.. automodule:: flask_app
+   :members:
+      
 .. automodule:: validation
    :members:
 

@@ -55,6 +55,7 @@ STOP_MINING = False
 
 class GlobalEncoder(json.JSONEncoder):
     """
+    Encoder for node_state objects
     """
     def default(self, o):
         """
@@ -106,21 +107,28 @@ host_address = f"http://127.0.0.1:{app_port}/"
 if(host_address == "http://127.0.0.1:5000/"):
     connected_nodes.add(host_address)
 
-# A function which triggers /append_block POST method of 
-# other connected nodes in order to register the newly mined block
+
 def notify_all_nodes_new_block(block):
+    """
+    A function which triggers /append_block POST method of 
+    other connected nodes in order to register the newly mined block
+    """
     for node in connected_nodes:
         requests.post("{}append_block".format(node), 
                     data=json.dumps(block.__dict__, sort_keys=True), 
                     headers={"Content-Type": "application/json"})
 
-# POST method for pushing a newly mined block by someone else to a node's chain
-# Used internally to receive mined blocks from the network
+
 
 APPENDING = False
 
 @app.route('/append_block', methods=['POST'])
+
 def app_append_block():
+    """
+    POST method for pushing a newly mined block by someone else to a node's chain
+    Used internally to receive mined blocks from the network
+    """
     global STOP_MINING
     global MINING_THREAD
     global APPENDING
@@ -165,18 +173,24 @@ def app_append_block():
     APPENDING=False
     return jsonify(response), status_code
 
-# A function which triggers /append_transaction POST method of 
-# other connected nodes in order to register the new transactions
+
 def notify_all_nodes_new_transaction(transaction):
+    """
+    A function which triggers /append_transaction POST method of 
+    other connected nodes in order to register the new transactions
+    """
     for node in connected_nodes:
         requests.post("{}append_transaction".format(node), 
                     data=json.dumps(transaction, sort_keys=True), 
                     headers={"Content-Type": "application/json"})
 
-# POST method for pushing a new transaction by someone else to a node's mempool
-# Used internally to receive new transactions from the network
 @app.route('/append_transaction', methods=['POST'])
 def app_append_transaction():
+    """
+    
+    POST method for pushing a new transaction by someone else to a node's mempool
+    Used internally to receive new transactions from the network
+    """
     global MINING_THREAD
     transaction_data = request.get_json()
     # Store the transaction received from the network in the local transactions_to_be_confirmed list
@@ -191,9 +205,12 @@ def app_append_transaction():
         if(DEBUG_PRINTS): print("Minimum number of transactions `{}` met. Starting to Mine new Block.".format(MIN_TRANSACTIONS))
     return "Created", 201
 
-# A function which triggers /update_nodes_list POST method of 
-# other connected nodes in order to register the most recently connected node
+
 def notify_all_nodes_new_node(host_address, node_address):
+    """
+    A function which triggers /update_nodes_list POST method of 
+    other connected nodes in order to register the most recently connected node
+    """
     for node in connected_nodes:
         # Avoid unnecessary method calls:
         # skip the most recently connected node (node_address) 
@@ -204,10 +221,13 @@ def notify_all_nodes_new_node(host_address, node_address):
                     data=json.dumps(node_address, sort_keys=True), 
                     headers={"Content-Type": "application/json"})
 
-# POST method for pushing a new peer by someone else to a node's mempool
-# Used internally to connect nodes from the network
+
 @app.route('/update_nodes_list', methods=['POST'])
 def app_update_nodes_list():
+    """
+    POST method for pushing a new peer by someone else to a node's mempool
+    Used internally to connect nodes from the network
+    """
     node_address = request.get_json()["node_address"]
     if not node_address:
         return "Invalid data", 400
@@ -218,9 +238,11 @@ def app_update_nodes_list():
         connected_nodes.add(node_address)
     return "Created", 201
 
-# GET request for checking if the node's copy of the Blockchain is valid
 @app.route('/check_validity', methods = ['GET'])
 def app_check_validity():
+    """
+    GET request for checking if the node's copy of the Blockchain is valid
+    """
     if(Blockchain.check_validity(blockchain.chain)):
         response, status_code = {"Chain Validation": "The current state of the Blockchain is valid!"}, 200
     else:
@@ -228,9 +250,12 @@ def app_check_validity():
 
     return jsonify(response), status_code
 
-# GET request for getting the node's copy of the Blockchain
 @app.route('/get_chain', methods = ['GET'])       
 def app_get_chain():
+    """
+    GET request for getting the node's copy of the Blockchain
+
+    """
     # Make blocks inside the chain json serializable
     blocks_data = []
     for block in blockchain.chain:
@@ -243,9 +268,13 @@ def app_get_chain():
                 "pending transactions": blockchain.transactions_to_be_confirmed}
     return jsonify(response), 200
 
-# GET request for pending transactions
 @app.route('/get_pending_transactions', methods = ['GET'])
+
 def app_get_pending_transactions():
+    """
+    GET request for pending transactions
+
+    """
     response = {"pending_transactions": blockchain.transactions_to_be_confirmed}
     return jsonify(response), 200
 
@@ -522,11 +551,13 @@ def app_get_memeformats():
     
     return app.response_class(response=response,status=201, mimetype="application/json")
 
-# GET request for mining a block 
-# (works only when AUTOMATIC_MINING is set to false)
+
 @app.route('/mine_block', methods=['GET'])
 def app_mine_block():
-
+    """
+    GET request for mining a block 
+    (works only when AUTOMATIC_MINING is set to false)
+    """
     if(AUTOMATIC_MINING):
         return jsonify({"Warning": "This method is not available when AUTOMATIC_MINING is set to True!"}), 405
 
@@ -559,11 +590,15 @@ def app_mine_block():
     response = vars(new_block)
     return jsonify(response), 200
 
-# POST method for connecting a new node to the network
-# Used internally to receive connections from nodes 
-# which are not part of the network yet
+
 @app.route('/connect_node', methods=['POST'])
+
 def app_connect_new_nodes():
+    """
+    POST method for connecting a new node to the network
+    Used internally to receive connections from nodes 
+    which are not part of the network yet
+    """
     json_address = request.get_json()
     if not json_address["node_address"]:
         return jsonify({"Error": "Missing node_address element!"}), 400

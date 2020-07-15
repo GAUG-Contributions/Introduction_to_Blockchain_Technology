@@ -87,7 +87,7 @@ Blocks in the Blockchain</p>
 
 <dl class="py method">
 <dt id="blockchain.Blockchain.check_validity">
-<em class="property">classmethod </em><code class="sig-name descname">check_validity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chain</span></em><span class="sig-paren">)</span><a class="headerlink" href="#blockchain.Blockchain.check_validity" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="sig-name descname">check_validity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">chain</span></em>, <em class="sig-param"><span class="n">check_transactions</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#blockchain.Blockchain.check_validity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether the current chain is valid or not</p>
 </dd></dl>
 
@@ -106,7 +106,7 @@ The block has 0 as a value for index, previous_hash, proof_of_work</p>
 
 <dl class="py attribute">
 <dt id="blockchain.Blockchain.difficultyPattern">
-<code class="sig-name descname">difficultyPattern</code><em class="property"> = '000'</em><a class="headerlink" href="#blockchain.Blockchain.difficultyPattern" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">difficultyPattern</code><em class="property"> = '0000'</em><a class="headerlink" href="#blockchain.Blockchain.difficultyPattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>difficulty level of the Proof of Work
 shows the pattern with which each hash has to start with</p>
 </dd></dl>
@@ -165,6 +165,202 @@ from the json data</p>
 </dd></dl>
 
 </div>
+<span class="target" id="module-flask_app"></span><p>flask_app.py
+Flask application for Meme Economy</p>
+<dl class="py class">
+<dt id="flask_app.GlobalEncoder">
+<em class="property">class </em><code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">GlobalEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">skipkeys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ensure_ascii</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">check_circular</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">allow_nan</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">sort_keys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">separators</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.GlobalEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encoder for node_state objects</p>
+<dl class="py method">
+<dt id="flask_app.GlobalEncoder.default">
+<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">o</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.GlobalEncoder.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom method that is used buy json.dumps for json encoding</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_add_memeFormat_transaction">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_add_memeFormat_transaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_add_memeFormat_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for pushing a new memeFormat transaction to the local mempool
+Expected JSON data formats
+{“imagePath”:”block.jpg”, “name”: “nameValue”}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_add_meme_transaction">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_add_meme_transaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_add_meme_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for pushing a new meme transaction to the local mempool
+Expected JSON data formats
+{“imagePath”:”block.jpg”, “name”: “nameValue”, “memeFormat” : “memeFormatID”}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_add_upvote_transaction">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_add_upvote_transaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_add_upvote_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for pushing a new upvote transaction to the local mempool
+Expected JSON data formats
+{“imageVoteId”:”memeID”, “upvoteID” : “upvoteID”}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_append_block">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_append_block</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_append_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for pushing a newly mined block by someone else to a node’s chain
+Used internally to receive mined blocks from the network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_append_transaction">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_append_transaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_append_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for pushing a new transaction by someone else to a node’s mempool
+Used internally to receive new transactions from the network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_check_validity">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_check_validity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_check_validity" title="Permalink to this definition">¶</a></dt>
+<dd><p>GET request for checking if the node’s copy of the Blockchain is valid</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_connect_new_nodes">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_connect_new_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_connect_new_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for connecting a new node to the network
+Used internally to receive connections from nodes
+which are not part of the network yet</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_connect_to_node">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_connect_to_node</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_connect_to_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function which triggers /connect_node POST method to connect to
+the network and get up-to-data chain and transactions information</p>
+<p>Internally calls the <cite>register_node</cite> endpoint to
+register current node with the node specified in the
+request, and sync the blockchain as well as peer data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_get_chain">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_get_chain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_get_chain" title="Permalink to this definition">¶</a></dt>
+<dd><p>GET request for getting the node’s copy of the Blockchain</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_get_memeformats">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_get_memeformats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_get_memeformats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all the memeformats currently tracked by node_state
+{“info”:true/false} (Optional) Whether or not to return all information</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_get_node_credits">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_get_node_credits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_get_node_credits" title="Permalink to this definition">¶</a></dt>
+<dd><p>GET method for getting (wallet) credit amount for a node
+Excepted JSON data format
+{“nodeId” : “idValue”}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_get_node_state">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_get_node_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_get_node_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all the objects currently tracked by node_state</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_get_pending_transactions">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_get_pending_transactions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_get_pending_transactions" title="Permalink to this definition">¶</a></dt>
+<dd><p>GET request for pending transactions</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_get_source">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_get_source</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_get_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Route used to get source of order66</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_mine_block">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_mine_block</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_mine_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>GET request for mining a block
+(works only when AUTOMATIC_MINING is set to false)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_purchase_ownership_transaction">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_purchase_ownership_transaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_purchase_ownership_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for pushing a new ownership purchase transaction to the local mempool
+Expected JSON data formats
+{“ownershipPurchaseID”:”ownershipPurchaseID”,
+“ownershipSaleOfferID”:”ownershipSaleOfferID”}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_sell_ownership_transaction">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_sell_ownership_transaction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_sell_ownership_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for pushing a new ownership sale offer transaction to the local mempool
+Expected JSON data formats
+{“ownershipSaleOfferID”: “ownershipSaleOfferID”, “memeFormat”:”memeFormatID”, “saleAmount” : “saleAmount”}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_update_nodes_list">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_update_nodes_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_update_nodes_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>POST method for pushing a new peer by someone else to a node’s mempool
+Used internally to connect nodes from the network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_visualize_meme">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_visualize_meme</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_visualize_meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>GET method for visualizing meme by it’s imageId</p>
+<p>Expected JSON data format
+{“imageId”:”idValue”}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.app_visualize_memeformat">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">app_visualize_memeformat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.app_visualize_memeformat" title="Permalink to this definition">¶</a></dt>
+<dd><p>GET method for visualizing memeformat by it’s imageId</p>
+<p>Expected JSON data format
+{“memeformatId”:”idValue”}</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.json_serialize_object">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">json_serialize_object</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.json_serialize_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method that is used to json serialize an arbitrary object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.mine_block_new_thread">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">mine_block_new_thread</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.mine_block_new_thread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used inside the thread used to start mining in a new
+thread</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.notify_all_nodes_new_block">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">notify_all_nodes_new_block</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.notify_all_nodes_new_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function which triggers /append_block POST method of
+other connected nodes in order to register the newly mined block</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.notify_all_nodes_new_node">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">notify_all_nodes_new_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">host_address</span></em>, <em class="sig-param"><span class="n">node_address</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.notify_all_nodes_new_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function which triggers /update_nodes_list POST method of
+other connected nodes in order to register the most recently connected node</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="flask_app.notify_all_nodes_new_transaction">
+<code class="sig-prename descclassname">flask_app.</code><code class="sig-name descname">notify_all_nodes_new_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction</span></em><span class="sig-paren">)</span><a class="headerlink" href="#flask_app.notify_all_nodes_new_transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function which triggers /append_transaction POST method of
+other connected nodes in order to register the new transactions</p>
+</dd></dl>
+
 <span class="target" id="module-validation"></span><div class="section" id="validation-py">
 <h2>validation.py<a class="headerlink" href="#validation-py" title="Permalink to this headline">¶</a></h2>
 <p>Module that validates block transactions</p>
@@ -257,7 +453,7 @@ it will commit node_state</p>
 
 <dl class="py function">
 <dt id="validation.apply_memeFormat_transaction">
-<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_memeFormat_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction_data</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">just_validate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_memeFormat_transaction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">validation.</code><code class="sig-name descname">apply_memeFormat_transaction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transaction_data</span></em>, <em class="sig-param"><span class="n">block_ID</span></em>, <em class="sig-param"><span class="n">miner_ID</span></em>, <em class="sig-param"><span class="n">just_validate</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#validation.apply_memeFormat_transaction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update node_state based on a memeFormat transaction</p>
 </dd></dl>
 
@@ -351,12 +547,6 @@ of a Meme.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_state.Meme.__repr__">
-<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Meme.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return repr(self).</p>
-</dd></dl>
-
-<dl class="py method">
 <dt id="node_state.Meme.add_upvote">
 <code class="sig-name descname">add_upvote</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upvote_ID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Meme.add_upvote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add upvote to the Meme</p>
@@ -388,12 +578,6 @@ of a MemeFormat.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="node_state.MemeFormat.__repr__">
-<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_state.MemeFormat.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return repr(self).</p>
-</dd></dl>
-
-<dl class="py method">
 <dt id="node_state.MemeFormat.add_meme">
 <code class="sig-name descname">add_meme</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">meme_ID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.MemeFormat.add_meme" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add meme to MemeFormat</p>
@@ -416,12 +600,6 @@ of a Node.</p>
 <dt id="node_state.Node.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ID</span></em>, <em class="sig-param"><span class="n">credits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Node.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="node_state.Node.__repr__">
-<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Node.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return repr(self).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -453,12 +631,6 @@ ownership : percentage of ownership of meme_format</p>
 <dt id="node_state.OwnershipSaleOffer.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ownershipSaleOfferID</span></em>, <em class="sig-param"><span class="n">sellerID</span></em>, <em class="sig-param"><span class="n">memeFormatID</span></em>, <em class="sig-param"><span class="n">sellBlockID</span></em>, <em class="sig-param"><span class="n">sellBlockMinerID</span></em>, <em class="sig-param"><span class="n">amount</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#node_state.OwnershipSaleOffer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="node_state.OwnershipSaleOffer.__repr__">
-<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_state.OwnershipSaleOffer.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return repr(self).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -501,12 +673,6 @@ of an Upvote</p>
 <dd><p>Initializes the upvote and transfers appropriate credits to meme
 poster, MemeFormat owner. Also rewards the UpvoteMiner,
 MemeMiner, MemeFormatMiner</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="node_state.Upvote.__repr__">
-<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#node_state.Upvote.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return repr(self).</p>
 </dd></dl>
 
 </dd></dl>

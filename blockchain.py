@@ -295,6 +295,7 @@ def consensus_mechanism(_chain, _connected_nodes):
             # else:
             #     node_state.revert_state()
     if best_chain is not None:
+        
         try:
             response_chain_obj = construct_chain_again(best_chain)
             chain_updated=True
