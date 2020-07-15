@@ -46,6 +46,7 @@ def apply_block(block, commit=False):
     miner_ID = block.minerID
     memes_upvoted = {}
     errors = []
+    node_state.backup_state()
     print("Trying to `{}` block `{}`, by miner `{}`".format("apply" if commit else "just_validate" ,block_ID, miner_ID))
     for trindex, transaction in enumerate(block.transactions):
         if transaction["nodeID"] not in node_state.Nodes:
@@ -53,7 +54,7 @@ def apply_block(block, commit=False):
     if miner_ID not in node_state.Nodes:
         node_state.Node(miner_ID, 5)
     atomic.commit()
-    
+    node_state.commit_state()
     for trindex, transaction in enumerate(block.transactions):
         # Skip if it is a pseudo transaction (no type field)
         if not(transaction.get("type")):
@@ -72,6 +73,7 @@ def apply_block(block, commit=False):
 
     if errors:
         atomic.revert()
+        node_state.revert_state()
         return False, errors
     if commit:
         for memeID, meme in memes_upvoted.items():
@@ -81,8 +83,10 @@ def apply_block(block, commit=False):
 
     if commit:
         atomic.commit()
+        node_state.commit_state()
     else:
         atomic.revert()
+        node_state.revert_state()
 
     return True, errors
 
