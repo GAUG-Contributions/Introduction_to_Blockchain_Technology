@@ -150,13 +150,14 @@ def app_append_block():
     STOP_MINING = False
     if(DEBUG_PRINTS): print("Should enable mining again")
     # Append the block to the chain if the block is validated
-    if(blockchain.append_block(block, proof)):
-        
+    if(blockchain.append_block(block, proof)): 
         response, status_code = {"Notification": "The block was appended to the chain."}, 201
     else:
         if(DEBUG_PRINTS): print("Error, an invalid block encountered!")
         response, status_code = {"Error": "The block was invalid and discarded!"}, 400
 
+    if(app_port == int(block_data["minerID"])):
+        print(">>>>>>>>>>>>>>> Congo! We mined something <<<<<<<<<<<<<<< ")
         
     # For some reason, need to recompute node_state
     # node_state.backup_state()
@@ -698,7 +699,7 @@ def mine_block_new_thread(block):
         MINING_RESULT = False
         return
     MINING_RESULT = block
-    print(">>>>>>>>>>>>>>> Congo! We mined something <<<<<<<<<<<<<<< ")
+    # print(">>>>>>>>>>>>>>> Congo! We mined something <<<<<<<<<<<<<<< ")
 
     def temporary_thread_to_notify_new_block(block):
         notify_all_nodes_new_block(block)

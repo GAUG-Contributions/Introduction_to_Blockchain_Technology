@@ -82,7 +82,7 @@ Future peers will be able to connect to the established network by sending a con
 
 {"imagePath" : "imagePathValue", "name" : "nameValue", "memeFormat" : "memeFormatID"}
 
-`Input format will be explained soon!`
+`memeFormatID` - The ID of the meme format to which this meme belongs to. It is in format `A_B`. `A` is the `port number` of the node which uploaded the meme and `B` is the `nameValue` of the meme.
 
 - `/add_upvote`
 
@@ -154,10 +154,6 @@ The response in `Postman` will be an html code. To see the image, switch the res
 
 ##### 7.5 Checking the credit balance of a node
 Send a `GET` request by using the `/get_node_credits` method. The input format is: `{"nodeId" : "idValue"}`, where the `idValue` is the `port number` of that node.
-
-### 8. Credits and rewards distribution system (NOT FINISHED COMPLETELY YET)
-
-`Brief explanation of the credits and rewards distribution system will be included.`
 
 ## Final version
 This is our final version for this project.
