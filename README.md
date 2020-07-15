@@ -73,6 +73,7 @@ Future peers will be able to connect to the established network by sending a con
 {"imagePath" : "imagePathValue", "name" : "nameValue"}
 
 `imagePathValue` - The path of the meme format to be uploaded.
+
 `nameValue` - Could be any value. The name of the meme format, which will be a part of the memeFormatID assigned internally.
 
 - `/add_meme`
@@ -80,7 +81,9 @@ Future peers will be able to connect to the established network by sending a con
 {"imagePath" : "imagePathValue", "name" : "nameValue", "memeFormat" : "memeFormatID"}
 
 `imagePathValue` - The path of the meme to be uploaded.
+
 `nameValue` - Could be any value. The name of the meme, which will be a part of the memeID assigned internally.
+
 `memeFormatID` - The ID of the meme format to which this meme belongs to. It is in format `A_B`. `A` is the `port number` of the node which uploaded the meme format and `B` is the `nameValue` of the meme format assigned when uploading.
 
 - `/add_upvote`
@@ -88,6 +91,7 @@ Future peers will be able to connect to the established network by sending a con
 {"imageVoteId":"memeID", "upvoteID" : "upvoteID"}
 
 `memeID` - The ID of the meme to be up voted. It is in format `A_B`. `A` is the `port number` of the node which uploaded the meme and `B` is the `nameValue` of the meme assigned when uploading.
+
 `upvoteID` - Could be any value. Used internally and for easier tracking of the Upvotes during the demo.
 
 - `/sell_ownership`
@@ -95,7 +99,9 @@ Future peers will be able to connect to the established network by sending a con
 {"ownershipSaleOfferID" : "ownershipSaleOfferID", "memeFormat" : "memeFormatID", "saleAmount" : "saleAmount"}
 
 `ownershipSaleOfferID` - Could be any value. The user which wants to buy this meme format should use this ID when creating a purchase ownership transaction.
+
 `memeFormatID` - The ID of the meme format to be sold. It is in format `A_B`. `A` is the `port number` of the node which uploaded the meme format and `B` is the `nameValue` of the meme format assigned when uploading.
+
 `saleAmount` - The price in credits of the meme format to be sold. 
 
 - `/purchase_ownership`
@@ -103,6 +109,7 @@ Future peers will be able to connect to the established network by sending a con
 {"ownershipPurchaseID" : "ownershipPurchaseID", "ownershipSaleOfferID" : "ownershipSaleOfferID"}
 
 `ownershipPurchaseID` - Could be any value. Used internally and for easier tracking of the purchases during the demo.
+
 `ownershipSaleOfferID` - This is the ID value specified from the seller when creating an ownership selling transaction.
 
 Check the video demo of the project to get an idea of example inputs for the transactions: https://www.youtube.com/watch?v=kS7bYrLqaDg
@@ -157,4 +164,3 @@ Send a `GET` request by using the `/get_node_credits` method. The input format i
 
 ## Final version
 This is our final version for this project.
-
