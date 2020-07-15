@@ -34,11 +34,7 @@ If set to `True`, mining of new blocks is automatic.
 If set to `False`, mining of new blocks is manual.
 (described in more details below in point 6)
 
-`DEBUG_PRINTS` = False
-
-If set to `True`, more detailed info for debugging/tracking will be printed on the terminal
-
-To change the value of the 3 parameters above check inside `flask_app.py`
+To change the value of the 2 parameters above check inside `flask_app.py`
 
 `difficultyPattern` = `0000`
 
@@ -76,41 +72,45 @@ Future peers will be able to connect to the established network by sending a con
 
 {"imagePath" : "imagePathValue", "name" : "nameValue"}
 
-`Input format will be explained soon!`
+`imagePathValue` - The path of the meme format to be uploaded.
+`nameValue` - Could be any value. The name of the meme format, which will be a part of the memeFormatID assigned internally.
 
 - `/add_meme`
 
 {"imagePath" : "imagePathValue", "name" : "nameValue", "memeFormat" : "memeFormatID"}
 
-`memeFormatID` - The ID of the meme format to which this meme belongs to. It is in format `A_B`. `A` is the `port number` of the node which uploaded the meme and `B` is the `nameValue` of the meme.
+`imagePathValue` - The path of the meme to be uploaded.
+`nameValue` - Could be any value. The name of the meme, which will be a part of the memeID assigned internally.
+`memeFormatID` - The ID of the meme format to which this meme belongs to. It is in format `A_B`. `A` is the `port number` of the node which uploaded the meme format and `B` is the `nameValue` of the meme format assigned when uploading.
 
 - `/add_upvote`
 
 {"imageVoteId":"memeID", "upvoteID" : "upvoteID"}
 
-`Input format will be explained soon!`
+`memeID` - The ID of the meme to be up voted. It is in format `A_B`. `A` is the `port number` of the node which uploaded the meme and `B` is the `nameValue` of the meme assigned when uploading.
+`upvoteID` - Could be any value. Used internally and for easier tracking of the Upvotes during the demo.
 
 - `/sell_ownership`
 
 {"ownershipSaleOfferID" : "ownershipSaleOfferID", "memeFormat" : "memeFormatID", "saleAmount" : "saleAmount"}
 
-`Input format will be explained soon!`
+`ownershipSaleOfferID` - Could be any value. The user which wants to buy this meme format should use this ID when creating a purchase ownership transaction.
+`memeFormatID` - The ID of the meme format to be sold. It is in format `A_B`. `A` is the `port number` of the node which uploaded the meme format and `B` is the `nameValue` of the meme format assigned when uploading.
+`saleAmount` - The price in credits of the meme format to be sold. 
 
 - `/purchase_ownership`
 
 {"ownershipPurchaseID" : "ownershipPurchaseID", "ownershipSaleOfferID" : "ownershipSaleOfferID"}
 
-`Input format will be explained soon!`
+`ownershipPurchaseID` - Could be any value. Used internally and for easier tracking of the purchases during the demo.
+`ownershipSaleOfferID` - This is the ID value specified from the seller when creating an ownership selling transaction.
+
+Check the video demo of the project to get an idea of example inputs for the transactions: https://www.youtube.com/watch?v=kS7bYrLqaDg
 
 ##### Events triggered after a new transaction is added:
 - All other peers are notified for the newly added transaction
 - All other peers validate and append the new transaction to their memory pool
-- All peers start mining a block if there are 
-
-##### Example Scenario of transactions: 
-
-`Example scenario of transactions will be included for better understanding of the "value" and "ID" fields of the inputs.`
-
+- All peers start mining a block if there are pending transactions
 
 ### 5. Printing all pending transactions
 To check all pending transactions in the pool, it is enough to make a `GET` request by using the `/get_pending_transactions` method to any of the connected peers.
@@ -157,3 +157,4 @@ Send a `GET` request by using the `/get_node_credits` method. The input format i
 
 ## Final version
 This is our final version for this project.
+
