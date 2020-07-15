@@ -151,6 +151,17 @@ def app_append_block():
     else:
         print("Error, an invalid block encountered!")
         response, status_code = {"Error": "The block was invalid and discarded!"}, 400
+
+        
+    # For some reason, need to recompute node_state
+    node_state.backup_state()
+    node_state.fresh_state()
+    for b in blockchain.chain[1:]:
+        success, errors = validation.apply_block(b, commit=True)
+        if not success:
+            node_state.revert_state()
+            print("Chain failed to create consistant node_state")
+            break
     APPENDING=False
     return jsonify(response), status_code
 
