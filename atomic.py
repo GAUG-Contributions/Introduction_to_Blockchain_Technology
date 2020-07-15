@@ -26,6 +26,8 @@ __initialized_objects__ = []
 
 __branched__ = False
 
+DEBUG_PRINTS = False
+
 class Atomic():
     """
     Class that implements the psuedo 'atomic' operations of objects
@@ -59,7 +61,7 @@ def commit():
     """
     for atomic_object in __initialized_objects__:
         if hasattr(atomic_object, "wallet"):
-            print(atomic_object.ID, atomic_object.wallet.credits)
+            if(DEBUG_PRINTS): print(atomic_object.ID, atomic_object.wallet.credits)
         atomic_object.commit()
 
 def revert():
@@ -72,7 +74,7 @@ def revert():
             __initialized_objects__.remove(atomic_object)
             del atomic_object
         elif hasattr(atomic_object, "wallet"):
-            print(atomic_object.ID, atomic_object.wallet.credits, "Reverting to {}".format(atomic_object.__var_backup__["wallet"].credits))
+            if(DEBUG_PRINTS): print(atomic_object.ID, atomic_object.wallet.credits, "Reverting to {}".format(atomic_object.__var_backup__["wallet"].credits))
             atomic_object.revert()
         else:
             atomic_object.revert()

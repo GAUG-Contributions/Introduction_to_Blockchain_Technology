@@ -124,6 +124,8 @@ Percentage, (in the form of a fraction) of the successful sale of
 ownership credited to the miner of the Buy transaction
 """
 
+DEBUG_PRINTS = False
+
 class Node(Atomic):
     """
     Class that handles all functions pertaining to maintaining state
@@ -219,7 +221,7 @@ class OwnershipSaleOffer(Atomic):
         Nodes[buyerID].wallet.discredit_amount(amount_to_discredit)
 
         if not discredit_only:
-            print("Processing Sale of Ownership of `{}`".format(self.memeFormatID))
+            if(DEBUG_PRINTS): print("Processing Sale of Ownership of `{}`".format(self.memeFormatID))
             self.buyerID = buyerID
             self.buyBlockID = buyBlockID
             self.buyBlockMinerID = buyBlockMinerID
@@ -359,7 +361,7 @@ class Meme(Atomic):
         Reward upvoters who upvoted before block `block_ID`.  All upvotes
         in the block should already be added using Meme.add_upvote
         """
-        print("Rewarding Upvoters")
+        if(DEBUG_PRINTS): print("Rewarding Upvoters")
         reward_amount = self.upvote_credits[block_ID] * UPVOTE_REWARD
 
         for block_id in self.blocklist:
@@ -412,7 +414,7 @@ class Upvote(Atomic):
         
         Nodes[upvoter_ID].wallet.discredit_amount(self.credits)
         if not discredit_only:
-            print("Distributing and Computing Rewards for Upvote `{}`".format(self.ID))
+            if(DEBUG_PRINTS): print("Distributing and Computing Rewards for Upvote `{}`".format(self.ID))
             Nodes[meme_poster_id].wallet.credit_amount(self.credits * MEME_POSTER_PORTION) # Credit Meme Poster
             Nodes[meme_miner_id].wallet.credit_amount(self.credits * MEME_MINER_PORTION)# Credit Meme Miner
             Nodes[meme_format_owner_id].wallet.credit_amount(self.credits * MEME_FORMAT_OWNER_PORTION)# Credit MemeFormat Owner

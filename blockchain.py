@@ -31,6 +31,9 @@ import requests
 from block import Block
 import node_state
 import validation
+
+DEBUG_PRINTS = False
+
 class Blockchain:
     """
     Class that maintains the functions and structure of the Blockchain
@@ -131,7 +134,7 @@ class Blockchain:
 
                 if not success:
                     chain_is_valid = False
-                    print("Error: Block transactions are not valid")
+                    if(DEBUG_PRINTS): print("Error: Block transactions are not valid")
             
             # Restore the current block's hash
             current_block.hash = current_block_hash
@@ -148,11 +151,11 @@ class Blockchain:
         Appends a block to the chain after verifying it's validity
         """
         if not (Blockchain.is_proof_valid(block, proof)):
-            print("Error: Proof is not valid")
+            if(DEBUG_PRINTS): print("Error: Proof is not valid")
             return False
 
         if (self.previous_block().hash != block.previous_hash):
-            print("Error: Previous block hash is not correct")
+            if(DEBUG_PRINTS): print("Error: Previous block hash is not correct")
             return False
 
         block.hash = proof
@@ -212,8 +215,8 @@ class Blockchain:
         success, errors = validation.apply_block(new_block)
 
         if not success:
-            print(errors)
-            print("Removing Erroneous transactions from transaction list")
+            if(DEBUG_PRINTS): print(errors)
+            if(DEBUG_PRINTS): print("Removing Erroneous transactions from transaction list")
             erroneous_transactions = [err.trindex for err in errors]
             new_transaction_list = []
             for trindex, transaction in enumerate(new_block.transactions):
@@ -240,8 +243,8 @@ class Blockchain:
         success, errors = validation.apply_block(new_block)
 
         if not success:
-            print(errors)
-            print("Removing Erroneous transactions from transaction list")
+            if(DEBUG_PRINTS): print(errors)
+            if(DEBUG_PRINTS): print("Removing Erroneous transactions from transaction list")
             erroneous_transactions = [err.trindex for err in errors]
             new_transaction_list = []
             for trindex, transaction in enumerate(new_block.transactions):
@@ -278,7 +281,7 @@ def consensus_mechanism(_chain, _connected_nodes):
         # If the response holds longer chain and the chain is valid
         if(current_node_chain_length < response_length):
             best_chain = response_chain
-            print("Found Longer chain")
+            if(DEBUG_PRINTS): print("Found Longer chain")
             # try:
             #     response_chain_object = construct_chain_again(response_chain)
             # except Exception as Exp2:
@@ -300,8 +303,8 @@ def consensus_mechanism(_chain, _connected_nodes):
             response_chain_obj = construct_chain_again(best_chain)
             chain_updated=True
         except Exception as Exp:
-            print("Best chain ain't good homes.")
-    print("Chain updated" if chain_updated else "Chain is up to date")
+            if(DEBUG_PRINTS): print("Best chain ain't good homes.")
+    if(DEBUG_PRINTS): print("Chain updated" if chain_updated else "Chain is up to date")
     return chain_updated
 
 def construct_chain_again(json_chain):

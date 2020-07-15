@@ -27,6 +27,8 @@ from wallet import NotEnoughCreditsException
 
 NEW_NODE_INITIAL_CREDITS = 5
 
+DEBUG_PRINTS = False
+
 class BlockException(Exception):
     """
     Exception that is raised when TransactionExceptions occur when 
@@ -47,7 +49,7 @@ def apply_block(block, commit=False):
     memes_upvoted = {}
     errors = []
     node_state.backup_state()
-    print("Trying to `{}` block `{}`, by miner `{}`".format("apply" if commit else "just_validate" ,block_ID, miner_ID))
+    if(DEBUG_PRINTS): print("Trying to `{}` block `{}`, by miner `{}`".format("apply" if commit else "just_validate" ,block_ID, miner_ID))
     for trindex, transaction in enumerate(block.transactions):
         if transaction["nodeID"] not in node_state.Nodes:
             node_state.Node(transaction["nodeID"], 5)
@@ -111,7 +113,7 @@ def apply_upvote_transaction(transaction_data, block_ID, miner_ID, just_validate
     Update node_state based on a memeFormat transaction
     """
     node_id = transaction_data["nodeID"]
-    print("Validating Upvote : {}".format(str(just_validate)))
+    if(DEBUG_PRINTS): print("Validating Upvote : {}".format(str(just_validate)))
     if node_id not in node_state.Nodes:
         raise(NodeNotFoundException(node_id,
                                     transaction_data["upvoteID"]))
@@ -142,7 +144,7 @@ def apply_memeFormat_transaction(transaction_data, block_ID, miner_ID, just_vali
     if just_validate:
         # print(just_validate)
         return
-    print("Creating MemeFormat")
+    if(DEBUG_PRINTS): print("Creating MemeFormat")
     if node_id not in node_state.Nodes: #Means the node is new. Start
                                         #tracking the state of this
                                         #node
@@ -169,7 +171,7 @@ def apply_meme_transaction(transaction_data, block_ID, miner_ID, just_validate=F
                                           transaction_data["imageId"]))
     if just_validate:
         return
-    print("Creating Meme")
+    if(DEBUG_PRINTS): print("Creating Meme")
     if node_id not in node_state.Nodes: # Means the node is new. Start
                                         # tracking the state of this
                                         # node
@@ -215,7 +217,7 @@ def apply_ownership_sale_offer_transaction(transaction_data, block_ID, miner_ID,
     if just_validate:
         return
 
-    print("Creating Ownership Sale Offer")
+    if(DEBUG_PRINTS): print("Creating Ownership Sale Offer")
 
     node_state.OwnershipSaleOffer(transaction_data["ownershipSaleOfferID"],
                                   node_id,

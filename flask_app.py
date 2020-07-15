@@ -46,12 +46,12 @@ import atomic, decimal, wallet
 # Parameters that could be edited
 AUTOMATIC_MINING = True # For toggling between auto and manual mining
 MIN_TRANSACTIONS = 1 # Minimum transactions amount needed to start auto mining
-DEBUG_PRINTS = True # Set to True for more print debugging on the terminal
 
 # Do not edit
 MINING_RESULT = None
 MINING_THREAD = None
 STOP_MINING = False
+DEBUG_PRINTS = False
 
 class GlobalEncoder(json.JSONEncoder):
     """
@@ -107,7 +107,6 @@ host_address = f"http://127.0.0.1:{app_port}/"
 if(host_address == "http://127.0.0.1:5000/"):
     connected_nodes.add(host_address)
 
-
 def notify_all_nodes_new_block(block):
     """
     A function which triggers /append_block POST method of 
@@ -117,8 +116,6 @@ def notify_all_nodes_new_block(block):
         requests.post("{}append_block".format(node), 
                     data=json.dumps(block.__dict__, sort_keys=True), 
                     headers={"Content-Type": "application/json"})
-
-
 
 APPENDING = False
 
@@ -157,7 +154,7 @@ def app_append_block():
         
         response, status_code = {"Notification": "The block was appended to the chain."}, 201
     else:
-        print("Error, an invalid block encountered!")
+        if(DEBUG_PRINTS): print("Error, an invalid block encountered!")
         response, status_code = {"Error": "The block was invalid and discarded!"}, 400
 
         
@@ -584,7 +581,7 @@ def app_mine_block():
         response = "Stopped Mining Because another valid block was recieved"
         return jsonify(response), 200
     
-    if(DEBUG_PRINTS): print("Congo! We mined something")
+    print(">>>>>>>>>>>>>>> Congo! We mined something! [Manual Mode] <<<<<<<<<<<<<<< ")
     notify_all_nodes_new_block(new_block)
     
     response = vars(new_block)
@@ -701,7 +698,7 @@ def mine_block_new_thread(block):
         MINING_RESULT = False
         return
     MINING_RESULT = block
-    if(DEBUG_PRINTS): print("Congo! We mined something")
+    print(">>>>>>>>>>>>>>> Congo! We mined something <<<<<<<<<<<<<<< ")
 
     def temporary_thread_to_notify_new_block(block):
         notify_all_nodes_new_block(block)
