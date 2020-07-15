@@ -113,6 +113,7 @@ Future peers will be able to connect to the established network by sending a con
 `ownershipSaleOfferID` - This is the ID value specified from the seller when creating an ownership selling transaction.
 
 Check the video demo of the project to get an idea of example inputs for the transactions: https://www.youtube.com/watch?v=kS7bYrLqaDg
+The collection of transaction requests used in the video could be imported by importing the `Meme_Economy_Blockchain.postman_collection.json` file in Postman.
 
 ##### Events triggered after a new transaction is added:
 - All other peers are notified for the newly added transaction
