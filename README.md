@@ -7,7 +7,7 @@ Akshay Katyal, Anant Sujatanagarjuna, Chris Warin, Mehmed Mustafa, Rahul Agrawal
 Meme economy, we got the inspiration from: `https://www.reddit.com/r/MemeEconomy/`
 
 ## API Documentation
-See [html documentation](docs/_build/index.html)
+See [html documentation](docs/_build/html/index.html)
 
 ## Running a demo test
 `Format` and `Template` words are used interchangeably across the project and they mean the same thing.
