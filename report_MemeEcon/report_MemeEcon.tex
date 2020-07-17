@@ -55,8 +55,9 @@ Anant Sujatanagarjuna, Steffen Tunkel, Chris Warin}
 \pagenumbering{roman} 
 \maketitle
 \thispagestyle{empty}
-\begin{abstract}
+\begin{abstract}% Steffen
 Here could go our kick-ass abstract.
+
 \end{abstract}
 
 \newpage
@@ -69,13 +70,36 @@ Here could go our kick-ass abstract.
 
 %\setcounter{table}{0}
 
-\section{Introduction} \label{sec:Intro}
+\section{Introduction} \label{sec:Intro}% Steffen
+% Motivation
+    % Meme Culture
+% Idea / Concept
 
-\section{Foundations} \label{sec:Foundations}
+
+\section{Foundations} \label{sec:Foundations} %Akshay
+% section intro
+\subsection{RESTful Applications}
+\subsection{Flask Framework}
+\subsection{Postman}
+
+\section{Related Work} %Rahul
+% Sub-reddit approach
 
 \section{Approach} \label{sec:Approach}
+% section intro and system diagram %Chris because he likes to make good looking stuff. And Mehmed too. Anant also has to be involved.
+\subsection{Block Design} %Mehmed
+\subsection{Peer to Peer Network} %Akshay
+\subsection{Transactions} %Mehmed
+\subsection{Mining and Consensus} %Steffen and Anant
+\subsection{Wallet and Rewards} %Anant
+\subsection{Visualization} %Chris
 
-\section{Conclusion} \label{sec:Conclusion}
+
+\section{Outlook} \label{sec:Outlook} %Chris
+
+\section{Conclusion} \label{sec:Conclusion} %Chris
+
+
 
 \section{Template Section} \label{sec:Template}
     This template should give us a first version we can start of with. This last section should support us in writing a more coherent paper together. Therefore I put some guidelines for the writing in section~\ref{sec:Guidelines}. Also there are some example for the use of functionalities in Section~\ref{sec:Examples}. You can copy them and adapt them the way you need them. Just leave this section here for now.
@@ -87,7 +111,7 @@ Here could go our kick-ass abstract.
             When you push the newest version to the repo, please leave out the files created by the compiler (besides the pdf). The report on the repo just needs the tex-file, the bib-file and maybe the most current pdf-file. Of course push the changes to the sub folders if you added images or sources.
 
         \item \textbf{references} \\
-            For every section, subsection, figure, or table you include give it a label. Therefore everyone can refer to it later. It can be done by \textit{$\backslash$label\{marker\}}. The marker should declare the type of the object and a short (one word in the best case) name for the object. The types are "sec:" for a section, "fig:" for a figure and 'tab:' for a table. You can refer to them then by \textit{$\backslash$ref\{fig:example\}}. Also you should use a $\sim$ symbol before instead of normal space to avoid line breaks there.
+            For every section, subsection, figure, or table you include give it a label. Therefore everyone can refer to it later. It can be done by \textit{$\backslash$label\{marker\}}. The marker should declare the type of the object and a short (one word in the best case) name for the object. The types are "sec:" for a section, "fig:" for a figure and "tab:" for a table. You can refer to them then by \textit{$\backslash$ref\{fig:example\}}. Also you should use a $\sim$ symbol before instead of normal space to avoid line breaks there.
 
         \item \textbf{citations} \\
             For cititions the BibTex code for the source needs to be in the 'literature\_list.bib' file. You can usually get them pretty easily from \textit{Google Scholar}. Please safe all papers/sources you used in the "sources" folder in addition. The citation can then be made by \textit{$\backslash$cite\{antonopoulos2017mastering\}} for example. Please use the $\sim$ here too. The result then looks like this~\cite{antonopoulos2017mastering}.
