@@ -88,8 +88,67 @@ Here could go our kick-ass abstract.
 \section{Approach} \label{sec:Approach}
 % section intro and system diagram %Chris because he likes to make good looking stuff. And Mehmed too. Anant also has to be involved.
 \subsection{Block Design} %Mehmed
+
+Each block inside the chain has the following fields:
+
+\begin{itemize}
+  \item index - the index of the block.
+  \item minerID - the id of the miner. This identification is used when distributing mining rewards.  
+  \item previous\_hash - the hash of the previous block inside the chain
+  \item proof\_of\_work - a nonce value (magic number) which makes the hash of the block to match the difficulty pattern
+  \item timestamp - an instance of time showing the creation time of the block
+  \item transaction\_counter - the number of transactions inside the block
+  \item transactions - a list which holds all transactions inside the block
+\end{itemize}
+
+The genesis block has "0" value on all fields and an empty list for the transactions. The hash value of the genesis block does not match any hash patterns and when validating the chain the genesis block is skipped. It should be noted that even if the block is not skipped, since all values inside the genesis block are predefined, the hash value will always be the same value and could be hard coded. 
+
+All consecutive blocks, after the genesis block, have their proper field values. The minerID field is a special field because it's value is different for each node. Each node assigns its ID to the minerID field and tries to find a nonce value with this assigned specific minerID. Also each time a new transaction is added to the memory pool of transactions, the finding nonce value process is restarted, since the transactions list is updated.
+
+
 \subsection{Peer to Peer Network} %Akshay
 \subsection{Transactions} %Mehmed
+
+In the Block Design section it was discussed that each block has a list of transactions. There are 5 different kind of possible transactions:
+\begin{itemize}
+  \item add\_memeFormat - Used to add a new meme format to the network
+  \item add\_meme - Used to add a new meme to the network
+  \item add\_upvote - Used to upvote a meme inside the network
+  \item sell\_ownership - Used to sell the ownership of a meme format
+  \item purchase\_ownership - Used to purchase the ownership of a meme format
+\end{itemize}
+
+\subsubsection{Raw-JSON body input formats of transactions}
+
+\begin{itemize}
+\item add\_memeFormat - \{"imagePath" : "imagePathValue",\\ "name" : "nameValue"\}
+
+\item add\_meme - \{"imagePath" : "imagePathValue",\\ "name" : "nameValue",\\ "memeFormat" : "memeFormatID"\}
+
+\item add\_upvote - \{"imageVoteId":"memeID",\\ "upvoteID" : "upvoteID"\}
+
+\item sell\_ownership - \{"ownershipSaleOfferID" : "ownershipSaleOfferID",\\ "memeFormat" : "memeFormatID",\\ "saleAmount" : "saleAmount"\}
+
+\item purchase\_ownership - \{"ownershipPurchaseID" : "ownershipPurchaseID",\\ "ownershipSaleOfferID" : "ownershipSaleOfferID"\}
+\end{itemize}
+
+\subsubsection{Transaction requirements and validation}
+
+This subsection discusses the requirements of each transaction. Once all of the requirements for a specific transaction are met, then the transaction is validated and ready to be mined in the next block.  
+
+\begin{itemize}
+\item add\_memeFormat - There are not any requirements for this transaction.
+
+\item add\_meme - Each meme to be uploaded must belong to a specific meme format. This meme format must be already mined inside a block and appended to the chain.
+
+\item add\_upvote - The meme to be up voted must be already mined inside a block and appended to the chain. The node which up votes must have enough credits available in its wallet.
+
+\item sell\_ownership - The meme format to be sold must be already mined inside a block and appended to the chain. The node which creates this transaction must have the ownership of the meme format to be sold.
+
+\item purchase\_ownership - The meme format to be purchased must be already offered for a sale, mined and appended to the chain. The purchasing node must have enough credits in order to buy the meme format. The worth of the meme format is specified inside the sell\_ownership transaction.
+\end{itemize}
+
+
 \subsection{Mining and Consensus} %Steffen and Anant
 \subsection{Wallet and Rewards} %Anant
 \subsection{Visualization} %Chris
