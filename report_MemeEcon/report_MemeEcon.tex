@@ -226,6 +226,66 @@ This subsection discusses the requirements of each transaction. Once all of the 
 
 \subsection{Mining and Consensus} %Steffen and Anant
 \subsection{Wallet and Rewards} %Anant
+
+This subsection discusses the role Wallets and Rewards play in the
+operation of the MemeEconomy Blockchain.
+
+Every node has a unique and implicit wallet associated with it. Once a
+node mines a block or issues a transaction that is added to a block,
+all nodes start to internally, and independently track the state of
+the wallet associated with the node. Every node starts out with an
+initial wallet amount of 5 credits. The reason for this will be
+explained after a detailed explanation of rewards and credit
+distribution.
+
+There are two situations in which a node is rewarded credits, either
+from another node, or from the system. Following are these situations:
+
+\begin{itemize}
+\item Upvote - When a meme is upvoted, a credit is deducted from the
+  node that issued the upvote. This credit is then distributed in
+  portions to:
+  \begin{itemize}
+  \item the Meme Format owner - 30\%
+  \item the Meme Poster - 60\%
+  \item the Meme miner - 10\%
+  \end{itemize}
+  In addition to this, 10\% of the upvote credits (which amounts to
+  0.1 credits) are created independently and rewarded to:
+  \begin{itemize}
+  \item the Meme Format miner
+  \item the Upvote miner
+  \item every previous Upvoter from previous blocks who upvoted the
+    same Meme
+  \end{itemize}
+\item Ownership Purchase - When a node issues a transaction to
+  purchase ownership, 10\% of the sale amount is taken in excess to
+  the sale amount from this node, and is shared evenly between:
+  \begin{itemize}
+  \item Sell transaction miner
+  \item Purchase transaction miner
+  \end{itemize}
+  In effect, the Sell transaction miner and Purchase transaction miner
+  each recieve 5\% of the sell amount.
+\end{itemize}
+
+It must be mentioned that all rewards are implicitly credited to the
+respective node's wallet.
+
+The reason for rewarding upvoters, is to incentivize upvoters who find
+a meme interesting or funny. Over time (as more blocks are mined), an
+upvoter is rewarded proportional to how much they contributed to the
+'virality' of the meme.
+
+There is no mechanism for a node to cancel a sell transaction. The
+node is free to issue a purchase transaction for their own sell
+transaction, if they see fit. In this scenario, they would lose 10\%
+of the amount that they posted the ownership for sale for.
+
+As mentioned earlier, every node is given 5 credits. This is a
+necessity, since if not, no nodes have any credits to upvote, nor buy
+ownership.
+
 \subsection{Visualization} %Chris
 
 
