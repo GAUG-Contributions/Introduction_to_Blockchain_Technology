@@ -58,7 +58,8 @@ Anant Sujatanagarjuna, Steffen Tunkel, Chris Warin}
 \maketitle
 \thispagestyle{empty}
 \begin{abstract}% Steffen
-Here could go our kick-ass abstract.
+The meme culture is spread widely over online communities. This project aims to create a novel decentralized platform for the sharing of memes. The \textit{Meme Economy Blockchain} is build up like a virtual marketplace, based on the principles of market economy. Through this users are rewarded for creating new and innovative memes and also for their intuition about the potential popularity of memes. The current state of the project contains all core functionalities, which are required for the application.
+
 
 \end{abstract}
 
@@ -76,6 +77,25 @@ Here could go our kick-ass abstract.
 % Motivation
     % Meme Culture
 % Idea / Concept
+
+    A meme is \textit{"an amusing or interesting item (such as a captioned picture or video) or genre of items that is spread widely online especially through social media"} according to Merriam-Webster dictionary~\cite{meme_def}.
+    An example for such an item is shown in Figure~\ref{fig:meme_memeformat}~a. This particular joke about procrastination is combined with the pictures of the musician Drake to highlight the message. This pictures, as shown in Figure~\ref{fig:meme_memeformat}~b, are a genre of memes. These are templates which are used over and over again to create new memes. In this work, templates for memes are named 'meme format', while 'meme' refers to the captioned pictures as in Figure~\ref{fig:meme_memeformat}~a.
+
+    \begin{figure}[H]
+        \centering
+        \subfigure[Meme]{\includegraphics[width=.3\textwidth]{images/drake_meme_framed.png}}
+        \subfigure[Meme Format]{\includegraphics[width=.3\textwidth]{images/drake_mf_framed.png}}
+        \caption{'Drake Hotline Bling' as an example for a meme and meme format~\cite{ImgflipMemes}.}
+        \label{fig:meme_memeformat}
+    \end{figure}
+
+    Memes are not only spread over classic social media platforms as Facebook or Twitter, but also on more dedicated platforms as 9GAG or Reddit. One of Reddit's sub-forums is called MemeEconomy~\cite{MemeEconReddit}. It is a virtual market place for memes, which is implemented with bots on the Reddit server. It served as inspiration for us to create a more free, decentralized version of a economy system for memes, which can therefore be run by the community itself.
+    The application, which is implemented on a blockchain technology, can be thought of as a virtual stock market for memes. That means, users are able to buy and sell shares of meme formats and speculate on their value. The value is defined by the estimated lifetime of the meme format and its circulation. This is based on the concept that the shareholders of a format get a reward every time it is used for a meme. The basic principles of financial markets are also applied in the approach. Users are motivated to buy a share when its value is low and has a higher potential to increase, and vice versa, to sell when its value is high and expected to go down in the future.
+    Moreover, users have the chance to invest in particular memes with their upvotes. The revenue a user can gain with an upvote is proportional to the amount of following upvotes by other users. Therefore, a good intuition and early support of a meme is rewarded.
+    The credits used in the economy system can be gained through smart investments, the creation of new and potentially successful content or the support of the blockchain with the mining of new blocks. The credits do not have any money value. Therefore, they can be interpreted as the user's score.
+    The motivation of the project is to offer users a fresh and interesting platform for meme sharing by enhancing the concept of the MemeEconomy subreddit. Additionally, the platform encourages the creation of new memes and even new meme genres. By recognizing memes as a form of art this factor gets even more important. Connected to this it is also possible to track down the origin of popular meme formats over the blockchain, which means the credit of the work goes where it belongs.
+
+    This report aims to give a rather technical introduction to the approach. Section~\ref{sec:Foundations} presents the different technologies used for the implementation. Afterwards, Section~\ref{sec:RelatedWork} gives an introduction to the MemeEconomy from Reddit as a related work. The main part is the technical description of our approach, outlining the different functional parts of the blockchain, in Section~\ref{sec:Approach}. Finally, Section~\ref{sec:Outlook} gives an outlook on further possibilities with the approach before Section~\ref{sec:Conclusion} concludes the report.
 
 
 \section{Foundations} \label{sec:Foundations} %Akshay
@@ -140,7 +160,7 @@ The \ac{API} Client allows the user to Send Requests and View response generated
     \label{fig:Postman}
 \end{figure}
 
-\section{Related Work} %Rahul
+\section{Related Work} \label{sec:RelatedWork} %Rahul
 % Sub-reddit approach
 
 \section{Approach} \label{sec:Approach}
