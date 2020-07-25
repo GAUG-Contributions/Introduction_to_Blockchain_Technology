@@ -164,7 +164,7 @@ The \ac{API} Client allows the user to Send Requests and View response generated
 % Sub-reddit approach
 Reddit /r/memeEconomy, community portrays memes as a potential investment where the members can buy, sell, share, and invest in them based on their potential to become a popular meme on the website. Basically, memes and economics are combined in perfect proportion. The official currency of the subreddit is \ac{MC}.\par
 \begin{flushleft}
-When user create an account, they are given 10,000 \ac{MC} and also a debt of 10,000M¢ to pay back. The return on the meme investment is determined by the demand of that meme and the incentive is calculated by higher the meme charts on the subreddit, more meme coins the user earns. The Meme Economy limits the amount of \ac{MC} in the economy. It follows a risk-return trade-off pattern which is similar to crypto currencies.\par
+When user create an account, they are given 10,000 \ac{MC} and also a debt of 10,000Mc to pay back. The return on the meme investment is determined by the demand of that meme and the incentive is calculated by higher the meme charts on the subreddit, more meme coins the user earns. The Meme Economy limits the amount of \ac{MC} in the economy. It follows a risk-return trade-off pattern which is similar to crypto currencies.\par
 \end{flushleft}
 \begin{flushleft}
 Members who create a post on /r/MemeEconomy receives \ac{MC} in the form of royalties totaling 5\% of all investments on the post. They are paid once in 24 hours after the post is released and investments after this 24 hour period will not count towards the 5\% bonus. This is a way for rewarding the creators for their work.
@@ -307,7 +307,8 @@ necessity, since if not, no nodes have any credits to upvote, nor buy
 ownership.
 
 \subsection{Visualization} %Chris
-
+Every meme and meme format can be visualized by every node once its transaction has been mined. This allows a node to decide whether to upvote the meme, to create their own meme of the given meme format, or, if the meme format is on sale, to buy it.
+The blockchain contains the list of all the memes and meme formats that have been mined, and their image is stored as a base64 encoded string. Since HTML supports the visualization of base64 encoded images, an HTML tag embedding the encoded string can be returned by the application in such way: {\tt <img src='data:image/jpg; base64, [encoded image string]'>}
 
 \section{Outlook} \label{sec:Outlook} %Chris
 
