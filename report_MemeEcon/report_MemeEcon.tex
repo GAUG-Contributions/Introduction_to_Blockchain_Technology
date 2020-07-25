@@ -95,7 +95,7 @@ The meme culture is spread widely over online communities. This project aims to 
     The credits used in the economy system can be gained through smart investments, the creation of new and potentially successful content or the support of the blockchain with the mining of new blocks. The credits do not have any money value. Therefore, they can be interpreted as the user's score.
     The motivation of the project is to offer users a fresh and interesting platform for meme sharing by enhancing the concept of the MemeEconomy subreddit. Additionally, the platform encourages the creation of new memes and even new meme genres. By recognizing memes as a form of art this factor gets even more important. Connected to this it is also possible to track down the origin of popular meme formats over the blockchain, which means the credit of the work goes where it belongs.
 
-    This report aims to give a rather technical introduction to the approach. Section~\ref{sec:Foundations} presents the different technologies used for the implementation. Afterwards, Section~\ref{sec:RelatedWork} gives an introduction to the MemeEconomy from Reddit as a related work. The main part is the technical description of our approach, outlining the different functional parts of the blockchain, in Section~\ref{sec:Approach}. Finally, Section~\ref{sec:Outlook} gives an outlook on further possibilities with the approach before Section~\ref{sec:Conclusion} concludes the report.
+    This report aims to give a rather technical introduction to the approach. Section~\ref{sec:Foundations} presents the different technologies used for the implementation. Afterwards, Section~\ref{sec:Related Work} gives an introduction to the MemeEconomy from Reddit as a related work. The main part is the technical description of our approach, outlining the different functional parts of the blockchain, in Section~\ref{sec:Approach}. Finally, Section~\ref{sec:Outlook} gives an outlook on further possibilities with the approach before Section~\ref{sec:Conclusion} concludes the report.
 
 
 \section{Foundations} \label{sec:Foundations} %Akshay
@@ -160,7 +160,7 @@ The \ac{API} Client allows the user to Send Requests and View response generated
     \label{fig:Postman}
 \end{figure}
 
-\section{Related Work} %Rahul
+\section{Related Work} \label{sec:Related Work}%Rahul
 % Sub-reddit approach
 Reddit /r/memeEconomy, community portrays memes as a potential investment where the members can buy, sell, share, and invest in them based on their potential to become a popular meme on the website. Basically, memes and economics are combined in perfect proportion. The official currency of the subreddit is \ac{MC}.\par
 \begin{flushleft}
@@ -170,6 +170,9 @@ When user create an account, they are given 10,000 \ac{MC} and also a debt of 10
 Members who create a post on /r/MemeEconomy receives \ac{MC} in the form of royalties totaling 5\% of all investments on the post. They are paid once in 24 hours after the post is released and investments after this 24 hour period will not count towards the 5\% bonus. This is a way for rewarding the creators for their work.
 \end{flushleft}
 % section intro and system diagram %Chris because he likes to make good looking stuff. And Mehmed too. Anant also has to be involved.
+
+\section{Approach} \label{sec:Approach}
+
 \subsection{Block Design} %Mehmed
 
 Each block inside the chain has the following fields:
@@ -252,19 +255,11 @@ This subsection discusses the requirements of each transaction. Once all of the 
 \subsection{Mining and Consensus} %Steffen and Anant
 \subsection{Wallet and Rewards} %Anant
 
-This subsection discusses the role Wallets and Rewards play in the
-operation of the MemeEconomy Blockchain.
+This subsection discusses the role Wallets and Rewards play in the operation of the MemeEconomy Blockchain.
 
-Every node has a unique and implicit wallet associated with it. Once a
-node mines a block or issues a transaction that is added to a block,
-all nodes start to internally, and independently track the state of
-the wallet associated with the node. Every node starts out with an
-initial wallet amount of 5 credits. The reason for this will be
-explained after a detailed explanation of rewards and credit
-distribution.
+Every node has a unique and implicit wallet associated with it. Once a node mines a block or issues a transaction that is added to a block, all nodes start to internally, and independently track the state of the wallet associated with the node. Every node starts out with an initial wallet amount of 5 credits. The reason for this will be explained after a detailed explanation of rewards and credit distribution.
 
-There are two situations in which a node is rewarded credits, either
-from another node, or from the system. Following are these situations:
+There are two situations in which a node is rewarded credits, either from another node, or from the system. Following are these situations:
 
 \begin{itemize}
 \item Upvote - When a meme is upvoted, a credit is deducted from the
@@ -401,7 +396,7 @@ training \& test data \\
 \addcontentsline{toc}{section}{Abbreviations and Acronyms}
 \begin{acronym}[Bash]
 \acro{AI} {\textit{Artificial Intelligence}}
-\acro{ML} {\textit{Machine Learning}}
+%\acro{ML} {\textit{Machine Learning}}
 \acro{API}{\textit{Application Programming Interface}}
 \acro{WSGI}{\textit{Web Server Gateway Interface}}
 \acro{MC}{\textit{Meme Coin}}
