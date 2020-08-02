@@ -81,7 +81,7 @@ The meme culture is spread widely over online communities. This project aims to 
 
 A meme is \textit{"an amusing or interesting item (such as a captioned picture or video) or genre of items that is spread widely online especially through social media"} according to Merriam-Webster dictionary~\cite{meme_def}.
     
-    An example for such an item is shown in Figure~\ref{fig:meme_memeformat}~a. This particular joke about procrastination is combined with the pictures of the musician Drake to highlight the message. These pictures, as shown in Figure~\ref{fig:meme_memeformat}~b, are a genre of memes. These are templates which are used over and over again to create new memes. In this work, templates for memes are named `meme formats', while `meme' refers to the captioned pictures as in Figure~\ref{fig:meme_memeformat}~a.
+    An example for such an item is shown in figure~\ref{fig:meme_memeformat}~a. This particular joke about procrastination is combined with the pictures of the musician Drake to highlight the message. These pictures, as shown in figure~\ref{fig:meme_memeformat}~b, are a genre of memes. These are templates which are used over and over again to create new memes. In this work, templates for memes are named `meme formats', while `meme' refers to the captioned pictures as in figure~\ref{fig:meme_memeformat}~a.
 
     \begin{figure}[H]
         \centering
@@ -101,7 +101,7 @@ A meme is \textit{"an amusing or interesting item (such as a captioned picture o
     
     The motivation of the project is to offer users a fresh and interesting platform for meme sharing by enhancing the concept of the MemeEconomy subreddit. Additionally, the platform encourages the creation of new memes and even new meme genres. By recognizing memes as a form of art, this factor gets even more important. Connected to this, it is also possible to track down the origin of popular meme formats over the blockchain, which means the credit of the work goes where it belongs.
 
-    This report aims to give a rather technical introduction to the approach. Section~\ref{sec:Foundations} presents the different technologies used for the implementation. Afterwards, Section~\ref{sec:Related Work} gives an introduction to the MemeEconomy from Reddit as a related work. The main part is the technical description of our approach, outlining the different functional parts of the blockchain, in section~\ref{sec:Approach}. Finally, section~\ref{sec:Outlook} gives an outlook on further possibilities with the approach before section~\ref{sec:Conclusion} concludes the report.
+    This report aims to give a rather technical introduction to the approach. Section~\ref{sec:Foundations} presents the different technologies used for the implementation. Afterwards, section~\ref{sec:Related Work} gives an introduction to the MemeEconomy from Reddit as a related work. The main part is the technical description of our approach, outlining the different functional parts of the blockchain, in section~\ref{sec:Approach}. Finally, section~\ref{sec:Outlook} gives an outlook on further possibilities with the approach before section~\ref{sec:Conclusion} concludes the report.
 
 
 \section{Foundations} \label{sec:Foundations} %Akshay
@@ -258,6 +258,15 @@ This subsection discusses the requirements of each transaction. Once all of the 
 
 
 \subsection{Mining and Consensus} %Steffen and Anant
+
+The consensus mechanism between the nodes is a proof of work based approach. In order to mine a new block the mining node has to solve a search puzzle. For this a json representation of the whole block is created and used as an input for the cryptographic hash function SHA-256. The output of the function has to lay in the target space to successfully mine a block. 
+The size of the target space and therefore also the difficulty to find a solution is defined by the \textit{difficultyPattern} parameter of the blockchain. 
+By default it is set to $'0000'$ which leads to a success rate of $1/16^4\approx~0.0015\%$. 
+A correct solution can be found by varying the \textit{proof\_of\_work} parameter of the block.
+
+The mining of new blocks works in a parallel manor for the nodes. As long as there are transactions to mine, the mining nodes are constantly trying to find a solution for the search puzzle of their blocks in a separate thread. When a node finds a solution for its search puzzle and successfully mine a block, it informs all other nodes about it. In this case the other nodes check the validity of the new block, stop their current mining process and restart based on the new current block chain. When a node adds a new transaction to the network the procedure is similar, starting with the node notifying all other nodes in the network. The other nodes check if the transaction is valid, add it to their transaction list and restart the mining if they can include the transaction to the block they are currently mining.
+
+
 \subsection{Wallet and Rewards} %Anant
 
 This subsection discusses the role that wallets and rewards play in the operation of the Meme Economy Blockchain.
@@ -415,7 +424,7 @@ The source code will be released on a public repository under the GNU Affero Gen
 \section*{Abbreviations and Acronyms}
 \addcontentsline{toc}{section}{Abbreviations and Acronyms}
 \begin{acronym}[Bash]
-\acro{AI} {\textit{Artificial Intelligence}}
+%\acro{AI} {\textit{Artificial Intelligence}}
 %\acro{ML} {\textit{Machine Learning}}
 \acro{API}{\textit{Application Programming Interface}}
 \acro{WSGI}{\textit{Web Server Gateway Interface}}
