@@ -85,8 +85,8 @@ A meme is \textit{"an amusing or interesting item (such as a captioned picture o
 
     \begin{figure}[H]
         \centering
-        \subfigure[Meme]{\includegraphics[width=.3\textwidth]{images/drake_meme_framed.png}}
-        \subfigure[Meme Format]{\includegraphics[width=.3\textwidth]{images/drake_mf_framed.png}}
+        \subfigure[Meme]{\includegraphics[width=.45\textwidth]{images/drake_meme_framed.png}}
+        \subfigure[Meme Format]{\includegraphics[width=.45\textwidth]{images/drake_mf_framed.png}}
         \caption{'Drake Hotline Bling' as an example for a meme and meme format~\cite{ImgflipMemes}.}
         \label{fig:meme_memeformat}
     \end{figure}
@@ -193,6 +193,14 @@ Each block inside the chain has the following fields:
   \item transactions - a list which holds all transactions inside the block
 \end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{../report_MemeEcon/images/block_design.pdf}
+    \caption{Design of a block.}
+    \label{fig:block_design}
+\end{figure}
+
+
 The genesis block has a value of "0" on all fields and an empty list for the transactions. The hash value of the genesis block does not match any hash patterns, and when validating the chain, the genesis block is skipped. It should be noted that even if the block is not skipped, since all values inside the genesis block are predefined, the hash value will always be the same value and could be hard coded.
 
 All consecutive blocks, after the genesis block, have their proper field values. The \textit{minerID} field is a special field because it's value is different for each node. Each node assigns its ID to the \textit{minerID} field and tries to find a nonce value with this assigned specific \textit{minerID}. Also each time a new transaction is added to the memory pool of transactions, the finding nonce value process is restarted, since the transactions list is updated.
@@ -211,7 +219,7 @@ In our meme economy application, the peer to peer concept is demonstrated by the
 As the connection is successful, the newly connected node receives a copy of the blockchain as well as the pending transactions in the blockchain network.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=12cm, height=10cm]{../report_MemeEcon/images/p2p.png}
+    \includegraphics[width=12cm]{../report_MemeEcon/images/p2p.png}
     \caption{Peer-to-Peer network}
     \label{fig:P2P}
 \end{figure}
@@ -435,7 +443,7 @@ The source code will be released on a public repository under the GNU Affero Gen
 
 %----------------List-of-Tables--------------------%
 %Comment the following lines out if you dont have tables or figures
-\listoftables
+%\listoftables
 \listoffigures
 \bibliographystyle{plain}
 \bibliography{literature_list}
