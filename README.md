@@ -1,7 +1,16 @@
 # Group Project for 'Introduction to Blockchain Technology' SoSe2020
 
+## Supervisors
+- Benjamin Leiding
+- Arne Bochem
+
 ## Team 
-Akshay Katyal, Anant Sujatanagarjuna, Chris Warin, Mehmed Mustafa, Rahul Agrawal, Steffen Tunkel
+- Akshay Katyal 
+- Anant Sujatanagarjuna 
+- Chris Warin 
+- Mehmed Mustafa
+- Rahul Agrawal 
+- Steffen Tunkel
 
 ## Description
 Meme economy, we got the inspiration from: `https://www.reddit.com/r/MemeEconomy/`
