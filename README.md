@@ -1,7 +1,7 @@
 # Group Project for 'Introduction to Blockchain Technology' SoSe2020
 
 ## Supervisors
-- Benjamin Leiding
+- Dr. Benjamin Leiding
 - Arne Bochem
 
 ## Team 
@@ -14,6 +14,7 @@
 
 ## Description
 Meme economy, we got the inspiration from: `https://www.reddit.com/r/MemeEconomy/`
+Demo video: https://www.youtube.com/watch?v=kS7bYrLqaDg
 
 ## API Documentation
 See [html documentation](docs/_build/html/index.html)
