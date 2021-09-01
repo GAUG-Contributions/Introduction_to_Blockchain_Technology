@@ -14,6 +14,7 @@
 
 ## Description
 Meme economy, we got the inspiration from: `https://www.reddit.com/r/MemeEconomy/`
+
 Demo video: https://www.youtube.com/watch?v=kS7bYrLqaDg
 
 ## API Documentation
